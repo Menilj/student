@@ -11,30 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <style>
         :root {
-            /* Light theme (default) */
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --surface-alt: #f1f5f9;
-            --text: #0f172a;
-            --text-secondary: #475569;
-            --primary: #1e3a5f;
-            --accent: #0ea5e9;
-            --gold: #f59e0b;
-            --emerald: #10b981;
-            --rose: #f43f5e;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.06);
-            --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.08);
-            --radius: 10px;
-            --radius-sm: 6px;
-            --transition: 0.2s ease;
-            --font: 'Inter', system-ui, sans-serif;
-            --max-width: 1100px;
-            --font-base: 1rem;
-        }
-
-        body.dark {
+            /* Dark theme (default) */
             --bg: #0f172a;
             --surface: #1e293b;
             --surface-alt: #334155;
@@ -49,6 +26,29 @@
             --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
             --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
             --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.4);
+            --radius: 10px;
+            --radius-sm: 6px;
+            --transition: 0.2s ease;
+            --font: 'Inter', system-ui, sans-serif;
+            --max-width: 1100px;
+            --font-base: 1rem;
+        }
+
+        body.light {
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-alt: #f1f5f9;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --primary: #1e3a5f;
+            --accent: #0ea5e9;
+            --gold: #f59e0b;
+            --emerald: #10b981;
+            --rose: #f43f5e;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.08);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -70,7 +70,6 @@
         @keyframes float { 0%{transform:translate(0,0);} 100%{transform:translate(30px,-20px);} }
         .main-content { position:relative; z-index:1; }
 
-        /* Navigation */
         .nav { position:sticky; top:0; z-index:1000; background: var(--surface); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 20px; height:64px; display:flex; align-items:center; transition:var(--transition); box-shadow: var(--shadow-sm); }
         .nav.scrolled { box-shadow:var(--shadow); }
         .nav-inner { max-width:var(--max-width); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
@@ -145,19 +144,65 @@
         .radio-card { display:flex; align-items:center; gap:8px; background:var(--surface-alt); padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--border); cursor:pointer; transition:0.2s; font-size:1rem; }
         .radio-card input { accent-color:var(--primary); }
         label { font-weight:500; }
-        @media (max-width:480px) {
-            .form-grid { grid-template-columns:1fr; }
-        }
+        @media (max-width:480px) { .form-grid { grid-template-columns:1fr; } }
 
         .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:2000; }
         .modal { background:var(--surface); border-radius:var(--radius); padding:28px; width:90%; max-width:500px; position:relative; animation:slideUp 0.3s; color: var(--text); }
         @keyframes slideUp { from{opacity:0; transform:translateY(20px);} }
-        .whatsapp-float { position:fixed; bottom:24px; right:24px; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 4px 15px rgba(37,211,102,0.4); z-index:1500; transition:0.3s; }
-        .whatsapp-float:hover { transform:scale(1.05); }
         .toast { position:fixed; bottom:90px; right:24px; background:var(--text); color:var(--bg); padding:12px 24px; border-radius:30px; font-weight:600; font-size:1rem; z-index:3000; animation:slideUp 0.3s, fadeOut 0.3s 2.5s forwards; }
         @keyframes fadeOut { to{opacity:0; transform:translateY(10px);} }
         .loading-spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px; }
         @keyframes spin { to{transform:rotate(360deg);} }
+
+        .product-img-container { width:100%; height:160px; overflow:hidden; background:var(--surface-alt); display:flex; align-items:center; justify-content:center; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+        .product-img-container img { width:100%; height:100%; object-fit:cover; }
+        .product-img-placeholder { font-size:3rem; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
+        .product-card { overflow:hidden; padding:0; }
+        .product-info { padding:16px; }
+        .badge { padding:4px 10px; border-radius:12px; font-size:0.75rem; font-weight:600; }
+        .badge-active { background:#d1fae5; color:#065f46; }
+        .badge-collected { background:#e2e8f0; color:#475569; }
+
+        /* Contact improvements */
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 900px; margin: 0 auto; align-items: start; }
+        .contact-info-card { background: linear-gradient(135deg, var(--primary) 0%, #0f2b45 100%); color: #fff; border-radius: var(--radius); padding: 32px 28px; box-shadow: var(--shadow-md); }
+        .contact-info-card h3 { font-size: 1.6rem; margin-bottom: 16px; }
+        .contact-info-card .info-item { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 1.05rem; }
+        .contact-info-card .info-item i { width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .contact-form-card { background: var(--surface); border-radius: var(--radius); padding: 32px 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border); }
+        .contact-form-card h3 { font-size: 1.6rem; margin-bottom: 20px; }
+        .contact-form-card .form-group { margin-bottom: 16px; }
+        .contact-form-card input, .contact-form-card textarea { width: 100%; padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface-alt); font-family: var(--font); font-size: 1rem; transition: 0.2s; }
+        .contact-form-card input:focus, .contact-form-card textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14,165,233,0.15); background: var(--surface); }
+        .contact-form-card textarea { resize: vertical; min-height: 120px; }
+        @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+
+        /* Toggle FAB */
+        .fab-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.6rem;
+            color: #fff;
+            z-index: 1500;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0ea5e9;   /* phone */
+        }
+        .fab-toggle.whatsapp {
+            background: #25d366;
+        }
+        .fab-toggle:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -173,7 +218,7 @@
                 <li><a href="#accommodation">Housing</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#storage" class="nav-cta">Book Now</a></li>
-                <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> <span id="themeLabel">Dark</span></button></li>
+                <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i> <span id="themeLabel">Light</span></button></li>
             </ul>
             <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
         </div>
@@ -316,27 +361,34 @@
 
         <section class="section" id="contact">
             <h2 class="section-title">📞 Contact <span class="gradient-text">Amos</span></h2>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:800px; margin:0 auto;">
-                <div style="background:var(--primary); color:#fff; border-radius:var(--radius); padding:24px;">
-                    <h3>Amos Services</h3>
-                    <p><i class="fas fa-phone"></i> 0116375166</p>
-                    <p><i class="fab fa-whatsapp"></i> WhatsApp: 0116375166</p>
-                    <p><i class="fas fa-clock"></i> Mon‑Fri 8AM‑7PM, Sat 9AM‑4PM</p>
+            <p class="section-subtitle">We'd love to hear from you. Reach out anytime!</p>
+            <div class="contact-grid">
+                <div class="contact-info-card">
+                    <h3>Get in Touch</h3>
+                    <div class="info-item"><i class="fas fa-phone-alt"></i><span>0116375166</span></div>
+                    <div class="info-item"><i class="fab fa-whatsapp"></i><span>WhatsApp: 0116375166</span></div>
+                    <div class="info-item"><i class="fas fa-clock"></i><span>Mon‑Fri 8AM‑7PM<br>Sat 9AM‑4PM</span></div>
+                    <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>Kenyatta University area</span></div>
                 </div>
-                <form onsubmit="handleContactForm(event)" style="background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
-                    <div class="form-grid" style="grid-template-columns:1fr;">
-                        <input type="text" id="contactName" placeholder="Your Name *" required>
-                        <input type="tel" id="contactPhone" placeholder="Phone *" required>
-                        <textarea id="contactMessage" placeholder="Message *" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">Send Message</button>
-                </form>
+                <div class="contact-form-card">
+                    <h3>Send a Message</h3>
+                    <form onsubmit="handleContactForm(event)">
+                        <div class="form-group"><input type="text" id="contactName" placeholder="Your Full Name *" required></div>
+                        <div class="form-group"><input type="tel" id="contactPhone" placeholder="Phone Number *" required></div>
+                        <div class="form-group"><textarea id="contactMessage" placeholder="How can we help you? *" required></textarea></div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; padding:14px;"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
             </div>
         </section>
     </div>
 
     <footer style="background:var(--surface); color:var(--text-secondary); text-align:center; padding:18px; font-size:0.95rem; border-top:1px solid var(--border);">© 2026 CampusVault & Amos Services</footer>
-    <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+
+    <!-- ══════ TOGGLE FAB ══════ -->
+    <button class="fab-toggle" id="fabToggle" title="Call Amos">
+        <i class="fas fa-phone-alt"></i>
+    </button>
 
     <!-- Modals -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
@@ -369,34 +421,57 @@
         const sellsRef = db.ref('sells');
         const accommodationRef = db.ref('accommodationRequests');
         const inquiriesRef = db.ref('inquiries');
+        const deliveriesRef = db.ref('deliveryRequests');
+        const productsRef = db.ref('products');
 
-        // Dark/Light mode toggle
+        // Theme (dark default)
         const themeToggle = document.getElementById('themeToggle');
         const themeLabel = document.getElementById('themeLabel');
         const themeIcon = themeToggle.querySelector('i');
-
         function setTheme(isDark) {
             if (isDark) {
-                document.body.classList.add('dark');
+                document.body.classList.remove('light');
                 themeIcon.className = 'fas fa-sun';
                 themeLabel.textContent = 'Light';
             } else {
-                document.body.classList.remove('dark');
+                document.body.classList.add('light');
                 themeIcon.className = 'fas fa-moon';
                 themeLabel.textContent = 'Dark';
             }
             localStorage.setItem('campusvault-theme', isDark ? 'dark' : 'light');
         }
-
         const savedTheme = localStorage.getItem('campusvault-theme');
-        if (savedTheme === 'dark') {
-            setTheme(true);
-        } else {
-            setTheme(false);
-        }
+        setTheme(savedTheme !== 'light');  // default dark
+        themeToggle.addEventListener('click', () => setTheme(!document.body.classList.contains('light')));
 
-        themeToggle.addEventListener('click', () => {
-            setTheme(!document.body.classList.contains('dark'));
+        // Toggle FAB
+        const fab = document.getElementById('fabToggle');
+        const fabIcon = fab.querySelector('i');
+        let contactMode = localStorage.getItem('campusvault-contact-mode') || 'phone';
+        function updateFab() {
+            if (contactMode === 'whatsapp') {
+                fab.classList.add('whatsapp');
+                fabIcon.className = 'fab fa-whatsapp';
+                fab.title = 'Chat on WhatsApp';
+            } else {
+                fab.classList.remove('whatsapp');
+                fabIcon.className = 'fas fa-phone-alt';
+                fab.title = 'Call Amos';
+            }
+        }
+        updateFab();
+        fab.addEventListener('click', () => {
+            if (contactMode === 'phone') {
+                contactMode = 'whatsapp';
+                updateFab();
+                localStorage.setItem('campusvault-contact-mode', 'whatsapp');
+                window.open('https://wa.me/254116375166', '_blank');
+            } else {
+                contactMode = 'phone';
+                updateFab();
+                localStorage.setItem('campusvault-contact-mode', 'phone');
+                window.location.href = 'tel:0116375166';
+            }
         });
 
         // Mobile menu
@@ -406,9 +481,7 @@
             navLinks.classList.toggle('open');
             hamburger.innerHTML = navLinks.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
-            link.addEventListener('click', () => navLinks.classList.remove('open'));
-        });
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('open')));
         window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
 
         function showToast(msg, icon='✅') {
@@ -440,7 +513,6 @@
             e.preventDefault();
             const btn = document.getElementById('bookingBtnText'), spinner = document.getElementById('bookingSpinner');
             btn.style.display = 'none'; spinner.style.display = 'inline-block';
-
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const email = document.getElementById('custEmail').value.trim();
@@ -450,37 +522,21 @@
             const category = document.getElementById('itemCategory').value;
             const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
             const scheduledDateTime = document.getElementById('scheduledDateTime').value;
-
             if (!name || !phone || !checkIn || !collect || !itemCount || !category || !deliveryMethod || !scheduledDateTime) {
-                showToast('Please fill all required fields', '⚠️');
-                resetBtn();
-                return;
+                showToast('Fill all required fields', '⚠️'); resetBtn(); return;
             }
-
             const bookingId = generateId('CV'), trackingId = generateId('TRK');
-            const booking = {
-                bookingId, trackingId, name, phone, email,
-                checkIn, collect, itemCount: parseInt(itemCount), category,
-                deliveryMethod, scheduledDateTime,
-                status: 'active', timestamp: new Date().toISOString()
-            };
-
+            const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime, status: 'active', timestamp: new Date().toISOString() };
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
                     const conf = document.getElementById('bookingConfirmation');
-                    conf.innerHTML = `<h4 style="color:#065f46; font-size:1.2rem;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4>
-                        <p><strong>Booking ID:</strong> ${bookingId}</p>
-                        <p><strong>Tracking ID:</strong> ${trackingId}</p>
-                        <p><strong>Delivery:</strong> ${deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${new Date(scheduledDateTime).toLocaleString()}</p>
-                        <small>Save these IDs. Track your items anytime.</small>`;
+                    conf.innerHTML = `<h4 style="color:#065f46; font-size:1.2rem;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4><p><strong>Booking ID:</strong> ${bookingId}</p><p><strong>Tracking ID:</strong> ${trackingId}</p><p><strong>Delivery:</strong> ${deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${new Date(scheduledDateTime).toLocaleString()}</p><small>Save these IDs.</small>`;
                     conf.style.display = 'block';
                     document.getElementById('storageBookingForm').reset();
                     document.getElementById('scheduleField').style.display = 'none';
-                    showToast('Booking confirmed!', '🎉');
-                    resetBtn();
+                    showToast('Booking confirmed!', '🎉'); resetBtn();
                 })
-                .catch(err => { showToast('Error: ' + err.message, '❌'); resetBtn(); });
-
+                .catch(err => { showToast('Error: '+err.message, '❌'); resetBtn(); });
             function resetBtn() { btn.style.display = ''; spinner.style.display = 'none'; }
         }
 
@@ -488,7 +544,6 @@
             const input = document.getElementById('trackingInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('trackingResult');
             if (!input) { showToast('Enter Booking ID or Tracking ID', '⚠️'); return; }
-
             bookingsRef.orderByChild('bookingId').equalTo(input).once('value').then(snap => {
                 if (snap.exists()) return displayTracking(Object.values(snap.val())[0]);
                 return bookingsRef.orderByChild('trackingId').equalTo(input).once('value');
@@ -496,44 +551,36 @@
                 if (snap && snap.exists()) displayTracking(Object.values(snap.val())[0]);
                 else { resultDiv.style.display = 'none'; showToast('No record found.', '❌'); }
             });
-
             function displayTracking(b) {
-                resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'bg-green-100 text-green-800':'bg-gray-200'}">${b.status}</span></p>
-                    <p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p>
-                    <p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>
-                    ${b.deliveryMethod ? `<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} at ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>` : ''}`;
+                resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'badge-active':'badge-collected'}">${b.status}</span></p><p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p><p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>${b.deliveryMethod?`<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>`:''}`;
                 resultDiv.style.display = 'block';
             }
         }
 
-        const products = [
-            { id:1, name:'iPhone 12 Pro', category:'Phones', condition:'Used', price:55000, emoji:'📱', available:true },
-            { id:2, name:'Dell Inspiron Laptop', category:'Laptops', condition:'Used', price:32000, emoji:'💻', available:true },
-            { id:3, name:'Wooden Study Desk', category:'Furniture', condition:'Used', price:4500, emoji:'🪑', available:true },
-            { id:4, name:'Samsung Galaxy A54', category:'Phones', condition:'New', price:38000, emoji:'📱', available:true },
-            { id:5, name:'Microwave Oven', category:'Electronics', condition:'Used', price:6500, emoji:'🔌', available:false },
-            { id:6, name:'Gas Cylinder 6kg', category:'Kitchen', condition:'New', price:2800, emoji:'🍳', available:true },
-            { id:7, name:'Mattress - Orthopedic', category:'Furniture', condition:'Used', price:8000, emoji:'🛏️', available:true },
-            { id:8, name:'HP Pavilion Laptop', category:'Laptops', condition:'Used', price:28000, emoji:'💻', available:true },
-            { id:9, name:'Blender Set', category:'Kitchen', condition:'New', price:2200, emoji:'🍳', available:true },
-            { id:10, name:'Office Chair', category:'Furniture', condition:'Used', price:3500, emoji:'🪑', available:true },
-            { id:11, name:'Wireless Earbuds', category:'Electronics', condition:'New', price:1800, emoji:'🎧', available:true },
-            { id:12, name:'Bookshelf', category:'Furniture', condition:'Used', price:2500, emoji:'📚', available:true }
-        ];
+        // Dynamic marketplace
         function renderProducts(filter='all') {
-            const filtered = filter==='all' ? products : products.filter(p=>p.category===filter);
-            document.getElementById('marketplaceGrid').innerHTML = filtered.map(p=>`
-                <div class="product-card">
-                    <div style="font-size:2.2rem; text-align:center; padding:16px; background:var(--surface-alt); border-radius:var(--radius-sm);">${p.emoji}</div>
-                    <div style="padding:16px;">
-                        <h4 style="font-size:1.1rem;">${p.name}</h4>
-                        <span class="product-condition ${p.condition==='New'?'cond-new':'cond-used'}">${p.condition}</span>
-                        <p class="product-price" style="font-size:1.1rem; margin:6px 0;">KES ${p.price.toLocaleString()}</p>
-                        <p style="font-size:0.9rem; color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p>
-                        <button class="btn btn-primary" style="font-size:0.9rem; padding:8px 14px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}>Inquire</button>
-                    </div>
-                </div>
-            `).join('');
+            productsRef.on('value', snap => {
+                const allProducts = snap.val() ? Object.values(snap.val()) : [];
+                const filtered = filter==='all' ? allProducts : allProducts.filter(p=>p.category===filter);
+                const grid = document.getElementById('marketplaceGrid');
+                if (filtered.length === 0) {
+                    grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-secondary);">No products found.</p>';
+                    return;
+                }
+                grid.innerHTML = filtered.map(p => {
+                    const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}">` : `<div class="product-img-placeholder">📦</div>`;
+                    return `<div class="product-card">
+                        <div class="product-img-container">${imgHtml}</div>
+                        <div class="product-info">
+                            <h4 style="font-size:1.1rem;">${p.name}</h4>
+                            <span class="badge ${p.condition==='New'?'badge-active':'badge-collected'}">${p.condition}</span>
+                            <p style="font-weight:700; font-size:1.1rem; margin:6px 0;">KES ${p.price.toLocaleString()}</p>
+                            <p style="font-size:0.9rem; color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p>
+                            <button class="btn btn-primary" style="font-size:0.9rem; padding:8px 14px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}>Inquire</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            });
         }
         function filterProducts(cat) { renderProducts(cat); document.getElementById('marketplace').scrollIntoView({behavior:'smooth'}); }
         function inquireProduct(name,price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
@@ -545,33 +592,38 @@
             const phone = document.getElementById('contactPhone').value.trim();
             const message = document.getElementById('contactMessage').value.trim();
             const inquiryId = generateId('INQ');
-            inquiriesRef.child(inquiryId).set({
-                id: inquiryId,
-                name, phone, message,
-                timestamp: new Date().toISOString()
-            }).then(() => {
-                window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${message}`)}`, '_blank');
-                showToast('Message sent! Redirecting to WhatsApp...', '📱');
-                document.getElementById('contactName').value = '';
-                document.getElementById('contactPhone').value = '';
-                document.getElementById('contactMessage').value = '';
-            }).catch(err => showToast('Error: ' + err.message, '❌'));
+            inquiriesRef.child(inquiryId).set({ id: inquiryId, name, phone, message, timestamp: new Date().toISOString() })
+                .then(() => {
+                    window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${message}`)}`, '_blank');
+                    showToast('Message sent! Redirecting to WhatsApp...', '📱');
+                    document.getElementById('contactName').value = '';
+                    document.getElementById('contactPhone').value = '';
+                    document.getElementById('contactMessage').value = '';
+                }).catch(err => showToast('Error: ' + err.message, '❌'));
         }
 
-        function handleDeliveryRequest(e) { e.preventDefault(); showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); e.target.reset(); }
+        function handleDeliveryRequest(e) {
+            e.preventDefault();
+            const form = e.target;
+            const name = form.querySelector('input[placeholder="Your Name *"]').value.trim();
+            const phone = form.querySelector('input[placeholder="Phone *"]').value.trim();
+            const service = form.querySelector('select').value;
+            const details = form.querySelector('textarea').value.trim();
+            const deliveryId = generateId('DEL');
+            deliveriesRef.child(deliveryId).set({ id: deliveryId, name, phone, service, details, timestamp: new Date().toISOString() })
+                .then(() => { showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); form.reset(); })
+                .catch(err => showToast('Error: ' + err.message, '❌'));
+        }
+
         function handleSellSubmission(e) {
             e.preventDefault();
             const form = e.target;
-            const sellData = {
-                id: generateId('SELL'),
-                itemName: form[0].value, condition: form[1].value,
-                location: form[2].value, price: form[3].value,
-                description: form[4].value, timestamp: new Date().toISOString()
-            };
+            const sellData = { id: generateId('SELL'), itemName: form[0].value, condition: form[1].value, location: form[2].value, price: form[3].value, description: form[4].value, timestamp: new Date().toISOString() };
             sellsRef.child(sellData.id).set(sellData)
                 .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); form.reset(); })
                 .catch(err => showToast('Error', '❌'));
         }
+
         function handleHouseHunt(e) {
             e.preventDefault();
             const form = e.target;
@@ -584,7 +636,7 @@
             if (!name || !phone || !type) { showToast('Fill name, phone and housing type', '⚠️'); return; }
             const requestId = generateId('ACC');
             accommodationRef.child(requestId).set({ id: requestId, name, phone, type, location, budget, preferences, timestamp: new Date().toISOString() })
-                .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHousingModal'); form.reset(); })
+                .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHuntingModal'); form.reset(); })
                 .catch(err => showToast('Error: ' + err.message, '❌'));
         }
     </script>
