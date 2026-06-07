@@ -7,359 +7,353 @@
     <meta name="description" content="Secure luggage storage, accommodation, deliveries, marketplace & student support.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Firebase Compat SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
     <style>
         :root {
-            --bg: #f8fafc; --surface: #ffffff; --surface-alt: #f1f5f9; --text: #0f172a;
-            --text-secondary: #475569; --text-muted: #94a3b8; --primary: #1e3a5f;
-            --primary-light: #2563eb; --accent: #0ea5e9; --accent-glow: #38bdf8;
-            --gold: #f59e0b; --gold-light: #fbbf24; --emerald: #10b981; --emerald-light: #34d399;
-            --rose: #f43f5e; --border: #e2e8f0; --border-light: #f1f5f9;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
-            --shadow-md: 0 10px 25px -5px rgba(0,0,0,0.08), 0 4px 10px -6px rgba(0,0,0,0.04);
-            --shadow-lg: 0 20px 40px -10px rgba(0,0,0,0.1), 0 8px 20px -8px rgba(0,0,0,0.06);
-            --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.15);
-            --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 20px; --radius-2xl: 24px;
-            --transition: 0.3s cubic-bezier(0.4,0,0.2,1); --transition-fast: 0.15s cubic-bezier(0.4,0,0.2,1);
-            --font: 'Inter', system-ui, -apple-system, sans-serif; --max-width: 1200px; --nav-height: 70px;
+            /* Light theme (default) */
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-alt: #f1f5f9;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --primary: #1e3a5f;
+            --accent: #0ea5e9;
+            --gold: #f59e0b;
+            --emerald: #10b981;
+            --rose: #f43f5e;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.08);
+            --radius: 10px;
+            --radius-sm: 6px;
+            --transition: 0.2s ease;
+            --font: 'Inter', system-ui, sans-serif;
+            --max-width: 1100px;
+            --font-base: 1rem;
         }
+
+        body.dark {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-alt: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --primary: #38bdf8;
+            --accent: #0ea5e9;
+            --gold: #fbbf24;
+            --emerald: #34d399;
+            --rose: #fb7185;
+            --border: #475569;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.4);
+        }
+
         * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
-        body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-        .bg-blobs { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
-        .bg-blob { position: absolute; border-radius:50%; filter:blur(80px); opacity:0.15; animation: floatBlob 20s infinite ease-in-out; }
-        .bg-blob:nth-child(1) { width:500px; height:500px; background: var(--accent); top:-10%; left:-5%; animation-delay:0s; animation-duration:22s; }
-        .bg-blob:nth-child(2) { width:400px; height:400px; background: var(--emerald); bottom:-8%; right:-8%; animation-delay:-7s; animation-duration:18s; }
-        .bg-blob:nth-child(3) { width:350px; height:350px; background: var(--gold); top:40%; left:50%; animation-delay:-14s; animation-duration:25s; }
-        @keyframes floatBlob { 0%,100% { transform:translate(0,0) scale(1); } 25% { transform:translate(60px,-40px) scale(1.1); } 50% { transform:translate(-30px,50px) scale(0.9); } 75% { transform:translate(-50px,-30px) scale(1.05); } }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s, color 0.3s;
+            font-weight: 400;
+            font-size: var(--font-base);
+        }
+        .bg-blobs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+        .bg-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.08; animation:float 20s infinite alternate; }
+        .bg-blob:nth-child(1){ width:500px; height:500px; background:var(--accent); top:-10%; left:-10%; }
+        .bg-blob:nth-child(2){ width:400px; height:400px; background:var(--emerald); bottom:-10%; right:-5%; animation-duration:25s; }
+        .bg-blob:nth-child(3){ width:300px; height:300px; background:var(--gold); top:50%; left:50%; animation-duration:30s; }
+        @keyframes float { 0%{transform:translate(0,0);} 100%{transform:translate(30px,-20px);} }
         .main-content { position:relative; z-index:1; }
-        .nav { position:sticky; top:0; z-index:1000; background: rgba(255,255,255,0.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); transition:var(--transition); height:var(--nav-height); display:flex; align-items:center; }
-        .nav.scrolled { box-shadow:var(--shadow-md); background:rgba(255,255,255,0.95); }
-        .nav-inner { max-width:var(--max-width); margin:0 auto; width:100%; padding:0 24px; display:flex; align-items:center; justify-content:space-between; }
-        .nav-logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.3rem; color:var(--primary); text-decoration:none; letter-spacing:-0.5px; }
-        .nav-logo .logo-icon { width:40px; height:40px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.1rem; }
-        .nav-links { display:flex; align-items:center; gap:6px; list-style:none; flex-wrap:wrap; }
-        .nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:500; font-size:0.9rem; padding:8px 14px; border-radius:20px; transition:var(--transition-fast); white-space:nowrap; }
-        .nav-links a:hover, .nav-links a.active { background:var(--surface-alt); color:var(--primary); }
-        .nav-cta { background:var(--primary)!important; color:#fff!important; font-weight:600!important; padding:10px 18px!important; border-radius:25px!important; }
-        .nav-cta:hover { background:#152d4a!important; transform:translateY(-1px); box-shadow:var(--shadow-md); }
-        .hamburger { display:none; background:none; border:none; cursor:pointer; font-size:1.5rem; color:var(--text); padding:8px; z-index:1001; }
-        .section { padding:60px 24px; max-width:var(--max-width); margin:0 auto; position:relative; }
-        .section-header { text-align:center; margin-bottom:48px; }
-        .section-tag { display:inline-block; background:linear-gradient(135deg, rgba(14,165,233,0.1), rgba(16,185,129,0.1)); color:var(--accent); font-weight:600; font-size:0.85rem; padding:6px 16px; border-radius:20px; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:12px; }
-        .section-title { font-size:clamp(1.8rem, 4vw, 2.6rem); font-weight:800; letter-spacing:-1px; line-height:1.2; margin-bottom:12px; color:var(--text); }
-        .section-subtitle { color:var(--text-secondary); font-size:1.1rem; max-width:600px; margin:0 auto; }
-        .gradient-text { background:linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-        .hero { padding:40px 24px 60px; max-width:var(--max-width); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center; min-height:calc(100vh - var(--nav-height) - 40px); }
-        .hero-content h1 { font-size:clamp(2.2rem, 5vw, 3.2rem); font-weight:900; letter-spacing:-1.5px; line-height:1.1; margin-bottom:16px; }
-        .hero-content .subhead { font-size:1.1rem; color:var(--text-secondary); margin-bottom:28px; line-height:1.7; max-width:500px; }
-        .hero-buttons { display:flex; flex-wrap:wrap; gap:12px; }
-        .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 22px; border-radius:25px; font-weight:600; font-size:0.95rem; text-decoration:none; cursor:pointer; border:none; transition:var(--transition); white-space:nowrap; font-family:var(--font); letter-spacing:-0.2px; }
-        .btn-primary { background:var(--primary); color:#fff; box-shadow:var(--shadow); }
-        .btn-primary:hover { background:#152d4a; transform:translateY(-2px); box-shadow:var(--shadow-lg); }
-        .btn-accent { background:var(--accent); color:#fff; box-shadow:var(--shadow); }
-        .btn-accent:hover { background:#0284c7; transform:translateY(-2px); box-shadow:var(--shadow-lg); }
-        .btn-outline { background:transparent; border:2px solid var(--border); color:var(--text); }
-        .btn-outline:hover { border-color:var(--primary); color:var(--primary); background:rgba(30,58,95,0.03); }
-        .btn-gold { background:var(--gold); color:#1a1a1a; font-weight:700; box-shadow:var(--shadow); }
-        .btn-gold:hover { background:var(--gold-light); transform:translateY(-2px); box-shadow:var(--shadow-lg); }
-        .btn-lg { padding:14px 28px; font-size:1rem; border-radius:30px; }
-        .hero-visual { display:flex; align-items:center; justify-content:center; }
-        .hero-card-stack { position:relative; width:100%; max-width:420px; aspect-ratio:1/1; }
-        .hero-floating-card { position:absolute; background:#fff; border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-lg); animation:floatCard 6s infinite ease-in-out; display:flex; align-items:center; gap:12px; font-weight:600; font-size:0.9rem; }
-        .hero-floating-card:nth-child(1) { top:5%; right:5%; animation-delay:0s; }
-        .hero-floating-card:nth-child(2) { top:38%; left:0%; animation-delay:-2s; }
-        .hero-floating-card:nth-child(3) { bottom:8%; right:8%; animation-delay:-4s; }
-        .hero-floating-card .fc-icon { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
-        .fc-blue { background:#dbeafe; color:#2563eb; } .fc-green { background:#d1fae5; color:#10b981; } .fc-amber { background:#fef3c7; color:#f59e0b; }
-        @keyframes floatCard { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-18px); } }
-        .services-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px; }
-        .service-card { background:var(--surface); border-radius:var(--radius-xl); padding:28px; border:1px solid var(--border-light); transition:var(--transition); cursor:pointer; position:relative; overflow:hidden; box-shadow:var(--shadow-sm); }
-        .service-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:transparent; }
-        .service-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; background:linear-gradient(90deg, var(--primary), var(--accent)); transform:scaleX(0); transition:transform 0.4s ease; transform-origin:left; }
-        .service-card:hover::before { transform:scaleX(1); }
-        .service-icon { width:56px; height:56px; border-radius:var(--radius); display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:16px; font-weight:700; }
-        .si-blue { background:#eff6ff; color:#2563eb; } .si-green { background:#ecfdf5; color:#10b981; } .si-amber { background:#fffbeb; color:#f59e0b; } .si-rose { background:#fff1f2; color:#f43f5e; } .si-purple { background:#faf5ff; color:#8b5cf6; }
-        .service-card h3 { font-size:1.2rem; font-weight:700; margin-bottom:8px; letter-spacing:-0.3px; }
-        .service-card p { color:var(--text-secondary); font-size:0.9rem; margin-bottom:16px; line-height:1.5; }
-        .service-card .card-btn { font-weight:600; font-size:0.85rem; color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:var(--transition-fast); }
-        .service-card .card-btn:hover { gap:10px; color:var(--accent); }
-        .service-features { list-style:none; display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
-        .service-features li { font-size:0.75rem; background:var(--surface-alt); padding:4px 10px; border-radius:12px; color:var(--text-secondary); font-weight:500; }
-        .tracking-area { background:var(--surface); border-radius:var(--radius-2xl); padding:40px; box-shadow:var(--shadow-md); border:1px solid var(--border-light); max-width:700px; margin:0 auto; }
-        .tracking-area h3 { font-size:1.4rem; font-weight:700; margin-bottom:20px; text-align:center; }
-        .input-group { display:flex; gap:10px; flex-wrap:wrap; }
-        .input-group input { flex:1; min-width:200px; padding:14px 18px; border-radius:25px; border:2px solid var(--border); font-size:1rem; font-family:var(--font); transition:var(--transition-fast); background:var(--bg); }
-        .input-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.1); }
-        .tracking-result { margin-top:24px; padding:20px; border-radius:var(--radius-lg); background:var(--surface-alt); display:none; animation:fadeInUp 0.4s ease; }
-        .tracking-result.show { display:block; }
-        .tracking-result .status-badge { display:inline-block; padding:6px 14px; border-radius:15px; font-weight:600; font-size:0.85rem; }
-        .status-active { background:#d1fae5; color:#065f46; } .status-collected { background:#e2e8f0; color:#475569; }
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(15px); } to { opacity:1; transform:translateY(0); } }
-        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-        .form-grid input, .form-grid select, .form-grid textarea { width:100%; padding:13px 16px; border-radius:var(--radius); border:2px solid var(--border); font-size:0.95rem; font-family:var(--font); transition:var(--transition-fast); background:var(--bg); }
-        .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.08); }
-        .form-grid .full-width { grid-column:1 / -1; }
-        textarea { resize:vertical; min-height:100px; }
-        .marketplace-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:20px; }
-        .product-card { background:#fff; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border-light); transition:var(--transition); box-shadow:var(--shadow-sm); }
-        .product-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
-        .product-img { width:100%; height:180px; object-fit:cover; background:var(--surface-alt); display:flex; align-items:center; justify-content:center; font-size:3rem; color:#cbd5e1; }
-        .product-info { padding:16px; }
-        .product-info h4 { font-weight:700; margin-bottom:4px; font-size:1rem; }
-        .product-condition { font-size:0.75rem; font-weight:600; padding:3px 10px; border-radius:10px; display:inline-block; margin-bottom:6px; }
-        .cond-new { background:#d1fae5; color:#065f46; } .cond-used { background:#fef3c7; color:#92400e; }
-        .product-price { font-weight:800; font-size:1.2rem; color:var(--primary); }
-        .product-actions { display:flex; gap:8px; margin-top:10px; }
-        .testimonials-scroll { display:flex; gap:20px; overflow-x:auto; padding:10px 0; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; }
-        .testimonials-scroll::-webkit-scrollbar { height:4px; } .testimonials-scroll::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:10px; }
-        .testimonial-card { min-width:300px; flex-shrink:0; background:#fff; border-radius:var(--radius-lg); padding:24px; border:1px solid var(--border-light); scroll-snap-align:start; box-shadow:var(--shadow-sm); }
-        .testimonial-card .stars { color:var(--gold); font-size:0.9rem; margin-bottom:8px; }
-        .testimonial-card .quote { color:var(--text-secondary); font-style:italic; margin-bottom:12px; font-size:0.9rem; line-height:1.5; }
-        .testimonial-card .author { font-weight:700; font-size:0.85rem; }
-        .trust-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; text-align:center; }
-        .trust-item { padding:24px 16px; border-radius:var(--radius-lg); background:#fff; border:1px solid var(--border-light); transition:var(--transition); }
-        .trust-item:hover { transform:translateY(-3px); box-shadow:var(--shadow-md); }
-        .trust-item .trust-icon { font-size:2rem; margin-bottom:10px; }
-        .trust-item h4 { font-weight:700; font-size:0.95rem; margin-bottom:4px; }
-        .trust-item p { font-size:0.8rem; color:var(--text-secondary); }
-        .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
-        .contact-info-card { background:var(--primary); color:#fff; border-radius:var(--radius-xl); padding:32px; display:flex; flex-direction:column; gap:20px; }
-        .contact-info-card a { color:#fff; text-decoration:none; font-weight:500; display:flex; align-items:center; gap:10px; transition:var(--transition-fast); }
-        .contact-info-card a:hover { color:var(--accent-glow); }
-        .contact-form-card { background:#fff; border-radius:var(--radius-xl); padding:32px; border:1px solid var(--border-light); box-shadow:var(--shadow-md); }
-        .footer { background:var(--primary); color:#cbd5e1; padding:40px 24px; text-align:center; font-size:0.9rem; }
-        .footer a { color:#fff; text-decoration:none; font-weight:500; }
-        .modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(6px); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.3s ease; }
-        .modal { background:#fff; border-radius:var(--radius-2xl); padding:32px; max-width:600px; width:100%; max-height:85vh; overflow-y:auto; box-shadow:var(--shadow-xl); position:relative; animation:slideUp 0.3s ease; }
-        .modal-close { position:absolute; top:16px; right:16px; background:var(--surface-alt); border:none; width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:1rem; transition:var(--transition-fast); display:flex; align-items:center; justify-content:center; }
-        .modal-close:hover { background:#e2e8f0; }
-        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-        @keyframes slideUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
-        .whatsapp-float { position:fixed; bottom:24px; right:24px; z-index:1500; width:58px; height:58px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 8px 25px rgba(37,211,102,0.4); cursor:pointer; transition:var(--transition); text-decoration:none; animation:pulse 2s infinite; }
-        .whatsapp-float:hover { transform:scale(1.1); box-shadow:0 12px 30px rgba(37,211,102,0.55); }
-        @keyframes pulse { 0%,100% { box-shadow:0 8px 25px rgba(37,211,102,0.4); } 50% { box-shadow:0 8px 40px rgba(37,211,102,0.7); } }
-        .toast { position:fixed; bottom:100px; right:24px; z-index:3000; background:#1e293b; color:#fff; padding:14px 22px; border-radius:25px; font-weight:600; font-size:0.9rem; box-shadow:var(--shadow-lg); animation:slideUp 0.3s ease, fadeOut 0.3s ease 2.5s forwards; display:flex; align-items:center; gap:8px; }
-        @keyframes fadeOut { to { opacity:0; transform:translateY(10px); } }
-        @media (max-width:900px) {
-            .hero { grid-template-columns:1fr; text-align:center; gap:30px; }
-            .hero-content .subhead { max-width:100%; }
-            .hero-buttons { justify-content:center; }
-            .hero-card-stack { max-width:300px; }
-            .contact-grid { grid-template-columns:1fr; }
-            .form-grid { grid-template-columns:1fr; }
-            .nav-links { position:fixed; top:0; right:-100%; width:280px; height:100vh; background:#fff; flex-direction:column; padding:80px 24px 30px; gap:4px; box-shadow:var(--shadow-xl); transition:var(--transition); z-index:999; }
+
+        /* Navigation */
+        .nav { position:sticky; top:0; z-index:1000; background: var(--surface); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 20px; height:64px; display:flex; align-items:center; transition:var(--transition); box-shadow: var(--shadow-sm); }
+        .nav.scrolled { box-shadow:var(--shadow); }
+        .nav-inner { max-width:var(--max-width); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
+        .nav-logo { font-weight:800; font-size:1.5rem; color:var(--primary); text-decoration:none; display:flex; align-items:center; gap:6px; }
+        .nav-logo i { font-size:1.6rem; background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .nav-links { display:flex; gap:6px; list-style:none; align-items:center; }
+        .nav-links a { text-decoration:none; color:var(--text-secondary); font-weight:500; padding:6px 14px; border-radius:20px; font-size:1rem; transition:var(--transition); }
+        .nav-links a:hover { background:var(--surface-alt); color:var(--primary); }
+        .nav-cta { background:var(--primary)!important; color:#fff!important; font-weight:600!important; border-radius:25px!important; padding:8px 18px!important; }
+        .hamburger { display:none; background:none; border:none; font-size:1.5rem; color:var(--text); cursor:pointer; z-index:1001; }
+
+        .theme-toggle {
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        .theme-toggle i { font-size: 1.1rem; }
+        .theme-toggle:hover { background: var(--border); }
+
+        @media (max-width:768px) {
+            .nav-links { position:fixed; top:0; right:-100%; width:280px; height:100vh; background:var(--surface); flex-direction:column; padding:80px 24px; gap:12px; box-shadow:var(--shadow-md); transition:0.3s; z-index:999; }
             .nav-links.open { right:0; }
             .hamburger { display:block; }
-            .services-grid { grid-template-columns:1fr; }
+            .theme-toggle { margin-left: 0; margin-top: 10px; }
         }
+
+        .hero { padding:40px 20px; max-width:var(--max-width); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; min-height:calc(100vh - 64px); }
+        .hero-content h1 { font-size:clamp(2.4rem,5vw,3.2rem); font-weight:800; letter-spacing:-0.8px; line-height:1.15; margin-bottom:16px; }
+        .hero-content .subhead { font-size:1.2rem; color:var(--text-secondary); margin-bottom:28px; font-weight: 400; }
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:30px; font-weight:600; font-size:1rem; cursor:pointer; border:none; transition:var(--transition); text-decoration:none; }
+        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 2px 8px rgba(30,58,95,0.2); }
+        .btn-primary:hover { filter: brightness(1.1); transform:translateY(-2px); }
+        .btn-accent { background:var(--accent); color:#fff; }
+        .btn-accent:hover { filter: brightness(1.1); transform:translateY(-2px); }
+        .btn-gold { background:var(--gold); color:#1a1a1a; }
+        .btn-gold:hover { filter: brightness(1.1); transform:translateY(-2px); }
+        .btn-outline { background:transparent; border:2px solid var(--border); color:var(--text); }
+        .btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+        .hero-visual { position:relative; }
+        .floating-card { background:var(--surface); border-radius:var(--radius); padding:16px 20px; box-shadow:var(--shadow); display:flex; align-items:center; gap:10px; font-weight:600; font-size:1rem; position:absolute; animation:floatCard 5s infinite alternate; }
+        .floating-card:nth-child(1){ top:8%; right:8%; }
+        .floating-card:nth-child(2){ bottom:22%; left:5%; animation-delay:-2s; }
+        .floating-card:nth-child(3){ top:50%; left:25%; animation-delay:-4s; }
+        @keyframes floatCard { 0%{transform:translateY(0);} 100%{transform:translateY(-12px);} }
+        @media (max-width:768px) {
+            .hero { grid-template-columns:1fr; text-align:center; min-height:auto; }
+            .hero-visual { display:none; }
+        }
+
+        .section { padding:60px 20px; max-width:var(--max-width); margin:0 auto; }
+        .section-title { font-size:2rem; font-weight:800; text-align:center; margin-bottom:10px; letter-spacing: -0.5px; }
+        .section-subtitle { color:var(--text-secondary); text-align:center; max-width:600px; margin:0 auto 36px; font-size:1.1rem; font-weight: 400; }
+        .gradient-text { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .services-grid, .marketplace-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+        .service-card, .product-card { background:var(--surface); border-radius:var(--radius); padding:24px; border:1px solid var(--border); transition:var(--transition); }
+        .service-card:hover, .product-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+        .service-icon { width:50px; height:50px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:16px; }
+        .booking-card { background:var(--surface); border-radius:var(--radius); padding:32px; box-shadow:var(--shadow); }
+        .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .form-grid input, .form-grid select, .form-grid textarea { width:100%; padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--border); font-family:var(--font); font-size:1rem; background: var(--surface); color: var(--text); transition:0.2s; }
+        .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.2); }
+        .radio-card { display:flex; align-items:center; gap:8px; background:var(--surface-alt); padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--border); cursor:pointer; transition:0.2s; font-size:1rem; }
+        .radio-card input { accent-color:var(--primary); }
+        label { font-weight:500; }
         @media (max-width:480px) {
-            .hero-content h1 { font-size:1.8rem; }
-            .section { padding:40px 16px; }
-            .btn { padding:10px 16px; font-size:0.85rem; }
-            .hero-buttons { flex-direction:column; align-items:center; }
-            .hero-buttons .btn { width:100%; justify-content:center; }
-            .marketplace-grid { grid-template-columns:1fr; }
+            .form-grid { grid-template-columns:1fr; }
         }
+
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:2000; }
+        .modal { background:var(--surface); border-radius:var(--radius); padding:28px; width:90%; max-width:500px; position:relative; animation:slideUp 0.3s; color: var(--text); }
+        @keyframes slideUp { from{opacity:0; transform:translateY(20px);} }
+        .whatsapp-float { position:fixed; bottom:24px; right:24px; width:56px; height:56px; background:#25d366; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:#fff; box-shadow:0 4px 15px rgba(37,211,102,0.4); z-index:1500; transition:0.3s; }
+        .whatsapp-float:hover { transform:scale(1.05); }
+        .toast { position:fixed; bottom:90px; right:24px; background:var(--text); color:var(--bg); padding:12px 24px; border-radius:30px; font-weight:600; font-size:1rem; z-index:3000; animation:slideUp 0.3s, fadeOut 0.3s 2.5s forwards; }
+        @keyframes fadeOut { to{opacity:0; transform:translateY(10px);} }
+        .loading-spinner { display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3); border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px; }
+        @keyframes spin { to{transform:rotate(360deg);} }
     </style>
 </head>
 <body>
-    <!-- Background blobs -->
     <div class="bg-blobs"><div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div></div>
-
-    <!-- Navigation -->
     <nav class="nav" id="navbar">
         <div class="nav-inner">
-            <a href="#" class="nav-logo"><div class="logo-icon"><i class="fas fa-shield-halved"></i></div>CampusVault</a>
+            <a href="#" class="nav-logo"><i class="fas fa-shield-halved"></i> CampusVault</a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#services" onclick="closeNav()">Services</a></li>
-                <li><a href="#storage" onclick="closeNav()">Storage</a></li>
-                <li><a href="#track" onclick="closeNav()">Track</a></li>
-                <li><a href="#marketplace" onclick="closeNav()">Marketplace</a></li>
-                <li><a href="#accommodation" onclick="closeNav()">Housing</a></li>
-                <li><a href="#contact" onclick="closeNav()">Contact</a></li>
-                <li><a href="#booking" class="nav-cta" onclick="closeNav()">Book Now</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#storage">Storage</a></li>
+                <li><a href="#track">Track</a></li>
+                <li><a href="#marketplace">Marketplace</a></li>
+                <li><a href="#accommodation">Housing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#storage" class="nav-cta">Book Now</a></li>
+                <li><button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i> <span id="themeLabel">Dark</span></button></li>
             </ul>
-            <button class="hamburger" id="hamburger" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
         </div>
     </nav>
 
     <div class="main-content">
-        <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="hero-content">
-                <span class="section-tag">🚀 Your Trusted Student Services Partner</span>
-                <h1>Storage, Housing, Deliveries & <span class="gradient-text">Student Services</span> Made Simple.</h1>
-                <p class="subhead">Secure luggage storage, accommodation assistance, deliveries, errands, second-hand deals, and student support — all in one place.</p>
-                <div class="hero-buttons">
-                    <a href="#booking" class="btn btn-primary btn-lg"><i class="fas fa-box-archive"></i> Book Luggage Storage</a>
-                    <a href="#accommodation" class="btn btn-accent btn-lg"><i class="fas fa-house"></i> Find Accommodation</a>
-                    <a href="#marketplace" class="btn btn-outline btn-lg"><i class="fas fa-store"></i> Buy & Sell</a>
-                    <a href="#contact" class="btn btn-gold btn-lg"><i class="fas fa-comment-dots"></i> Contact Amos</a>
+                <h1>Storage, Housing & <span class="gradient-text">Deliveries</span> Made Simple.</h1>
+                <p class="subhead">Secure luggage storage, accommodation assistance, fast deliveries, and a student marketplace – all in one place.</p>
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                    <a href="#storage" class="btn btn-primary">📦 Book Storage</a>
+                    <a href="#accommodation" class="btn btn-accent">🏠 Housing</a>
+                    <a href="#marketplace" class="btn btn-outline">🛒 Marketplace</a>
+                    <button class="btn btn-gold" onclick="openModal('deliveryModal')">🚚 Quick Delivery</button>
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="hero-card-stack">
-                    <div class="hero-floating-card"><div class="fc-icon fc-blue"><i class="fas fa-box"></i></div><div><strong>Secure Storage</strong><br><small>Tracked & Verified</small></div></div>
-                    <div class="hero-floating-card"><div class="fc-icon fc-green"><i class="fas fa-truck-fast"></i></div><div><strong>Fast Delivery</strong><br><small>Campus-wide</small></div></div>
-                    <div class="hero-floating-card"><div class="fc-icon fc-amber"><i class="fas fa-star"></i></div><div><strong>Trusted by 500+</strong><br><small>Students</small></div></div>
+                <div class="floating-card"><i class="fas fa-box" style="color:#2563eb;"></i> Secure Storage</div>
+                <div class="floating-card"><i class="fas fa-truck" style="color:#10b981;"></i> Fast Delivery</div>
+                <div class="floating-card"><i class="fas fa-star" style="color:#f59e0b;"></i> Trusted by 500+</div>
+            </div>
+        </section>
+
+        <section class="section" id="services">
+            <h2 class="section-title">All‑In‑One <span class="gradient-text">Student Platform</span></h2>
+            <p class="section-subtitle">Storage, housing, marketplace, deliveries and student support – one platform.</p>
+            <div class="services-grid">
+                <div class="service-card" onclick="document.getElementById('storage').scrollIntoView({behavior:'smooth'})">
+                    <div class="service-icon" style="background:#eff6ff;color:#2563eb;"><i class="fas fa-warehouse"></i></div>
+                    <h3>📦 Luggage Storage</h3><p>Book securely, get a tracking ID.</p>
+                    <button class="btn btn-primary" style="margin-top:12px; width:100%;">Book Now</button>
+                </div>
+                <div class="service-card" onclick="document.getElementById('accommodation').scrollIntoView({behavior:'smooth'})">
+                    <div class="service-icon" style="background:#ecfdf5;color:#10b981;"><i class="fas fa-house-chimney"></i></div>
+                    <h3>🏠 House Hunting</h3><p>Find rooms, bedsitters, hostels.</p>
+                    <button class="btn btn-accent" style="margin-top:12px; width:100%;">Find a House</button>
+                </div>
+                <div class="service-card" onclick="document.getElementById('marketplace').scrollIntoView({behavior:'smooth'})">
+                    <div class="service-icon" style="background:#fffbeb;color:#f59e0b;"><i class="fas fa-store-alt"></i></div>
+                    <h3>🛒 Buy & Sell</h3><p>Phones, laptops, furniture.</p>
+                    <button class="btn btn-outline" style="margin-top:12px; width:100%;">Browse Items</button>
+                </div>
+                <div class="service-card" onclick="openModal('deliveryModal')">
+                    <div class="service-icon" style="background:#fff1f2;color:#f43f5e;"><i class="fas fa-motorcycle"></i></div>
+                    <h3>🚚 Delivery & Errands</h3><p>Food, parcels, shopping.</p>
+                    <button class="btn btn-accent" style="margin-top:12px; width:100%;">Request Delivery</button>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon" style="background:#faf5ff;color:#8b5cf6;"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>🎓 Student Support</h3><p>Networking, info, opportunities.</p>
+                    <a href="#contact" class="btn btn-outline" style="margin-top:12px; width:100%;">Contact Us</a>
                 </div>
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section class="section" id="services">
-            <div class="section-header">
-                <span class="section-tag">What We Offer</span>
-                <h2 class="section-title">All-In-One <span class="gradient-text">Student Platform</span></h2>
-                <p class="section-subtitle">Everything a student needs — storage, housing, marketplace, deliveries, and support services.</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card" onclick="scrollToSection('storage')"><div class="service-icon si-blue"><i class="fas fa-warehouse"></i></div><h3>📦 Luggage Storage</h3><p>Securely store luggage, boxes, electronics, bedding & personal belongings.</p><ul class="service-features"><li>Online Booking</li><li>Tracking ID</li><li>Secure Storage</li><li>Pickup Assistance</li></ul><a href="#booking" class="card-btn">Book Storage <i class="fas fa-arrow-right"></i></a></div>
-                <div class="service-card" onclick="scrollToSection('accommodation')"><div class="service-icon si-green"><i class="fas fa-house-chimney"></i></div><h3>🏠 House Hunting</h3><p>Find single rooms, bedsitters, one-bedroom houses & student hostels.</p><ul class="service-features"><li>Location Preference</li><li>Budget Matching</li><li>Available Listings</li><li>Direct Assistance</li></ul><a href="#accommodation" class="card-btn">Find a House <i class="fas fa-arrow-right"></i></a></div>
-                <div class="service-card" onclick="scrollToSection('marketplace')"><div class="service-icon si-amber"><i class="fas fa-store-alt"></i></div><h3>🛒 Buy & Sell Marketplace</h3><p>Buy and sell quality new & second-hand items.</p><ul class="service-features"><li>Phones</li><li>Laptops</li><li>Furniture</li><li>Electronics</li></ul><a href="#marketplace" class="card-btn">Browse Items <i class="fas fa-arrow-right"></i></a></div>
-                <div class="service-card" onclick="openModal('deliveryModal')"><div class="service-icon si-rose"><i class="fas fa-motorcycle"></i></div><h3>🚚 Delivery & Errands</h3><p>Reliable delivery & errand services around campus.</p><ul class="service-features"><li>Food Delivery</li><li>Parcels</li><li>Pickups</li><li>Shopping</li></ul><a href="#" class="card-btn" onclick="event.preventDefault(); openModal('deliveryModal')">Request Service <i class="fas fa-arrow-right"></i></a></div>
-                <div class="service-card"><div class="service-icon si-purple"><i class="fas fa-graduation-cap"></i></div><h3>🎓 Student Services</h3><p>Support services — networking, mobilization, information assistance & student opportunities.</p><ul class="service-features"><li>Networking</li><li>Mobilization</li><li>Info Assistance</li><li>Opportunities</li></ul><a href="#contact" class="card-btn">Learn More <i class="fas fa-arrow-right"></i></a></div>
-            </div>
-        </section>
-
-        <!-- Booking Section -->
         <section class="section" id="storage">
-            <div class="section-header"><span class="section-tag">Flagship Service</span><h2 class="section-title">📦 Luggage <span class="gradient-text">Storage Booking</span></h2><p class="section-subtitle">Book secure storage in seconds. Get your unique Booking ID & Tracking ID instantly.</p></div>
-            <div id="booking" style="max-width:700px;margin:0 auto;">
-                <div class="tracking-area" style="max-width:100%;">
-                    <h3><i class="fas fa-calendar-check"></i> Book Your Storage</h3>
+            <h2 class="section-title">📦 <span class="gradient-text">Book Storage</span></h2>
+            <p class="section-subtitle">Fill in the details, choose delivery method, get your IDs instantly.</p>
+            <div style="max-width:780px; margin:0 auto;">
+                <div class="booking-card">
                     <form id="storageBookingForm" onsubmit="handleStorageBooking(event)">
-                        <div class="form-grid">
-                            <input type="text" placeholder="Full Name *" id="custName" required>
-                            <input type="tel" placeholder="Phone Number *" id="custPhone" required>
-                            <input type="email" placeholder="Email (optional)" id="custEmail">
-                            <input type="date" id="checkInDate" required>
-                            <input type="date" id="collectDate" required>
-                            <input type="number" placeholder="Number of Items *" id="itemCount" min="1" required>
-                            <select id="itemCategory" required class="full-width">
-                                <option value="">Select Item Category</option>
-                                <option>Luggage/Bags</option><option>Boxes</option><option>Electronics</option><option>Bedding</option><option>Furniture</option><option>Kitchen Items</option><option>Books</option><option>Other</option>
-                            </select>
+                        <div class="form-grid" style="margin-bottom:20px;">
+                            <input type="text" id="custName" placeholder="Full Name *" required>
+                            <input type="tel" id="custPhone" placeholder="Phone Number *" required>
+                            <input type="email" id="custEmail" placeholder="Email (optional)" style="grid-column:1/-1;">
+                            <div><label style="display:block; margin-bottom:6px; font-size:0.95rem;">Start Date *</label><input type="date" id="checkInDate" required></div>
+                            <div><label style="display:block; margin-bottom:6px; font-size:0.95rem;">Collection Date *</label><input type="date" id="collectDate" required></div>
+                            <div><label style="display:block; margin-bottom:6px; font-size:0.95rem;">No. of Items *</label><input type="number" id="itemCount" min="1" required></div>
+                            <div><label style="display:block; margin-bottom:6px; font-size:0.95rem;">Category *</label><select id="itemCategory" required><option value="">-- Select --</option><option>Luggage/Bags</option><option>Boxes</option><option>Electronics</option><option>Bedding</option><option>Furniture</option><option>Kitchen Items</option><option>Books</option><option>Other</option></select></div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:16px;justify-content:center;"><i class="fas fa-lock"></i> Confirm Booking & Generate IDs</button>
+                        <div style="margin-bottom:20px;">
+                            <label style="font-weight:600; display:block; margin-bottom:10px;">🚚 Delivery Method *</label>
+                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                                <label class="radio-card"><input type="radio" name="deliveryMethod" value="self" onchange="toggleSchedule()"> I'll bring them myself</label>
+                                <label class="radio-card"><input type="radio" name="deliveryMethod" value="pickup" onchange="toggleSchedule()"> Request pickup</label>
+                            </div>
+                        </div>
+                        <div id="scheduleField" style="display:none; margin-bottom:20px; background:var(--surface-alt); border-radius:var(--radius-sm); padding:16px;">
+                            <label style="font-weight:600; display:block; margin-bottom:8px; font-size:1rem;"><span id="scheduleLabel">Preferred Date & Time</span> *</label>
+                            <input type="datetime-local" id="scheduledDateTime" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px;">
+                            <span id="bookingBtnText">Confirm Booking</span>
+                            <span id="bookingSpinner" class="loading-spinner" style="display:none;"></span>
+                        </button>
                     </form>
-                    <div id="bookingConfirmation" style="display:none;margin-top:20px;padding:20px;background:#f0fdf4;border-radius:16px;border:2px solid #10b981;">
-                        <h4 style="color:#065f46;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4>
-                        <p><strong>Booking ID:</strong> <span id="displayBookingId" style="font-family:monospace;font-size:1.1rem;background:#fff;padding:4px 10px;border-radius:8px;"></span></p>
-                        <p><strong>Tracking ID:</strong> <span id="displayTrackingId" style="font-family:monospace;font-size:1.1rem;background:#fff;padding:4px 10px;border-radius:8px;"></span></p>
-                        <p style="font-size:0.85rem;color:#065f46;">Save these IDs! Use them to track your items anytime.</p>
+                    <div id="bookingConfirmation" style="display:none; margin-top:20px; padding:20px; background:var(--surface-alt); border-radius:var(--radius-sm); border:2px solid #10b981;">
+                        <h4 style="color:#065f46; font-size:1.2rem;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4>
+                        <p><strong>Booking ID:</strong> <span id="displayBookingId"></span></p>
+                        <p><strong>Tracking ID:</strong> <span id="displayTrackingId"></span></p>
+                        <small>Save these IDs. Track your items anytime.</small>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Tracking Section -->
         <section class="section" id="track">
-            <div class="section-header"><span class="section-tag">Track & Trace</span><h2 class="section-title">🔍 <span class="gradient-text">Track Your Items</span></h2><p class="section-subtitle">Enter your Booking ID or Tracking ID to check status.</p></div>
-            <div class="tracking-area">
-                <h3>Item Tracking</h3>
-                <div class="input-group">
-                    <input type="text" id="trackingInput" placeholder="Enter Booking ID or Tracking ID...">
-                    <button class="btn btn-primary" onclick="trackItem()"><i class="fas fa-search"></i> Track</button>
-                </div>
-                <div class="tracking-result" id="trackingResult">
-                    <p><strong>Status:</strong> <span class="status-badge status-active" id="trackStatus">Active - In Storage</span></p>
-                    <p><strong>Customer:</strong> <span id="trackName">-</span></p>
-                    <p><strong>Check-in Date:</strong> <span id="trackCheckIn">-</span></p>
-                    <p><strong>Expected Collection:</strong> <span id="trackCollect">-</span></p>
-                    <p><strong>Items:</strong> <span id="trackItems">-</span></p>
-                    <p><strong>Category:</strong> <span id="trackCategory">-</span></p>
-                </div>
+            <h2 class="section-title">🔍 Track <span class="gradient-text">Your Items</span></h2>
+            <div style="max-width:500px; margin:0 auto; display:flex; gap:10px;">
+                <input type="text" id="trackingInput" placeholder="Booking ID or Tracking ID" style="flex:1; padding:12px 16px; border-radius:30px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:1rem;">
+                <button class="btn btn-primary" onclick="trackItem()">Track</button>
             </div>
+            <div id="trackingResult" style="display:none; margin-top:20px; background:var(--surface); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);"></div>
         </section>
 
-        <!-- Marketplace Section -->
         <section class="section" id="marketplace">
-            <div class="section-header"><span class="section-tag">Buy & Sell</span><h2 class="section-title">🛍️ Student <span class="gradient-text">Marketplace</span></h2><p class="section-subtitle">Quality new & second-hand items.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px;">
-                    <button class="btn btn-outline" onclick="filterProducts('all')">All</button>
-                    <button class="btn btn-outline" onclick="filterProducts('Phones')">📱 Phones</button>
-                    <button class="btn btn-outline" onclick="filterProducts('Laptops')">💻 Laptops</button>
-                    <button class="btn btn-outline" onclick="filterProducts('Furniture')">🪑 Furniture</button>
-                    <button class="btn btn-outline" onclick="filterProducts('Electronics')">🔌 Electronics</button>
-                    <button class="btn btn-outline" onclick="filterProducts('Kitchen')">🍳 Kitchen</button>
-                </div>
+            <h2 class="section-title">🛍️ Student <span class="gradient-text">Marketplace</span></h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:24px;">
+                <button class="btn btn-outline" onclick="filterProducts('all')">All</button>
+                <button class="btn btn-outline" onclick="filterProducts('Phones')">📱 Phones</button>
+                <button class="btn btn-outline" onclick="filterProducts('Laptops')">💻 Laptops</button>
+                <button class="btn btn-outline" onclick="filterProducts('Furniture')">🪑 Furniture</button>
+                <button class="btn btn-outline" onclick="filterProducts('Electronics')">🔌 Electronics</button>
+                <button class="btn btn-outline" onclick="filterProducts('Kitchen')">🍳 Kitchen</button>
             </div>
             <div class="marketplace-grid" id="marketplaceGrid"></div>
-            <div style="text-align:center;margin-top:24px;"><button class="btn btn-gold btn-lg" onclick="openModal('sellModal')"><i class="fas fa-tag"></i> Sell Your Item</button></div>
+            <div style="text-align:center; margin-top:24px;">
+                <button class="btn btn-gold" onclick="openModal('sellModal')">💰 Sell Your Item</button>
+            </div>
         </section>
 
-        <!-- Accommodation Section -->
         <section class="section" id="accommodation">
-            <div class="section-header"><span class="section-tag">Housing</span><h2 class="section-title">🏡 <span class="gradient-text">Accommodation</span> Assistance</h2></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:700px;margin:0 auto;">
-                <div class="service-card" style="text-align:center;" onclick="openModal('houseHuntingModal')"><div class="service-icon si-green" style="margin:0 auto 12px;"><i class="fas fa-house-circle-check"></i></div><h3>Looking for a House</h3><p>Single rooms, bedsitters, one-bedroom & hostels</p><button class="btn btn-accent" style="margin-top:8px;">Find Housing</button></div>
-                <div class="service-card" style="text-align:center;" onclick="scrollToSection('storage')"><div class="service-icon si-blue" style="margin:0 auto 12px;"><i class="fas fa-boxes-stacked"></i></div><h3>Luggage Storage + Accommodation</h3><p>Store your items while you search</p><button class="btn btn-primary" style="margin-top:8px;">Book Storage</button></div>
+            <h2 class="section-title">🏡 <span class="gradient-text">Accommodation</span> Assistance</h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; max-width:700px; margin:0 auto;">
+                <div class="service-card" onclick="openModal('houseHuntingModal')">
+                    <div class="service-icon" style="background:#ecfdf5;color:#10b981; margin:0 auto 14px;"><i class="fas fa-house-circle-check"></i></div>
+                    <h3 style="text-align:center;">Looking for a House?</h3>
+                    <p style="text-align:center;">Rooms, bedsitters, hostels</p>
+                    <button class="btn btn-accent" style="width:100%; margin-top:12px;">Find Housing</button>
+                </div>
+                <div class="service-card" onclick="document.getElementById('storage').scrollIntoView({behavior:'smooth'})">
+                    <div class="service-icon" style="background:#eff6ff;color:#2563eb; margin:0 auto 14px;"><i class="fas fa-boxes-stacked"></i></div>
+                    <h3 style="text-align:center;">Storage + Housing</h3>
+                    <p style="text-align:center;">Store items while you search</p>
+                    <button class="btn btn-primary" style="width:100%; margin-top:12px;">Book Storage</button>
+                </div>
             </div>
         </section>
 
-        <!-- Trust & Testimonials -->
-        <section class="section" id="trust">
-            <div class="section-header"><span class="section-tag">Why Choose Us</span><h2 class="section-title">🏆 <span class="gradient-text">Trusted</span> by Students</h2></div>
-            <div class="trust-grid">
-                <div class="trust-item"><div class="trust-icon">🔒</div><h4>Secure Storage</h4><p>Your items are safe</p></div>
-                <div class="trust-item"><div class="trust-icon">💰</div><h4>Affordable Pricing</h4><p>Student-friendly rates</p></div>
-                <div class="trust-item"><div class="trust-icon">⚡</div><h4>Fast Response</h4><p>Quick service always</p></div>
-                <div class="trust-item"><div class="trust-icon">✅</div><h4>Easy Booking</h4><p>Simple online process</p></div>
-                <div class="trust-item"><div class="trust-icon">🤝</div><h4>Reliable Support</h4><p>Here when you need us</p></div>
-                <div class="trust-item"><div class="trust-icon">📱</div><h4>WhatsApp Ready</h4><p>Chat with us directly</p></div>
-            </div>
-        </section>
-        <section class="section" id="testimonials">
-            <div class="section-header"><span class="section-tag">Testimonials</span><h2 class="section-title">⭐ What <span class="gradient-text">Students Say</span></h2></div>
-            <div class="testimonials-scroll" id="testimonialsContainer"></div>
-        </section>
-
-        <!-- Contact Section -->
         <section class="section" id="contact">
-            <div class="section-header"><span class="section-tag">Get In Touch</span><h2 class="section-title">📞 <span class="gradient-text">Contact</span> Amos</h2></div>
-            <div class="contact-grid">
-                <div class="contact-info-card">
-                    <h3 style="font-size:1.4rem;">Amos Services</h3>
-                    <p>Your trusted student services partner around Kenyatta University.</p>
-                    <div><a href="tel:0116375166"><i class="fas fa-phone"></i> 0116375166</a><a href="https://wa.me/254116375166"><i class="fab fa-whatsapp"></i> WhatsApp: 0116375166</a><p><i class="fas fa-clock"></i> Mon-Fri: 8AM-7PM, Sat: 9AM-4PM</p></div>
+            <h2 class="section-title">📞 Contact <span class="gradient-text">Amos</span></h2>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; max-width:800px; margin:0 auto;">
+                <div style="background:var(--primary); color:#fff; border-radius:var(--radius); padding:24px;">
+                    <h3>Amos Services</h3>
+                    <p><i class="fas fa-phone"></i> 0116375166</p>
+                    <p><i class="fab fa-whatsapp"></i> WhatsApp: 0116375166</p>
+                    <p><i class="fas fa-clock"></i> Mon‑Fri 8AM‑7PM, Sat 9AM‑4PM</p>
                 </div>
-                <div class="contact-form-card">
-                    <h3>Quick Contact Form</h3>
-                    <form onsubmit="handleContactForm(event)"><div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone Number *" required><textarea placeholder="Your Message *" class="full-width" required></textarea></div><button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:12px;"><i class="fas fa-paper-plane"></i> Send Message</button></form>
-                </div>
+                <form onsubmit="handleContactForm(event)" style="background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);">
+                    <div class="form-grid" style="grid-template-columns:1fr;">
+                        <input type="text" id="contactName" placeholder="Your Name *" required>
+                        <input type="tel" id="contactPhone" placeholder="Phone *" required>
+                        <textarea id="contactMessage" placeholder="Message *" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px;">Send Message</button>
+                </form>
             </div>
         </section>
     </div>
 
-    <footer class="footer">
-        <p>&copy; 2026 <strong>CampusVault & Amos Services</strong>. All rights reserved. </a></p>
-    </footer>
-
-    <!-- WhatsApp Floating Button -->
+    <footer style="background:var(--surface); color:var(--text-secondary); text-align:center; padding:18px; font-size:0.95rem; border-top:1px solid var(--border);">© 2026 CampusVault & Amos Services</footer>
     <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
 
     <!-- Modals -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
-        <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal('deliveryModal')"><i class="fas fa-times"></i></button><h3>🚚 Request Delivery or Errand</h3><form onsubmit="handleDeliveryRequest(event)"><div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone Number *" required><select class="full-width" required><option value="">Service Type</option><option>Food Delivery</option><option>Parcel Delivery</option><option>Pickup</option><option>Document Collection</option><option>Shopping Assistance</option><option>General Errand</option></select><textarea placeholder="Describe what you need..." class="full-width" required></textarea></div><button type="submit" class="btn btn-accent btn-lg" style="width:100%;margin-top:12px;">Submit Request</button></form></div>
+        <div class="modal"><span class="modal-close" onclick="closeModal('deliveryModal')">&times;</span><h3>🚚 Request Delivery</h3>
+            <form onsubmit="handleDeliveryRequest(event)"><div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone *" required><select required><option value="">Service</option><option>Food Delivery</option><option>Parcel</option><option>Pickup</option><option>Shopping</option></select><textarea placeholder="Details" required></textarea></div><button class="btn btn-accent" style="width:100%;">Submit Request</button></form></div>
     </div>
     <div class="modal-overlay" id="sellModal" style="display:none;" onclick="closeModalBg(event,'sellModal')">
-        <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal('sellModal')"><i class="fas fa-times"></i></button><h3>💰 Sell Your Item</h3><form onsubmit="handleSellSubmission(event)"><div class="form-grid"><input type="text" placeholder="Item Name *" required><input type="text" placeholder="Condition (New/Used) *" required><input type="text" placeholder="Location *" required><input type="number" placeholder="Asking Price (KES) *" required><textarea placeholder="Description..." class="full-width" required></textarea></div><button type="submit" class="btn btn-gold btn-lg" style="width:100%;margin-top:12px;">Submit Item</button></form></div>
+        <div class="modal"><span class="modal-close" onclick="closeModal('sellModal')">&times;</span><h3>💰 Sell Your Item</h3>
+            <form onsubmit="handleSellSubmission(event)"><div class="form-grid"><input type="text" placeholder="Item Name *" required><input type="text" placeholder="Condition" required><input type="text" placeholder="Location" required><input type="number" placeholder="Price (KES)" required><textarea placeholder="Description" required></textarea></div><button class="btn btn-gold" style="width:100%;">Submit Item</button></form></div>
     </div>
     <div class="modal-overlay" id="houseHuntingModal" style="display:none;" onclick="closeModalBg(event,'houseHuntingModal')">
-        <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal('houseHuntingModal')"><i class="fas fa-times"></i></button><h3>🏡 Find Accommodation</h3><form onsubmit="handleHouseHunt(event)"><div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone Number *" required><select required><option value="">Housing Type</option><option>Single Room</option><option>Bedsitter</option><option>One-Bedroom</option><option>Student Hostel</option></select><input type="text" placeholder="Preferred Location"><input type="number" placeholder="Budget (KES)" class="full-width"><textarea placeholder="Additional preferences..." class="full-width"></textarea></div><button type="submit" class="btn btn-accent btn-lg" style="width:100%;margin-top:12px;">Find Housing</button></form></div>
+        <div class="modal"><span class="modal-close" onclick="closeModal('houseHuntingModal')">&times;</span><h3>🏡 Find Accommodation</h3>
+            <form onsubmit="handleHouseHunt(event)"><div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone *" required><select required><option value="">Housing Type</option><option>Single Room</option><option>Bedsitter</option><option>One‑Bedroom</option><option>Hostel</option></select><input type="text" placeholder="Preferred Location"><input type="number" placeholder="Budget (KES)"><textarea placeholder="Preferences"></textarea></div><button class="btn btn-accent" style="width:100%;">Submit Request</button></form></div>
     </div>
     <div id="toastContainer"></div>
 
-    <!-- SCRIPTS -->
     <script>
-        // ============ FIREBASE CONFIG ============
         const firebaseConfig = {
             apiKey: "AIzaSyCuCd89dawEHOGrKmcCimw3pBErKYJU_VI",
             authDomain: "campusvault-connect.firebaseapp.com",
@@ -367,41 +361,86 @@
             projectId: "campusvault-connect",
             storageBucket: "campusvault-connect.firebasestorage.app",
             messagingSenderId: "185904648786",
-            appId: "1:185904648786:web:390764d552d388b6e2058b",
-            measurementId: "G-JNQL5Z531C"
+            appId: "1:185904648786:web:390764d552d388b6e2058b"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const bookingsRef = db.ref('bookings');
         const sellsRef = db.ref('sells');
+        const accommodationRef = db.ref('accommodationRequests');
+        const inquiriesRef = db.ref('inquiries');
 
-        // ============ GLOBAL FUNCTIONS ============
+        // Dark/Light mode toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeLabel = document.getElementById('themeLabel');
+        const themeIcon = themeToggle.querySelector('i');
+
+        function setTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark');
+                themeIcon.className = 'fas fa-sun';
+                themeLabel.textContent = 'Light';
+            } else {
+                document.body.classList.remove('dark');
+                themeIcon.className = 'fas fa-moon';
+                themeLabel.textContent = 'Dark';
+            }
+            localStorage.setItem('campusvault-theme', isDark ? 'dark' : 'light');
+        }
+
+        const savedTheme = localStorage.getItem('campusvault-theme');
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            setTheme(!document.body.classList.contains('dark'));
+        });
+
+        // Mobile menu
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('open');
-            hamburger.querySelector('i').className = navLinks.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            hamburger.innerHTML = navLinks.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-        function closeNav() { navLinks.classList.remove('open'); hamburger.querySelector('i').className = 'fas fa-bars'; }
+        document.querySelectorAll('.nav-links a, .nav-links button').forEach(link => {
+            link.addEventListener('click', () => navLinks.classList.remove('open'));
+        });
         window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
-        document.addEventListener('click', (e) => { if (!document.getElementById('navbar').contains(e.target) && navLinks.classList.contains('open')) closeNav(); });
-        function scrollToSection(id) { closeNav(); document.getElementById(id)?.scrollIntoView({ behavior:'smooth' }); }
 
-        function showToast(message, icon='✅') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div'); toast.className='toast'; toast.innerHTML=`<span>${icon}</span> ${message}`;
-            container.appendChild(toast); setTimeout(() => toast.remove(), 3000);
+        function showToast(msg, icon='✅') {
+            const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = icon + ' ' + msg;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
-        function openModal(id) { document.getElementById(id).style.display='flex'; document.body.style.overflow='hidden'; }
-        function closeModal(id) { document.getElementById(id).style.display='none'; document.body.style.overflow=''; }
-        function closeModalBg(e,id) { if(e.target===e.currentTarget) closeModal(id); }
-        document.addEventListener('keydown', (e) => { if(e.key==='Escape') { document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); document.body.style.overflow=''; } });
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closeModalBg(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
 
-        function generateId(prefix) { return prefix+'-'+Math.random().toString(36).substring(2,10).toUpperCase(); }
+        function toggleSchedule() {
+            const method = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
+            const scheduleDiv = document.getElementById('scheduleField');
+            const input = document.getElementById('scheduledDateTime');
+            const label = document.getElementById('scheduleLabel');
+            if (method) {
+                scheduleDiv.style.display = 'block';
+                input.required = true;
+                label.textContent = method === 'self' ? 'Preferred Drop‑off Date & Time *' : 'Preferred Pickup Date & Time *';
+            } else {
+                scheduleDiv.style.display = 'none';
+                input.required = false;
+            }
+        }
 
-        // ============ STORAGE BOOKING (Firebase) ============
         function handleStorageBooking(e) {
             e.preventDefault();
+            const btn = document.getElementById('bookingBtnText'), spinner = document.getElementById('bookingSpinner');
+            btn.style.display = 'none'; spinner.style.display = 'inline-block';
+
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const email = document.getElementById('custEmail').value.trim();
@@ -409,54 +448,64 @@
             const collect = document.getElementById('collectDate').value;
             const itemCount = document.getElementById('itemCount').value;
             const category = document.getElementById('itemCategory').value;
-            if (!name || !phone || !checkIn || !collect || !itemCount || !category) { showToast('Please fill all required fields','⚠️'); return; }
+            const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
+            const scheduledDateTime = document.getElementById('scheduledDateTime').value;
 
-            const bookingId = generateId('CV');
-            const trackingId = generateId('TRK');
-            const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount: parseInt(itemCount), category, status:'active', timestamp: new Date().toISOString() };
+            if (!name || !phone || !checkIn || !collect || !itemCount || !category || !deliveryMethod || !scheduledDateTime) {
+                showToast('Please fill all required fields', '⚠️');
+                resetBtn();
+                return;
+            }
+
+            const bookingId = generateId('CV'), trackingId = generateId('TRK');
+            const booking = {
+                bookingId, trackingId, name, phone, email,
+                checkIn, collect, itemCount: parseInt(itemCount), category,
+                deliveryMethod, scheduledDateTime,
+                status: 'active', timestamp: new Date().toISOString()
+            };
 
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
-                    document.getElementById('displayBookingId').textContent = bookingId;
-                    document.getElementById('displayTrackingId').textContent = trackingId;
-                    document.getElementById('bookingConfirmation').style.display='block';
+                    const conf = document.getElementById('bookingConfirmation');
+                    conf.innerHTML = `<h4 style="color:#065f46; font-size:1.2rem;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4>
+                        <p><strong>Booking ID:</strong> ${bookingId}</p>
+                        <p><strong>Tracking ID:</strong> ${trackingId}</p>
+                        <p><strong>Delivery:</strong> ${deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${new Date(scheduledDateTime).toLocaleString()}</p>
+                        <small>Save these IDs. Track your items anytime.</small>`;
+                    conf.style.display = 'block';
                     document.getElementById('storageBookingForm').reset();
-                    showToast('Booking confirmed! IDs generated.','🎉');
-                    document.getElementById('bookingConfirmation').scrollIntoView({ behavior:'smooth' });
+                    document.getElementById('scheduleField').style.display = 'none';
+                    showToast('Booking confirmed!', '🎉');
+                    resetBtn();
                 })
-                .catch(err => showToast('Error: '+err.message,'❌'));
+                .catch(err => { showToast('Error: ' + err.message, '❌'); resetBtn(); });
+
+            function resetBtn() { btn.style.display = ''; spinner.style.display = 'none'; }
         }
 
-        // ============ TRACKING (Firebase) ============
         function trackItem() {
             const input = document.getElementById('trackingInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('trackingResult');
-            if (!input) { showToast('Enter Booking ID or Tracking ID','⚠️'); return; }
+            if (!input) { showToast('Enter Booking ID or Tracking ID', '⚠️'); return; }
 
-            bookingsRef.orderByChild('bookingId').equalTo(input).once('value', snapshot => {
-                if (snapshot.exists()) {
-                    displayTracking(Object.values(snapshot.val())[0], resultDiv);
-                } else {
-                    bookingsRef.orderByChild('trackingId').equalTo(input).once('value', snap2 => {
-                        if (snap2.exists()) displayTracking(Object.values(snap2.val())[0], resultDiv);
-                        else { resultDiv.classList.remove('show'); showToast('No record found.','❌'); }
-                    });
-                }
+            bookingsRef.orderByChild('bookingId').equalTo(input).once('value').then(snap => {
+                if (snap.exists()) return displayTracking(Object.values(snap.val())[0]);
+                return bookingsRef.orderByChild('trackingId').equalTo(input).once('value');
+            }).then(snap => {
+                if (snap && snap.exists()) displayTracking(Object.values(snap.val())[0]);
+                else { resultDiv.style.display = 'none'; showToast('No record found.', '❌'); }
             });
-        }
-        function displayTracking(found, resultDiv) {
-            document.getElementById('trackStatus').textContent = found.status === 'active' ? 'Active - In Storage' : 'Collected';
-            document.getElementById('trackStatus').className = 'status-badge ' + (found.status==='active'?'status-active':'status-collected');
-            document.getElementById('trackName').textContent = found.name;
-            document.getElementById('trackCheckIn').textContent = found.checkIn;
-            document.getElementById('trackCollect').textContent = found.collect;
-            document.getElementById('trackItems').textContent = found.itemCount;
-            document.getElementById('trackCategory').textContent = found.category;
-            resultDiv.classList.add('show');
-            resultDiv.scrollIntoView({ behavior:'smooth' });
+
+            function displayTracking(b) {
+                resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'bg-green-100 text-green-800':'bg-gray-200'}">${b.status}</span></p>
+                    <p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p>
+                    <p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>
+                    ${b.deliveryMethod ? `<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} at ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>` : ''}`;
+                resultDiv.style.display = 'block';
+            }
         }
 
-        // ============ MARKETPLACE (static) ============
         const products = [
             { id:1, name:'iPhone 12 Pro', category:'Phones', condition:'Used', price:55000, emoji:'📱', available:true },
             { id:2, name:'Dell Inspiron Laptop', category:'Laptops', condition:'Used', price:32000, emoji:'💻', available:true },
@@ -471,53 +520,73 @@
             { id:11, name:'Wireless Earbuds', category:'Electronics', condition:'New', price:1800, emoji:'🎧', available:true },
             { id:12, name:'Bookshelf', category:'Furniture', condition:'Used', price:2500, emoji:'📚', available:true }
         ];
-        let currentFilter = 'all';
         function renderProducts(filter='all') {
-            currentFilter = filter;
             const filtered = filter==='all' ? products : products.filter(p=>p.category===filter);
             document.getElementById('marketplaceGrid').innerHTML = filtered.map(p=>`
-                <div class="product-card"><div class="product-img">${p.emoji}</div><div class="product-info"><h4>${p.name}</h4><span class="product-condition ${p.condition==='New'?'cond-new':'cond-used'}">${p.condition}</span><p class="product-price">KES ${p.price.toLocaleString()}</p><p style="font-size:0.8rem;color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p><button class="btn btn-primary" style="font-size:0.8rem;padding:8px 14px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}><i class="fas fa-comment"></i> Inquire</button></div></div>
+                <div class="product-card">
+                    <div style="font-size:2.2rem; text-align:center; padding:16px; background:var(--surface-alt); border-radius:var(--radius-sm);">${p.emoji}</div>
+                    <div style="padding:16px;">
+                        <h4 style="font-size:1.1rem;">${p.name}</h4>
+                        <span class="product-condition ${p.condition==='New'?'cond-new':'cond-used'}">${p.condition}</span>
+                        <p class="product-price" style="font-size:1.1rem; margin:6px 0;">KES ${p.price.toLocaleString()}</p>
+                        <p style="font-size:0.9rem; color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p>
+                        <button class="btn btn-primary" style="font-size:0.9rem; padding:8px 14px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}>Inquire</button>
+                    </div>
+                </div>
             `).join('');
         }
-        function filterProducts(cat) { renderProducts(cat); scrollToSection('marketplace'); }
-        function inquireProduct(name,price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, I'm interested in ${name} listed at KES ${price.toLocaleString()}.`)}`,'_blank'); }
+        function filterProducts(cat) { renderProducts(cat); document.getElementById('marketplace').scrollIntoView({behavior:'smooth'}); }
+        function inquireProduct(name,price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
         renderProducts();
 
-        // Testimonials
-        document.getElementById('testimonialsContainer').innerHTML = [
-            { stars:5, quote:'CampusVault saved me during the holidays!', author:'Mercy W.' },
-            { stars:5, quote:'Found a great bedsitter through Amos.', author:'Brian K.' },
-            { stars:5, quote:'Sold my old laptop in 2 days.', author:'Faith M.' },
-            { stars:4, quote:'Reliable delivery right to my hostel.', author:'Kevin O.' }
-        ].map(t=>`<div class="testimonial-card"><div class="stars">${'⭐'.repeat(t.stars)}</div><p class="quote">"${t.quote}"</p><p class="author">— ${t.author}</p></div>`).join('');
-
-        // Contact form
         function handleContactForm(e) {
             e.preventDefault();
-            const name = e.target.querySelector('input[placeholder*="Name"]').value;
-            const phone = e.target.querySelector('input[placeholder*="Phone"]').value;
-            const msg = e.target.querySelector('textarea').value;
-            window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${msg}`)}`,'_blank');
-            showToast('Redirecting to WhatsApp...','📱');
-            e.target.reset();
+            const name = document.getElementById('contactName').value.trim();
+            const phone = document.getElementById('contactPhone').value.trim();
+            const message = document.getElementById('contactMessage').value.trim();
+            const inquiryId = generateId('INQ');
+            inquiriesRef.child(inquiryId).set({
+                id: inquiryId,
+                name, phone, message,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${message}`)}`, '_blank');
+                showToast('Message sent! Redirecting to WhatsApp...', '📱');
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactPhone').value = '';
+                document.getElementById('contactMessage').value = '';
+            }).catch(err => showToast('Error: ' + err.message, '❌'));
         }
 
-        // Delivery / Sell / House modals
-        function handleDeliveryRequest(e) { e.preventDefault(); showToast('Delivery request submitted!','✅'); closeModal('deliveryModal'); e.target.reset(); }
+        function handleDeliveryRequest(e) { e.preventDefault(); showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); e.target.reset(); }
         function handleSellSubmission(e) {
             e.preventDefault();
             const form = e.target;
-            const itemName = form.querySelector('input[placeholder="Item Name *"]').value;
-            const condition = form.querySelector('input[placeholder="Condition (New/Used) *"]').value;
-            const location = form.querySelector('input[placeholder="Location *"]').value;
-            const price = form.querySelector('input[placeholder="Asking Price (KES) *"]').value;
-            const description = form.querySelector('textarea').value;
-            const sellData = { id: generateId('SELL'), itemName, condition, location, price, description, timestamp: new Date().toISOString() };
+            const sellData = {
+                id: generateId('SELL'),
+                itemName: form[0].value, condition: form[1].value,
+                location: form[2].value, price: form[3].value,
+                description: form[4].value, timestamp: new Date().toISOString()
+            };
             sellsRef.child(sellData.id).set(sellData)
-                .then(() => { showToast('Item submitted!','💰'); closeModal('sellModal'); form.reset(); })
-                .catch(err => showToast('Error: '+err.message,'❌'));
+                .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); form.reset(); })
+                .catch(err => showToast('Error', '❌'));
         }
-        function handleHouseHunt(e) { e.preventDefault(); showToast('Housing request submitted!','🏡'); closeModal('houseHuntingModal'); e.target.reset(); }
+        function handleHouseHunt(e) {
+            e.preventDefault();
+            const form = e.target;
+            const name = form.querySelector('input[placeholder*="Name"]').value.trim();
+            const phone = form.querySelector('input[placeholder*="Phone"]').value.trim();
+            const type = form.querySelector('select').value;
+            const location = form.querySelector('input[placeholder="Preferred Location"]').value.trim() || 'Not specified';
+            const budget = form.querySelector('input[placeholder="Budget (KES)"]').value.trim() || 'Not specified';
+            const preferences = form.querySelector('textarea').value.trim();
+            if (!name || !phone || !type) { showToast('Fill name, phone and housing type', '⚠️'); return; }
+            const requestId = generateId('ACC');
+            accommodationRef.child(requestId).set({ id: requestId, name, phone, type, location, budget, preferences, timestamp: new Date().toISOString() })
+                .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHousingModal'); form.reset(); })
+                .catch(err => showToast('Error: ' + err.message, '❌'));
+        }
     </script>
 </body>
 </html>
