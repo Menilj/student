@@ -11,58 +11,21 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
     <style>
         :root {
-            /* Dark theme (default) */
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --surface-alt: #334155;
-            --text: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --primary: #38bdf8;
-            --accent: #0ea5e9;
-            --gold: #fbbf24;
-            --emerald: #34d399;
-            --rose: #fb7185;
-            --border: #475569;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --bg: #0f172a; --surface: #1e293b; --surface-alt: #334155;
+            --text: #f1f5f9; --text-secondary: #cbd5e1; --primary: #38bdf8;
+            --accent: #0ea5e9; --gold: #fbbf24; --emerald: #34d399; --rose: #fb7185;
+            --border: #475569; --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
             --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
             --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.4);
-            --radius: 14px;
-            --radius-sm: 10px;
-            --transition: 0.2s ease;
-            --font: 'Inter', system-ui, sans-serif;
-            --max-width: 1140px;
-            --font-base: 1rem;
+            --radius: 14px; --radius-sm: 10px; --transition: 0.2s ease;
+            --font: 'Inter', system-ui, sans-serif; --max-width: 1140px; --font-base: 1rem;
         }
-
-        body.light {
-            --bg: #f8fafc;
-            --surface: #ffffff;
-            --surface-alt: #f1f5f9;
-            --text: #0f172a;
-            --text-secondary: #475569;
-            --primary: #1e3a5f;
-            --accent: #0ea5e9;
-            --gold: #f59e0b;
-            --emerald: #10b981;
-            --rose: #f43f5e;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-            --shadow: 0 4px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-        }
-
         * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.65;
-            -webkit-font-smoothing: antialiased;
-            transition: background 0.3s, color 0.3s;
-            font-weight: 400;
-            font-size: var(--font-base);
-            position: relative;
+            font-family: var(--font); background: var(--bg); color: var(--text);
+            line-height: 1.65; -webkit-font-smoothing: antialiased; font-weight: 400;
+            font-size: var(--font-base); position: relative;
         }
         .bg-blobs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
         .bg-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.08; animation:float 20s infinite alternate; }
@@ -72,19 +35,16 @@
         @keyframes float { 0%{transform:translate(0,0);} 100%{transform:translate(30px,-20px);} }
         .main-content { position:relative; z-index:1; }
 
-        /* Navbar */
         .nav {
-            position:sticky; top:0; z-index:1000;
-            background: var(--surface); backdrop-filter:blur(12px);
-            border-bottom:1px solid var(--border); padding:0 24px; height:68px;
-            display:flex; align-items:center; transition:var(--transition);
+            position:sticky; top:0; z-index:1000; background: var(--surface);
+            backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
+            padding:0 24px; height:68px; display:flex; align-items:center; transition:var(--transition);
             box-shadow: var(--shadow-sm);
         }
         .nav.scrolled { box-shadow:var(--shadow); }
         .nav-inner { max-width:var(--max-width); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
         .nav-logo {
-            font-weight:800; font-size:1.5rem; color:var(--primary);
-            text-decoration:none; display:flex; align-items:center; gap:8px;
+            font-weight:800; font-size:1.5rem; color:var(--primary); text-decoration:none; display:flex; align-items:center; gap:8px;
         }
         .nav-logo i { font-size:1.6rem; background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
         .nav-links { display:flex; gap:6px; list-style:none; align-items:center; }
@@ -96,43 +56,6 @@
         .nav-cta { background:var(--primary)!important; color:#fff!important; font-weight:600!important; border-radius:30px!important; padding:10px 20px!important; }
         .hamburger { display:none; background:none; border:none; font-size:1.6rem; color:var(--text); cursor:pointer; z-index:1001; }
 
-        /* Theme toggle - modern pill style */
-        .theme-toggle {
-            background: var(--surface-alt);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 6px 6px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-left: 12px;
-            position: relative;
-            width: 56px;
-            height: 32px;
-        }
-        .theme-toggle .toggle-thumb {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: var(--primary);
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-            color: #fff;
-        }
-        body.light .theme-toggle .toggle-thumb {
-            transform: translateX(24px);
-        }
-        .theme-toggle i {
-            font-size: 0.9rem;
-            color: #fff;
-        }
         @media (max-width:768px) {
             .nav-links {
                 position:fixed; top:0; right:-100%; width:280px; height:100vh;
@@ -141,29 +64,22 @@
             }
             .nav-links.open { right:0; }
             .hamburger { display:block; }
-            .theme-toggle { margin-left: 0; margin-top: 12px; }
         }
 
-        /* Hero */
         .hero {
             padding:60px 24px; max-width:var(--max-width); margin:0 auto;
             display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
             min-height:calc(100vh - 68px);
         }
         .hero-content h1 {
-            font-size:clamp(2.6rem,5vw,3.5rem); font-weight:900;
-            letter-spacing:-1px; line-height:1.15; margin-bottom:20px;
+            font-size:clamp(2.6rem,5vw,3.5rem); font-weight:900; letter-spacing:-1px; line-height:1.15; margin-bottom:20px;
         }
-        .hero-content .subhead {
-            font-size:1.2rem; color:var(--text-secondary); margin-bottom:32px; font-weight:400;
-        }
+        .hero-content .subhead { font-size:1.2rem; color:var(--text-secondary); margin-bottom:32px; font-weight:400; }
         .btn {
-            display:inline-flex; align-items:center; gap:8px;
-            padding:12px 26px; border-radius:30px; font-weight:600; font-size:1rem;
-            cursor:pointer; border:none; transition:var(--transition); text-decoration:none;
-            white-space: nowrap;
+            display:inline-flex; align-items:center; gap:8px; padding:12px 26px; border-radius:30px;
+            font-weight:600; font-size:1rem; cursor:pointer; border:none; transition:var(--transition); text-decoration:none; white-space: nowrap;
         }
-        .btn-primary { background:var(--primary); color:#fff; box-shadow:0 2px 10px rgba(30,58,95,0.2); }
+        .btn-primary { background:var(--primary); color:#fff; }
         .btn-primary:hover { filter: brightness(1.1); transform:translateY(-2px); }
         .btn-accent { background:var(--accent); color:#fff; }
         .btn-accent:hover { filter: brightness(1.1); transform:translateY(-2px); }
@@ -175,57 +91,31 @@
         .floating-card {
             background:var(--surface); border-radius:var(--radius); padding:16px 20px;
             box-shadow:var(--shadow); display:flex; align-items:center; gap:10px;
-            font-weight:600; font-size:1rem; position:absolute;
-            animation:floatCard 6s infinite alternate ease-in-out;
+            font-weight:600; font-size:1rem; position:absolute; animation:floatCard 6s infinite alternate ease-in-out;
         }
         .floating-card:nth-child(1){ top:8%; right:8%; }
         .floating-card:nth-child(2){ bottom:22%; left:5%; animation-delay:-2s; }
         .floating-card:nth-child(3){ top:50%; left:25%; animation-delay:-4s; }
         @keyframes floatCard { 0%{transform:translateY(0);} 100%{transform:translateY(-10px);} }
-        @media (max-width:768px) {
-            .hero { grid-template-columns:1fr; text-align:center; min-height:auto; }
-            .hero-visual { display:none; }
-        }
+        @media (max-width:768px) { .hero { grid-template-columns:1fr; text-align:center; min-height:auto; } .hero-visual { display:none; } }
 
-        /* Sections */
         .section { padding:70px 24px; max-width:var(--max-width); margin:0 auto; }
-        .section-title {
-            font-size:2.2rem; font-weight:800; text-align:center; margin-bottom:12px;
-            letter-spacing:-0.5px;
-        }
-        .section-subtitle {
-            color:var(--text-secondary); text-align:center; max-width:650px;
-            margin:0 auto 40px; font-size:1.1rem; font-weight:400;
-        }
-        .gradient-text {
-            background:linear-gradient(135deg,var(--primary),var(--accent));
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-        }
+        .section-title { font-size:2.2rem; font-weight:800; text-align:center; margin-bottom:12px; letter-spacing:-0.5px; }
+        .section-subtitle { color:var(--text-secondary); text-align:center; max-width:650px; margin:0 auto 40px; font-size:1.1rem; font-weight:400; }
+        .gradient-text { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 
-        /* Service & product cards */
-        .services-grid, .marketplace-grid {
-            display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px;
-        }
+        .services-grid, .marketplace-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:24px; }
         .service-card, .product-card {
             background:var(--surface); border-radius:var(--radius); padding:28px 24px;
             border:1px solid var(--border); transition:var(--transition); box-shadow:var(--shadow-sm);
         }
-        .service-card:hover, .product-card:hover {
-            transform:translateY(-6px); box-shadow:var(--shadow-md);
-        }
-        .service-icon {
-            width:52px; height:52px; border-radius:12px;
-            display:flex; align-items:center; justify-content:center;
-            font-size:1.4rem; margin-bottom:18px;
-        }
+        .service-card:hover, .product-card:hover { transform:translateY(-6px); box-shadow:var(--shadow-md); }
+        .service-icon { width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:18px; }
         .service-card h3 { font-size:1.2rem; margin-bottom:8px; }
         .service-card p { color:var(--text-secondary); margin-bottom:20px; flex:1; }
         .service-card .btn, .product-card .btn { margin-top:auto; width:100%; }
 
-        .booking-card {
-            background:var(--surface); border-radius:var(--radius); padding:36px 32px;
-            box-shadow:var(--shadow); border:1px solid var(--border);
-        }
+        .booking-card { background:var(--surface); border-radius:var(--radius); padding:36px 32px; box-shadow:var(--shadow); border:1px solid var(--border); }
         .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
         .form-grid input, .form-grid select, .form-grid textarea {
             width:100%; padding:14px 16px; border-radius:var(--radius-sm);
@@ -236,16 +126,14 @@
             outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.15);
         }
         .radio-card {
-            display:flex; align-items:center; gap:8px;
-            background:var(--surface-alt); padding:14px 18px;
-            border-radius:var(--radius-sm); border:1px solid var(--border);
+            display:flex; align-items:center; gap:8px; background:var(--surface-alt);
+            padding:14px 18px; border-radius:var(--radius-sm); border:1px solid var(--border);
             cursor:pointer; transition:0.2s; font-size:1rem;
         }
         .radio-card input { accent-color:var(--primary); }
         label { font-weight:500; }
         @media (max-width:480px) { .form-grid { grid-template-columns:1fr; } }
 
-        /* Modal */
         .modal-overlay {
             position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px);
             display:flex; align-items:center; justify-content:center; z-index:2000;
@@ -257,63 +145,46 @@
         }
         @keyframes slideUp { from{opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
         .modal-close {
-            position:absolute; top:16px; right:16px;
-            background:var(--surface-alt); border:none; width:32px; height:32px;
-            border-radius:50%; display:flex; align-items:center; justify-content:center;
+            position:absolute; top:16px; right:16px; background:var(--surface-alt); border:none;
+            width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
             cursor:pointer; font-size:1.2rem; color:var(--text-secondary); transition:var(--transition);
         }
         .modal-close:hover { background:var(--border); }
 
-        /* Toast */
         .toast {
-            position:fixed; bottom:90px; right:24px;
-            background:var(--text); color:var(--bg); padding:14px 28px;
-            border-radius:30px; font-weight:600; font-size:1rem; z-index:3000;
-            animation:slideUp 0.3s, fadeOut 0.3s 3s forwards;
-            box-shadow:var(--shadow-md);
+            position:fixed; bottom:90px; right:24px; background:var(--text); color:var(--bg);
+            padding:14px 28px; border-radius:30px; font-weight:600; font-size:1rem; z-index:3000;
+            animation:slideUp 0.3s, fadeOut 0.3s 3s forwards; box-shadow:var(--shadow-md);
         }
         @keyframes fadeOut { to{opacity:0; transform:translateY(10px);} }
         .loading-spinner {
-            display:inline-block; width:18px; height:18px;
-            border:2px solid rgba(255,255,255,0.3); border-top-color:#fff;
-            border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px;
+            display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3);
+            border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px;
         }
         @keyframes spin { to{transform:rotate(360deg);} }
 
-        /* Marketplace product cards */
         .product-img-container {
-            width:100%; height:180px; overflow:hidden;
-            background:var(--surface-alt); border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-            display:flex; align-items:center; justify-content:center;
+            width:100%; height:180px; overflow:hidden; background:var(--surface-alt);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0; display:flex; align-items:center; justify-content:center;
         }
-        .product-img-container img {
-            width:100%; height:100%; object-fit:cover;
-        }
-        .product-img-placeholder {
-            font-size:3rem; color:var(--text-secondary);
-            display:flex; align-items:center; justify-content:center;
-            width:100%; height:100%;
-        }
+        .product-img-container img { width:100%; height:100%; object-fit:cover; }
+        .product-img-placeholder { font-size:3rem; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
         .product-card { overflow:hidden; padding:0; display:flex; flex-direction:column; }
         .product-info { padding:20px; flex:1; display:flex; flex-direction:column; }
         .badge { padding:4px 12px; border-radius:12px; font-size:0.75rem; font-weight:600; }
         .badge-active { background:#d1fae5; color:#065f46; }
         .badge-collected { background:#e2e8f0; color:#475569; }
 
-        /* Contact */
         .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:32px; max-width:920px; margin:0 auto; align-items:start; }
         .contact-info-card {
             background:linear-gradient(135deg, var(--primary) 0%, #0f2b45 100%);
-            color:#fff; border-radius:var(--radius); padding:36px 32px;
-            box-shadow:var(--shadow-md);
+            color:#fff; border-radius:var(--radius); padding:36px 32px; box-shadow:var(--shadow-md);
         }
         .contact-info-card h3 { font-size:1.6rem; margin-bottom:20px; }
-        .contact-info-card .info-item {
-            display:flex; align-items:center; gap:14px; margin-bottom:20px; font-size:1.1rem;
-        }
+        .contact-info-card .info-item { display:flex; align-items:center; gap:14px; margin-bottom:20px; font-size:1.1rem; }
         .contact-info-card .info-item i {
-            width:42px; height:42px; background:rgba(255,255,255,0.15);
-            border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+            width:42px; height:42px; background:rgba(255,255,255,0.15); border-radius:50%;
+            display:flex; align-items:center; justify-content:center; font-size:1.2rem;
         }
         .contact-form-card {
             background:var(--surface); border-radius:var(--radius); padding:36px 32px;
@@ -333,36 +204,73 @@
         .contact-form-card textarea { resize:vertical; min-height:130px; }
         @media (max-width:768px) { .contact-grid { grid-template-columns:1fr; } }
 
-        /* WhatsApp floating button */
+        .floating-group {
+            position: fixed; right: 24px; bottom: 24px; z-index: 1600;
+            display: flex; flex-direction: column-reverse; gap: 16px; align-items: flex-end;
+        }
         .whatsapp-float {
-            position:fixed; bottom:32px; right:32px; width:60px; height:60px;
-            border-radius:50%; background:#25d366; color:#fff; font-size:1.8rem;
-            display:flex; align-items:center; justify-content:center;
-            box-shadow:0 4px 20px rgba(37,211,102,0.5);
-            z-index:1500; transition:transform 0.3s;
-            text-decoration: none;
+            width: 60px; height: 60px; border-radius: 50%; background: #25d366; color: #fff;
+            font-size: 1.8rem; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.5); transition: transform 0.3s; text-decoration: none;
         }
-        .whatsapp-float:hover { transform:scale(1.1); }
-
-        /* Scroll to top */
+        .whatsapp-float:hover { transform: scale(1.1); }
+        .ai-float {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff;
+            font-size: 1.6rem; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(139,92,246,0.4); cursor: pointer; transition: 0.3s;
+        }
+        .ai-float:hover { transform: scale(1.1); }
         .scroll-top {
-            position:fixed; bottom:105px; right:32px; width:44px; height:44px;
-            border-radius:50%; background:var(--surface); border:1px solid var(--border);
-            color:var(--text); font-size:1.2rem; cursor:pointer;
-            opacity:0; pointer-events:none; transition:0.3s; z-index:1400;
-            box-shadow:var(--shadow);
+            width: 44px; height: 44px; border-radius: 50%; background: var(--surface);
+            border: 1px solid var(--border); color: var(--text); font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            opacity: 0; pointer-events: none; transition: 0.3s; box-shadow: var(--shadow);
         }
-        .scroll-top.visible { opacity:1; pointer-events:auto; }
+        .scroll-top.visible { opacity: 1; pointer-events: auto; }
+        @media (max-width: 480px) {
+            .whatsapp-float { width: 54px; height: 54px; font-size: 1.6rem; }
+            .ai-float { width: 50px; height: 50px; font-size: 1.4rem; }
+            .scroll-top { width: 40px; height: 40px; }
+        }
 
-        /* Footer */
+        .ai-chat-modal {
+            background:var(--surface); border-radius:var(--radius); padding:24px 20px;
+            width:90%; max-width:420px; max-height:70vh; display:flex; flex-direction:column;
+            animation:slideUp 0.3s ease; color:var(--text);
+        }
+        .chat-messages { flex:1; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; max-height:45vh; }
+        .chat-msg { max-width:80%; padding:10px 16px; border-radius:18px; font-size:0.95rem; line-height:1.4; }
+        .chat-msg.bot { background:var(--surface-alt); align-self:flex-start; border-bottom-left-radius:4px; }
+        .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+        .chat-input-area { display:flex; gap:8px; margin-top:8px; }
+        .chat-input-area input {
+            flex:1; padding:12px 16px; border-radius:24px; border:1px solid var(--border);
+            background:var(--surface-alt); color:var(--text); font-size:0.95rem;
+        }
+        .chat-input-area input:focus { outline:none; border-color:var(--accent); }
+        .chat-input-area button {
+            width:44px; height:44px; border-radius:50%; background:var(--primary);
+            color:#fff; border:none; cursor:pointer; font-size:1.2rem;
+        }
+        .quick-replies { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+        .quick-reply {
+            background:var(--surface-alt); border:1px solid var(--border); padding:6px 14px;
+            border-radius:20px; font-size:0.85rem; cursor:pointer; transition:0.2s; color:var(--text);
+        }
+        .quick-reply:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+        .assurance-modal {
+            background:var(--surface); padding:24px; border-radius:var(--radius);
+            max-width:440px; text-align:center;
+        }
+        .assurance-modal i { font-size:2.5rem; color:#10b981; margin-bottom:12px; }
+
         footer {
-            background:var(--surface); color:var(--text-secondary);
-            text-align:center; padding:22px; font-size:0.95rem;
-            border-top:1px solid var(--border);
+            background:var(--surface); color:var(--text-secondary); text-align:center;
+            padding:22px; font-size:0.95rem; border-top:1px solid var(--border);
         }
-        footer a {
-            color: var(--accent); text-decoration: none; font-weight: 500;
-        }
+        footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
         footer a:hover { text-decoration: underline; }
     </style>
 </head>
@@ -380,11 +288,6 @@
                 <li><a href="#accommodation">Housing</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#storage" class="nav-cta">Book Now</a></li>
-                <li>
-                    <button class="theme-toggle" id="themeToggle">
-                        <span class="toggle-thumb"><i class="fas fa-sun"></i></span>
-                    </button>
-                </li>
             </ul>
             <button class="hamburger" id="hamburger"><i class="fas fa-bars"></i></button>
         </div>
@@ -465,7 +368,7 @@
                         </div>
                         <div id="scheduleField" style="display:none; margin-bottom:24px; background:var(--surface-alt); border-radius:var(--radius-sm); padding:20px;">
                             <label style="font-weight:600; display:block; margin-bottom:10px;"><span id="scheduleLabel">Preferred Date & Time</span> *</label>
-                            <input type="datetime-local" id="scheduledDateTime" required>
+                            <input type="datetime-local" id="scheduledDateTime">
                         </div>
                         <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; padding:16px;">
                             <span id="bookingBtnText">Confirm Booking</span>
@@ -554,50 +457,110 @@
         <a href="https://menilj.github.io/E-web/" target="" rel="">Powered by Zafyier</a>
     </footer>
 
-    <!-- WhatsApp Float -->
-    <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <div class="floating-group">
+        <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <div class="ai-float" onclick="openModal('aiChatModal')" title="AI Assistant">
+            <i class="fas fa-robot"></i>
+        </div>
+        <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
 
-    <!-- Scroll to Top -->
-    <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
-    <!-- Modals -->
+    <!-- Delivery Modal -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('deliveryModal')">&times;</button>
             <h3>🚚 Request Delivery</h3>
             <form onsubmit="handleDeliveryRequest(event)" style="margin-top:20px;">
-                <div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone *" required><select required><option value="">Service</option><option>Food Delivery</option><option>Parcel</option><option>Pickup</option><option>Shopping</option></select><textarea placeholder="Details" required></textarea></div>
+                <div class="form-grid">
+                    <input type="text" placeholder="Your Name *" id="delName" required>
+                    <input type="tel" placeholder="Phone *" id="delPhone" required>
+                    <select required id="delService"><option value="">Service</option><option>Food Delivery</option><option>Parcel</option><option>Pickup</option><option>Shopping</option></select>
+                    <textarea placeholder="Details" id="delDetails" required></textarea>
+                </div>
                 <button class="btn btn-accent" style="width:100%; margin-top:12px;">Submit Request</button>
             </form>
         </div>
     </div>
+
+    <!-- Sell Modal -->
     <div class="modal-overlay" id="sellModal" style="display:none;" onclick="closeModalBg(event,'sellModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('sellModal')">&times;</button>
             <h3>💰 Sell Your Item</h3>
             <form onsubmit="handleSellSubmission(event)" style="margin-top:20px;">
-                <div class="form-grid"><input type="text" placeholder="Item Name *" required><input type="text" placeholder="Condition" required><input type="text" placeholder="Location" required><input type="number" placeholder="Price (KES)" required><textarea placeholder="Description" required></textarea></div>
+                <div class="form-grid">
+                    <input type="text" placeholder="Item Name *" id="sellName" required>
+                    <input type="text" placeholder="Condition" id="sellCond" required>
+                    <input type="text" placeholder="Location" id="sellLoc" required>
+                    <input type="number" placeholder="Price (KES)" id="sellPrice" required>
+                    <textarea placeholder="Description" id="sellDesc" required></textarea>
+                </div>
                 <button class="btn btn-gold" style="width:100%; margin-top:12px;">Submit Item</button>
             </form>
         </div>
     </div>
+
+    <!-- House Hunting Modal -->
     <div class="modal-overlay" id="houseHuntingModal" style="display:none;" onclick="closeModalBg(event,'houseHuntingModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('houseHuntingModal')">&times;</button>
             <h3>🏡 Find Accommodation</h3>
             <form onsubmit="handleHouseHunt(event)" style="margin-top:20px;">
-                <div class="form-grid"><input type="text" placeholder="Your Name *" required><input type="tel" placeholder="Phone *" required><select required><option value="">Housing Type</option><option>Single Room</option><option>Bedsitter</option><option>One‑Bedroom</option><option>Hostel</option></select><input type="text" placeholder="Preferred Location"><input type="number" placeholder="Budget (KES)"><textarea placeholder="Preferences"></textarea></div>
+                <div class="form-grid">
+                    <input type="text" placeholder="Your Name *" id="houseName" required>
+                    <input type="tel" placeholder="Phone *" id="housePhone" required>
+                    <select required id="houseType"><option value="">Housing Type</option><option>Single Room</option><option>Bedsitter</option><option>One‑Bedroom</option><option>Hostel</option></select>
+                    <input type="text" placeholder="Preferred Location" id="houseLoc">
+                    <input type="number" placeholder="Budget (KES)" id="houseBudget">
+                    <textarea placeholder="Preferences" id="housePrefs"></textarea>
+                </div>
                 <button class="btn btn-accent" style="width:100%; margin-top:12px;">Submit Request</button>
             </form>
         </div>
     </div>
+
+    <!-- AI Chat Modal -->
+    <div class="modal-overlay" id="aiChatModal" style="display:none;" onclick="closeModalBg(event,'aiChatModal')">
+        <div class="ai-chat-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3 style="font-size:1.2rem;"><i class="fas fa-robot" style="color:#8b5cf6;"></i> CampusVault AI</h3>
+                <button class="modal-close" onclick="closeModal('aiChatModal')" style="position:static;">&times;</button>
+            </div>
+            <div class="quick-replies" id="quickReplies">
+                <span class="quick-reply" onclick="quickSend('Book storage')">📦 Book Storage</span>
+                <span class="quick-reply" onclick="quickSend('Track my item')">🔍 Track</span>
+                <span class="quick-reply" onclick="quickSend('Request delivery')">🚚 Delivery</span>
+                <span class="quick-reply" onclick="quickSend('Sell an item')">💰 Sell</span>
+                <span class="quick-reply" onclick="quickSend('Find housing')">🏠 Housing</span>
+            </div>
+            <div class="chat-messages" id="aiChatMessages">
+                <div class="chat-msg bot">Hi! 👋 I'm the CampusVault assistant. I can directly book services for you. Just tap a quick reply or tell me what you need.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="aiUserInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendAiMessage()">
+                <button onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assurance Popup -->
+    <div class="modal-overlay" id="assuranceModal" style="display:none;" onclick="closeModalBg(event,'assuranceModal')">
+        <div class="assurance-modal">
+            <i class="fas fa-check-circle"></i>
+            <h3 id="assuranceTitle"></h3>
+            <p id="assuranceMessage"></p>
+            <button class="btn btn-primary" onclick="closeModal('assuranceModal')">Got it</button>
+        </div>
+    </div>
+
     <div id="toastContainer"></div>
 
     <script>
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyCuCd89dawEHOGrKmcCimw3pBErKYJU_VI",
             authDomain: "campusvault-connect.firebaseapp.com",
@@ -616,24 +579,7 @@
         const deliveriesRef = db.ref('deliveryRequests');
         const productsRef = db.ref('products');
 
-        // Theme toggle – dark as default
-        const themeToggle = document.getElementById('themeToggle');
-        const themeIcon = themeToggle.querySelector('.toggle-thumb i');
-        function setTheme(isDark) {
-            if (isDark) {
-                document.body.classList.remove('light');
-                themeIcon.className = 'fas fa-sun';
-            } else {
-                document.body.classList.add('light');
-                themeIcon.className = 'fas fa-moon';
-            }
-            localStorage.setItem('campusvault-theme', isDark ? 'dark' : 'light');
-        }
-        // Default dark
-        setTheme(localStorage.getItem('campusvault-theme') !== 'light');
-        themeToggle.addEventListener('click', () => setTheme(!document.body.classList.contains('light')));
-
-        // Scroll to top button
+        // Scroll to top
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
             scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
@@ -647,7 +593,10 @@
             navLinks.classList.toggle('open');
             hamburger.innerHTML = navLinks.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-        document.querySelectorAll('.nav-links a, .nav-links button').forEach(el => el.addEventListener('click', () => navLinks.classList.remove('open')));
+        document.querySelectorAll('.nav-links a').forEach(el => el.addEventListener('click', () => {
+            navLinks.classList.remove('open');
+            hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+        }));
 
         function showToast(msg, icon='✅') {
             const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = icon + ' ' + msg;
@@ -695,39 +644,47 @@
             const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime, status: 'active', timestamp: new Date().toISOString() };
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
+                    const assureTitle = document.getElementById('assuranceTitle');
+                    const assureMsg = document.getElementById('assuranceMessage');
+                    if (deliveryMethod === 'self') {
+                        assureTitle.textContent = '🧳 Self Drop‑off Scheduled';
+                        assureMsg.innerHTML = `Please bring your items on <strong>${new Date(scheduledDateTime).toLocaleString()}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
+                    } else {
+                        assureTitle.textContent = '🚚 Pickup Confirmed';
+                        assureMsg.innerHTML = `Our team will pick up your items on <strong>${new Date(scheduledDateTime).toLocaleString()}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
+                    }
+                    openModal('assuranceModal');
                     const conf = document.getElementById('bookingConfirmation');
                     conf.innerHTML = `<h4 style="color:#065f46; font-size:1.2rem;"><i class="fas fa-check-circle"></i> Booking Confirmed!</h4><p><strong>Booking ID:</strong> ${bookingId}</p><p><strong>Tracking ID:</strong> ${trackingId}</p><p><strong>Delivery:</strong> ${deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${new Date(scheduledDateTime).toLocaleString()}</p><small>Save these IDs.</small>`;
                     conf.style.display = 'block';
                     document.getElementById('storageBookingForm').reset();
                     document.getElementById('scheduleField').style.display = 'none';
+                    document.getElementById('scheduledDateTime').required = false;
                     showToast('Booking confirmed!', '🎉'); resetBtn();
                 })
                 .catch(err => { showToast('Error: '+err.message, '❌'); resetBtn(); });
             function resetBtn() { btn.style.display = ''; spinner.style.display = 'none'; }
         }
 
-        function trackItem() {
+        async function trackItem() {
             const input = document.getElementById('trackingInput').value.trim().toUpperCase();
             const resultDiv = document.getElementById('trackingResult');
             if (!input) { showToast('Enter Booking ID or Tracking ID', '⚠️'); return; }
-            bookingsRef.orderByChild('bookingId').equalTo(input).once('value').then(snap => {
-                if (snap.exists()) return displayTracking(Object.values(snap.val())[0]);
-                return bookingsRef.orderByChild('trackingId').equalTo(input).once('value');
-            }).then(snap => {
-                if (snap && snap.exists()) displayTracking(Object.values(snap.val())[0]);
-                else { resultDiv.style.display = 'none'; showToast('No record found.', '❌'); }
-            });
-            function displayTracking(b) {
-                resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'badge-active':'badge-collected'}">${b.status}</span></p><p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p><p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>${b.deliveryMethod?`<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>`:''}`;
-                resultDiv.style.display = 'block';
-            }
+            try {
+                let snap = await bookingsRef.orderByChild('bookingId').equalTo(input).once('value');
+                if (!snap.exists()) snap = await bookingsRef.orderByChild('trackingId').equalTo(input).once('value');
+                if (snap.exists()) {
+                    const b = Object.values(snap.val())[0];
+                    resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'badge-active':'badge-collected'}">${b.status}</span></p><p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p><p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>${b.deliveryMethod?`<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>`:''}`;
+                    resultDiv.style.display = 'block';
+                } else { resultDiv.style.display = 'none'; showToast('No record found.', '❌'); }
+            } catch (err) { showToast('Error: ' + err.message, '❌'); }
         }
 
-        // Marketplace
-        function renderProducts(filter='all') {
-            productsRef.on('value', snap => {
+        function renderProducts(filter = 'all') {
+            productsRef.once('value').then(snap => {
                 const allProducts = snap.val() ? Object.values(snap.val()) : [];
-                const filtered = filter==='all' ? allProducts : allProducts.filter(p=>p.category===filter);
+                const filtered = filter === 'all' ? allProducts : allProducts.filter(p => p.category === filter);
                 const grid = document.getElementById('marketplaceGrid');
                 if (filtered.length === 0) {
                     grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-secondary);">No products found.</p>';
@@ -740,7 +697,7 @@
                         <div class="product-info">
                             <h4 style="font-size:1.1rem;">${p.name}</h4>
                             <span class="badge ${p.condition==='New'?'badge-active':'badge-collected'}">${p.condition}</span>
-                            <p style="font-weight:700; font-size:1.1rem; margin:6px 0;">KES ${p.price.toLocaleString()}</p>
+                            <p style="font-weight:700; font-size:1.1rem; margin:6px 0;">KES ${parseInt(p.price).toLocaleString()}</p>
                             <p style="font-size:0.9rem; color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p>
                             <button class="btn btn-primary" style="font-size:0.9rem; padding:10px 16px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}>Inquire</button>
                         </div>
@@ -749,7 +706,7 @@
             });
         }
         function filterProducts(cat) { renderProducts(cat); document.getElementById('marketplace').scrollIntoView({behavior:'smooth'}); }
-        function inquireProduct(name,price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
+        function inquireProduct(name, price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
         renderProducts();
 
         function handleContactForm(e) {
@@ -770,42 +727,245 @@
 
         function handleDeliveryRequest(e) {
             e.preventDefault();
-            const form = e.target;
-            const name = form.querySelector('input[placeholder="Your Name *"]').value.trim();
-            const phone = form.querySelector('input[placeholder="Phone *"]').value.trim();
-            const service = form.querySelector('select').value;
-            const details = form.querySelector('textarea').value.trim();
+            const name = document.getElementById('delName').value.trim();
+            const phone = document.getElementById('delPhone').value.trim();
+            const service = document.getElementById('delService').value;
+            const details = document.getElementById('delDetails').value.trim();
             const deliveryId = generateId('DEL');
             deliveriesRef.child(deliveryId).set({ id: deliveryId, name, phone, service, details, timestamp: new Date().toISOString() })
-                .then(() => { showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); form.reset(); })
+                .then(() => { showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); e.target.reset(); })
                 .catch(err => showToast('Error: ' + err.message, '❌'));
         }
 
         function handleSellSubmission(e) {
             e.preventDefault();
-            const form = e.target;
-            const sellData = { id: generateId('SELL'), itemName: form[0].value, condition: form[1].value, location: form[2].value, price: form[3].value, description: form[4].value, timestamp: new Date().toISOString() };
+            const sellData = {
+                id: generateId('SELL'),
+                itemName: document.getElementById('sellName').value,
+                condition: document.getElementById('sellCond').value,
+                location: document.getElementById('sellLoc').value,
+                price: document.getElementById('sellPrice').value,
+                description: document.getElementById('sellDesc').value,
+                timestamp: new Date().toISOString()
+            };
             sellsRef.child(sellData.id).set(sellData)
-                .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); form.reset(); })
+                .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); e.target.reset(); })
                 .catch(err => showToast('Error', '❌'));
         }
 
         function handleHouseHunt(e) {
             e.preventDefault();
-            const form = e.target;
-            const name = form.querySelector('input[placeholder*="Name"]').value.trim();
-            const phone = form.querySelector('input[placeholder*="Phone"]').value.trim();
-            const type = form.querySelector('select').value;
-            const location = form.querySelector('input[placeholder="Preferred Location"]').value.trim() || 'Not specified';
-            const budget = form.querySelector('input[placeholder="Budget (KES)"]').value.trim() || 'Not specified';
-            const preferences = form.querySelector('textarea').value.trim();
+            const name = document.getElementById('houseName').value.trim();
+            const phone = document.getElementById('housePhone').value.trim();
+            const type = document.getElementById('houseType').value;
+            const location = document.getElementById('houseLoc').value.trim() || 'Not specified';
+            const budget = document.getElementById('houseBudget').value.trim() || 'Not specified';
+            const preferences = document.getElementById('housePrefs').value.trim();
             if (!name || !phone || !type) { showToast('Fill name, phone and housing type', '⚠️'); return; }
             const requestId = generateId('ACC');
             accommodationRef.child(requestId).set({ id: requestId, name, phone, type, location, budget, preferences, timestamp: new Date().toISOString() })
-                .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHuntingModal'); form.reset(); })
+                .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHuntingModal'); e.target.reset(); })
                 .catch(err => showToast('Error: ' + err.message, '❌'));
+        }
+
+        // ========== AI INTERACTIVE ENGINE ==========
+        const aiState = { active: false, type: null, step: 0, data: {} };
+        const flows = {
+            storage: {
+                steps: ['name', 'phone', 'checkIn', 'collect', 'itemCount', 'category', 'deliveryMethod', 'scheduledDateTime'],
+                questions: {
+                    name: "What's your full name?",
+                    phone: "Your phone number?",
+                    checkIn: "Start date (e.g., 2026-06-20)?",
+                    collect: "Collection date?",
+                    itemCount: "How many items?",
+                    category: "Item category (Luggage/Bags, Boxes, Electronics, Bedding, Furniture, Kitchen, Books, Other)?",
+                    deliveryMethod: "Delivery method: type 'self' (you bring) or 'pickup' (we collect).",
+                    scheduledDateTime: "Preferred date & time for drop‑off/pickup? (e.g., 2026-06-20T14:00)"
+                },
+                validate: {
+                    checkIn: v => !isNaN(Date.parse(v)),
+                    collect: v => !isNaN(Date.parse(v)),
+                    itemCount: v => /^\d+$/.test(v) && parseInt(v) > 0,
+                    category: v => ['luggage/bags','boxes','electronics','bedding','furniture','kitchen','books','other'].includes(v.toLowerCase()),
+                    deliveryMethod: v => ['self','pickup'].includes(v.toLowerCase()),
+                    scheduledDateTime: v => !isNaN(Date.parse(v))
+                },
+                onComplete: async (data) => {
+                    const bookingId = generateId('CV');
+                    const trackingId = generateId('TRK');
+                    const booking = {
+                        bookingId, trackingId,
+                        name: data.name, phone: data.phone, email: data.email || '',
+                        checkIn: data.checkIn, collect: data.collect,
+                        itemCount: parseInt(data.itemCount), category: data.category,
+                        deliveryMethod: data.deliveryMethod.toLowerCase(),
+                        scheduledDateTime: data.scheduledDateTime,
+                        status: 'active', timestamp: new Date().toISOString()
+                    };
+                    await bookingsRef.child(bookingId).set(booking);
+                    const deliveryWord = booking.deliveryMethod === 'self' ? 'Drop‑off' : 'Pickup';
+                    return `✅ Booking confirmed!\nID: ${bookingId}\nTrack: ${trackingId}\n${deliveryWord} on ${new Date(data.scheduledDateTime).toLocaleString()}`;
+                }
+            },
+            delivery: {
+                steps: ['name', 'phone', 'service', 'details'],
+                questions: {
+                    name: "Your full name?",
+                    phone: "Phone number?",
+                    service: "Service (Food Delivery, Parcel, Pickup, Shopping)?",
+                    details: "Details of the request?"
+                },
+                onComplete: async (data) => {
+                    const id = generateId('DEL');
+                    await deliveriesRef.child(id).set({
+                        id, name: data.name, phone: data.phone,
+                        service: data.service, details: data.details,
+                        timestamp: new Date().toISOString()
+                    });
+                    return `🚚 Delivery request submitted! Reference: ${id}`;
+                }
+            },
+            sell: {
+                steps: ['itemName', 'condition', 'location', 'price', 'description'],
+                questions: {
+                    itemName: "Item name?",
+                    condition: "Condition (e.g., New, Used)?",
+                    location: "Your location?",
+                    price: "Price in KES?",
+                    description: "Brief description?"
+                },
+                onComplete: async (data) => {
+                    const id = generateId('SELL');
+                    await sellsRef.child(id).set({
+                        id, itemName: data.itemName, condition: data.condition,
+                        location: data.location, price: data.price,
+                        description: data.description, timestamp: new Date().toISOString()
+                    });
+                    return `💰 Item listed! ID: ${id}`;
+                }
+            },
+            house: {
+                steps: ['name', 'phone', 'type', 'location', 'budget', 'preferences'],
+                questions: {
+                    name: "Full name?",
+                    phone: "Phone number?",
+                    type: "Housing type (Single Room, Bedsitter, One‑Bedroom, Hostel)?",
+                    location: "Preferred location?",
+                    budget: "Budget (KES)?",
+                    preferences: "Any preferences?"
+                },
+                onComplete: async (data) => {
+                    const id = generateId('ACC');
+                    await accommodationRef.child(id).set({
+                        id, name: data.name, phone: data.phone,
+                        type: data.type, location: data.location || 'Not specified',
+                        budget: data.budget || 'Not specified',
+                        preferences: data.preferences || '',
+                        timestamp: new Date().toISOString()
+                    });
+                    return `🏡 Housing request submitted! ID: ${id}`;
+                }
+            }
+        };
+
+        function startFlow(type) {
+            aiState.active = true;
+            aiState.type = type;
+            aiState.step = 0;
+            aiState.data = {};
+            const flow = flows[type];
+            appendChat('bot', `Let's set that up! ${flow.questions[flow.steps[0]]}`);
+        }
+
+        function processFlow(input) {
+            const flow = flows[aiState.type];
+            const currentStepKey = flow.steps[aiState.step];
+            const validate = flow.validate?.[currentStepKey];
+            if (validate && !validate(input)) {
+                appendChat('bot', `Hmm, that doesn't look right. ${flow.questions[currentStepKey]}`);
+                return;
+            }
+            aiState.data[currentStepKey] = input;
+            aiState.step++;
+            if (aiState.step < flow.steps.length) {
+                const nextStep = flow.steps[aiState.step];
+                appendChat('bot', flow.questions[nextStep]);
+            } else {
+                appendChat('bot', 'Processing...');
+                flow.onComplete(aiState.data).then(result => {
+                    appendChat('bot', result);
+                    aiState.active = false;
+                }).catch(err => {
+                    appendChat('bot', '❌ Something went wrong. Please try again.');
+                    aiState.active = false;
+                });
+            }
+        }
+
+        function sendAiMessage() {
+            const input = document.getElementById('aiUserInput');
+            const message = input.value.trim();
+            if (!message) return;
+            appendChat('user', message);
+            input.value = '';
+
+            if (aiState.active) {
+                processFlow(message);
+                return;
+            }
+
+            const msg = message.toLowerCase();
+            if (/book|storage/i.test(msg)) startFlow('storage');
+            else if (/track/i.test(msg)) {
+                const id = message.match(/\b(CV|TRK)[-]?\w+/i)?.[0] || message.replace(/[^A-Z0-9-]/g, '').substring(0, 12);
+                if (id) trackById(id);
+                else appendChat('bot', "Sure! Please tell me your Booking ID or Tracking ID.");
+            }
+            else if (/delivery/i.test(msg)) startFlow('delivery');
+            else if (/sell/i.test(msg)) startFlow('sell');
+            else if (/house|accommodation/i.test(msg)) startFlow('house');
+            else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing. Tap a quick reply or describe what you need.");
+        }
+
+        function trackById(id) {
+            bookingsRef.orderByChild('bookingId').equalTo(id).once('value').then(snap => {
+                if (snap.exists()) return Object.values(snap.val())[0];
+                return bookingsRef.orderByChild('trackingId').equalTo(id).once('value').then(s => s.exists() ? Object.values(s.val())[0] : null);
+            }).then(b => {
+                if (b) {
+                    const msg = `📦 Booking: ${b.bookingId}\nStatus: ${b.status}\nItems: ${b.itemCount} (${b.category})\nCheck‑in: ${b.checkIn}\nCollection: ${b.collect}`;
+                    appendChat('bot', msg);
+                } else appendChat('bot', '❌ No record found with that ID.');
+            });
+        }
+
+        function quickSend(text) {
+            appendChat('user', text);
+            if (aiState.active) processFlow(text);
+            else {
+                // Re‑evaluate intent
+                if (/book|storage/i.test(text)) startFlow('storage');
+                else if (/track/i.test(text)) {
+                    const id = text.match(/\b(CV|TRK)[-]?\w+/i)?.[0] || text.replace(/[^A-Z0-9-]/g, '').substring(0, 12);
+                    if (id) trackById(id);
+                    else appendChat('bot', "Sure! Please tell me your Booking ID or Tracking ID.");
+                }
+                else if (/delivery/i.test(text)) startFlow('delivery');
+                else if (/sell/i.test(text)) startFlow('sell');
+                else if (/house|accommodation/i.test(text)) startFlow('house');
+                else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing.");
+            }
+        }
+
+        function appendChat(sender, text) {
+            const chatDiv = document.getElementById('aiChatMessages');
+            const div = document.createElement('div');
+            div.className = `chat-msg ${sender}`;
+            div.textContent = text;
+            chatDiv.appendChild(div);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
         }
     </script>
 </body>
 </html>
-
