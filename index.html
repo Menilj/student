@@ -204,6 +204,125 @@
         .contact-form-card textarea { resize:vertical; min-height:130px; }
         @media (max-width:768px) { .contact-grid { grid-template-columns:1fr; } }
 
+        /* Reviews & Testimonials */
+        .reviews-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .review-card {
+            background: var(--surface-alt);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--gold);
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .review-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .review-stars {
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+        .review-comment {
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .review-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* Gallery */
+        .verification-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+        }
+        .gallery-thumb {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .gallery-thumb:hover {
+            transform: scale(1.05);
+        }
+        /* Improved star rating inside tracking */
+        .star-rating-input {
+            display: flex;
+            gap: 8px;
+            font-size: 2rem;
+            cursor: pointer;
+            margin: 10px 0;
+            justify-content: center;
+        }
+        .star-rating-input i {
+            color: #cbd5e1;
+            transition: 0.1s;
+        }
+        .star-rating-input i.active {
+            color: var(--gold);
+            text-shadow: 0 0 2px rgba(251,191,36,0.5);
+        }
+        /* Improved review form card */
+        .improved-review-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 24px;
+            box-shadow: var(--shadow-md);
+        }
+        .improved-review-card .review-card-header {
+            background: linear-gradient(135deg, var(--gold), #d97706);
+            padding: 14px 20px;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .improved-review-card .review-card-body {
+            padding: 24px;
+        }
+        .improved-review-card .review-card-footer {
+            padding: 16px 24px;
+            background: var(--surface-alt);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+        }
+        .improved-review-card textarea {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            width: 100%;
+            color: var(--text);
+            font-family: var(--font);
+            resize: vertical;
+            margin-top: 8px;
+        }
+        .improved-review-card textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+        }
+
         .floating-group {
             position: fixed; right: 24px; bottom: 24px; z-index: 1600;
             display: flex; flex-direction: column-reverse; gap: 16px; align-items: flex-end;
@@ -286,6 +405,7 @@
                 <li><a href="#track">Track</a></li>
                 <li><a href="#marketplace">Marketplace</a></li>
                 <li><a href="#accommodation">Housing</a></li>
+                <li><a href="#reviewsSection">Reviews</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#storage" class="nav-cta">Book Now</a></li>
             </ul>
@@ -387,8 +507,9 @@
 
         <section class="section" id="track">
             <h2 class="section-title">🔍 Track <span class="gradient-text">Your Items</span></h2>
+            <p class="section-subtitle">Enter Booking ID, Tracking ID, <strong>or your phone number</strong> to view details, photos, confirm collection, and leave a review.</p>
             <div style="max-width:520px; margin:0 auto; display:flex; gap:12px;">
-                <input type="text" id="trackingInput" placeholder="Booking ID or Tracking ID" style="flex:1; padding:14px 20px; border-radius:30px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:1rem;">
+                <input type="text" id="trackingInput" placeholder="Booking ID (CV-...), Tracking ID (TRK-...), or Phone Number" style="flex:1; padding:14px 20px; border-radius:30px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-size:1rem;">
                 <button class="btn btn-primary" onclick="trackItem()">Track</button>
             </div>
             <div id="trackingResult" style="display:none; margin-top:24px; background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow);"></div>
@@ -428,6 +549,15 @@
             </div>
         </section>
 
+        <!-- Reviews & Testimonials Section (global list) -->
+        <section class="section" id="reviewsSection">
+            <h2 class="section-title">⭐ <span class="gradient-text">Reviews & Testimonials</span></h2>
+            <p class="section-subtitle">What students say about CampusVault. Your feedback builds trust.</p>
+            <div class="reviews-container" id="reviewsListContainer">
+                <div style="text-align:center; padding:20px;">Loading reviews...</div>
+            </div>
+        </section>
+
         <section class="section" id="contact">
             <h2 class="section-title">📞 Contact <span class="gradient-text">Amos</span></h2>
             <p class="section-subtitle">We'd love to hear from you. Reach out anytime!</p>
@@ -436,8 +566,9 @@
                     <h3>Get in Touch</h3>
                     <div class="info-item"><i class="fas fa-phone-alt"></i><span>0116375166</span></div>
                     <div class="info-item"><i class="fab fa-whatsapp"></i><span>WhatsApp: 0116375166</span></div>
-                    <div class="info-item"><i class="fas fa-clock"></i><span>Mon‑Fri 8AM‑7PM<br>Sat 9AM‑4PM</span></div>
+                    <div class="info-item"><i class="fas fa-envelope"></i><span>campusvault@support.com</span></div>
                     <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>Kenyatta University area</span></div>
+                    <div class="info-item"><i class="fas fa-clock"></i><span>Mon‑Fri 8AM‑7PM<br>Sat 9AM‑4PM</span></div>
                 </div>
                 <div class="contact-form-card">
                     <h3>Send a Message</h3>
@@ -454,7 +585,7 @@
 
     <footer>
         © 2026 CampusVault & Amos Services &nbsp; | &nbsp;
-        <a href="https://menilj.github.io/E-web/" target="" rel="">Powered by Zafyier</a>
+        <a href="https://menilj.github.io/E-web/" target="">Powered by Zafyier</a>
     </footer>
 
     <div class="floating-group">
@@ -469,7 +600,7 @@
         </button>
     </div>
 
-    <!-- Delivery Modal -->
+    <!-- Existing Modals (Delivery, Sell, HouseHunting, AI Chat, Assurance) -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('deliveryModal')">&times;</button>
@@ -486,7 +617,6 @@
         </div>
     </div>
 
-    <!-- Sell Modal -->
     <div class="modal-overlay" id="sellModal" style="display:none;" onclick="closeModalBg(event,'sellModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('sellModal')">&times;</button>
@@ -504,7 +634,6 @@
         </div>
     </div>
 
-    <!-- House Hunting Modal -->
     <div class="modal-overlay" id="houseHuntingModal" style="display:none;" onclick="closeModalBg(event,'houseHuntingModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('houseHuntingModal')">&times;</button>
@@ -523,7 +652,6 @@
         </div>
     </div>
 
-    <!-- AI Chat Modal -->
     <div class="modal-overlay" id="aiChatModal" style="display:none;" onclick="closeModalBg(event,'aiChatModal')">
         <div class="ai-chat-modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -547,7 +675,6 @@
         </div>
     </div>
 
-    <!-- Assurance Popup -->
     <div class="modal-overlay" id="assuranceModal" style="display:none;" onclick="closeModalBg(event,'assuranceModal')">
         <div class="assurance-modal">
             <i class="fas fa-check-circle"></i>
@@ -578,15 +705,35 @@
         const inquiriesRef = db.ref('inquiries');
         const deliveriesRef = db.ref('deliveryRequests');
         const productsRef = db.ref('products');
+        const reviewsRef = db.ref('reviews');
 
-        // Scroll to top
+        // Helper functions
+        function showToast(msg, icon='✅') {
+            const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = icon + ' ' + msg;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(() => t.remove(), 3500);
+        }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closeModalBg(e, id) { if (e.target === e.currentTarget) closeModal(id); }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); });
+        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Scroll to top and mobile menu
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
             scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
             document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
         });
-
-        // Mobile menu
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
         hamburger.addEventListener('click', () => {
@@ -598,17 +745,7 @@
             hamburger.innerHTML = '<i class="fas fa-bars"></i>';
         }));
 
-        function showToast(msg, icon='✅') {
-            const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = icon + ' ' + msg;
-            document.getElementById('toastContainer').appendChild(t);
-            setTimeout(() => t.remove(), 3500);
-        }
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function closeModalBg(e, id) { if (e.target === e.currentTarget) closeModal(id); }
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); });
-        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
-
+        // Booking storage
         function toggleSchedule() {
             const method = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
             const scheduleDiv = document.getElementById('scheduleField');
@@ -641,7 +778,12 @@
                 showToast('Fill all required fields', '⚠️'); resetBtn(); return;
             }
             const bookingId = generateId('CV'), trackingId = generateId('TRK');
-            const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime, status: 'active', timestamp: new Date().toISOString() };
+            const booking = { 
+                bookingId, trackingId, name, phone, email, checkIn, collect, 
+                itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime, 
+                status: 'active', verificationImages: [], collectedAt: null,
+                timestamp: new Date().toISOString()
+            };
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
                     const assureTitle = document.getElementById('assuranceTitle');
@@ -666,21 +808,261 @@
             function resetBtn() { btn.style.display = ''; spinner.style.display = 'none'; }
         }
 
+        // --- TRACKING: supports Booking ID, Tracking ID, or Phone Number ---
+        let currentTrackedBooking = null;
+
         async function trackItem() {
-            const input = document.getElementById('trackingInput').value.trim().toUpperCase();
+            const input = document.getElementById('trackingInput').value.trim();
             const resultDiv = document.getElementById('trackingResult');
-            if (!input) { showToast('Enter Booking ID or Tracking ID', '⚠️'); return; }
+            if (!input) { showToast('Please enter a Booking ID, Tracking ID, or phone number', '⚠️'); return; }
+            
+            const bookingIdMatch = input.toUpperCase().match(/^CV-[A-Z0-9]{6,8}$/);
+            const trackingIdMatch = input.toUpperCase().match(/^TRK-[A-Z0-9]{6,8}$/);
+            
             try {
-                let snap = await bookingsRef.orderByChild('bookingId').equalTo(input).once('value');
-                if (!snap.exists()) snap = await bookingsRef.orderByChild('trackingId').equalTo(input).once('value');
-                if (snap.exists()) {
-                    const b = Object.values(snap.val())[0];
-                    resultDiv.innerHTML = `<p><strong>Status:</strong> <span class="badge ${b.status==='active'?'badge-active':'badge-collected'}">${b.status}</span></p><p>Customer: ${b.name}</p><p>Items: ${b.itemCount} (${b.category})</p><p>Check‑in: ${b.checkIn}</p><p>Collection: ${b.collect}</p>${b.deliveryMethod?`<p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop‑off':'Pickup'} on ${b.scheduledDateTime?new Date(b.scheduledDateTime).toLocaleString():'N/A'}</p>`:''}`;
-                    resultDiv.style.display = 'block';
-                } else { resultDiv.style.display = 'none'; showToast('No record found.', '❌'); }
+                if (bookingIdMatch) {
+                    const snap = await bookingsRef.child(input.toUpperCase()).once('value');
+                    if (snap.exists()) {
+                        displaySingleBooking({ ...snap.val(), _key: snap.key });
+                    } else {
+                        resultDiv.style.display = 'none';
+                        showToast('No booking found with that ID', '❌');
+                    }
+                } 
+                else if (trackingIdMatch) {
+                    const snap = await bookingsRef.orderByChild('trackingId').equalTo(input.toUpperCase()).once('value');
+                    if (snap.exists()) {
+                        const [key, val] = Object.entries(snap.val())[0];
+                        displaySingleBooking({ ...val, _key: key });
+                    } else {
+                        resultDiv.style.display = 'none';
+                        showToast('No booking found with that Tracking ID', '❌');
+                    }
+                }
+                else {
+                    const allSnap = await bookingsRef.once('value');
+                    const allBookings = [];
+                    allSnap.forEach(child => {
+                        const b = child.val();
+                        if (b.phone && b.phone.includes(input)) {
+                            allBookings.push({ ...b, _key: child.key });
+                        }
+                    });
+                    if (allBookings.length === 0) {
+                        resultDiv.style.display = 'none';
+                        showToast('No bookings found for this phone number', '❌');
+                    } else if (allBookings.length === 1) {
+                        displaySingleBooking(allBookings[0]);
+                    } else {
+                        displayBookingList(allBookings);
+                    }
+                }
+            } catch (err) {
+                showToast('Error: ' + err.message, '❌');
+            }
+        }
+
+        function displayBookingList(bookings) {
+            const resultDiv = document.getElementById('trackingResult');
+            const listHtml = `
+                <div>
+                    <h3>📞 Multiple bookings found for this phone number</h3>
+                    <p>Select a booking to view details:</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+                        ${bookings.map(b => `
+                            <div style="background: var(--surface-alt); border-radius: var(--radius-sm); padding: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                                <div>
+                                    <strong>${b.bookingId}</strong> – ${b.name}<br>
+                                    <small>Items: ${b.itemCount} | Status: ${b.status === 'active' ? 'Active' : 'Collected'}</small>
+                                </div>
+                                <button class="btn btn-primary" onclick="selectBooking('${b._key}')">View Details</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = listHtml;
+            resultDiv.style.display = 'block';
+        }
+
+        window.selectBooking = async (bookingKey) => {
+            const snap = await bookingsRef.child(bookingKey).once('value');
+            if (snap.exists()) {
+                displaySingleBooking({ ...snap.val(), _key: bookingKey });
+            } else {
+                showToast('Booking not found', '❌');
+            }
+        };
+
+        async function displaySingleBooking(b) {
+            currentTrackedBooking = b;
+            const resultDiv = document.getElementById('trackingResult');
+            const isCollected = b.status === 'collected';
+            const images = b.verificationImages || [];
+            const galleryHtml = images.length ? 
+                `<div class="verification-gallery">${images.map(url => `<img src="${url}" class="gallery-thumb" onclick="window.open(this.src)" alt="Verification photo">`).join('')}</div>` : 
+                `<p><i class="fas fa-info-circle"></i> No verification photos uploaded yet. Staff will add images when your items are checked in.</p>`;
+            
+            let actionButton = '';
+            if (!isCollected) {
+                actionButton = `<div style="margin-top: 20px; padding: 16px; background: var(--surface-alt); border-radius: var(--radius-sm);">
+                                    <button id="confirmCollectionBtn" class="btn btn-primary" style="width:100%;"><i class="fas fa-check-circle"></i> I Have Successfully Received My Items</button>
+                                </div>`;
+            } else {
+                actionButton = `<div style="margin-top: 20px; padding: 12px; background: rgba(52,211,153,0.1); border-radius: var(--radius-sm); color: var(--emerald);">
+                                    <i class="fas fa-check-circle"></i> Collection confirmed on ${new Date(b.collectedAt).toLocaleString()}
+                                </div>`;
+            }
+
+            resultDiv.innerHTML = `
+                <div>
+                    <h3 style="margin-bottom: 16px;">📋 Booking Details</h3>
+                    <p><strong>Booking ID:</strong> ${b.bookingId}</p>
+                    <p><strong>Customer:</strong> ${escapeHtml(b.name)}</p>
+                    <p><strong>Phone:</strong> ${escapeHtml(b.phone)}</p>
+                    <p><strong>Items:</strong> ${b.itemCount} (${b.category})</p>
+                    <p><strong>Storage Period:</strong> ${b.checkIn} → ${b.collect}</p>
+                    <p><strong>Delivery:</strong> ${b.deliveryMethod === 'self' ? 'Self drop-off' : 'Pickup'} scheduled on ${new Date(b.scheduledDateTime).toLocaleString()}</p>
+                    <p><strong>Status:</strong> <span class="badge ${isCollected ? 'badge-collected' : 'badge-active'}">${isCollected ? 'Collected ✓' : 'Active / Pending'}</span></p>
+                    
+                    <h3 style="margin: 24px 0 12px;">📸 Item Verification Gallery</h3>
+                    ${galleryHtml}
+                    
+                    ${actionButton}
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+
+            // Attach collection confirmation event
+            if (!isCollected) {
+                const confirmBtn = document.getElementById('confirmCollectionBtn');
+                if (confirmBtn) confirmBtn.onclick = () => confirmCollection(b._key);
+            } 
+            // If collected, show improved review form if not already reviewed
+            else {
+                const reviewSnap = await reviewsRef.orderByChild('bookingId').equalTo(b.bookingId).once('value');
+                if (!reviewSnap.exists()) {
+                    // Improved review form with better layout
+                    const reviewFormHtml = `
+                        <div class="improved-review-card" id="trackingReviewForm">
+                            <div class="review-card-header">
+                                <i class="fas fa-star"></i> Share Your Experience
+                            </div>
+                            <div class="review-card-body">
+                                <input type="hidden" id="trackReviewBookingId" value="${b.bookingId}">
+                                <div style="margin-bottom: 16px;">
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600;">Your Name</label>
+                                    <input type="text" id="trackReviewName" value="${escapeHtml(b.name)}" readonly style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface-alt); color: var(--text);">
+                                </div>
+                                <div style="margin-bottom: 16px; text-align: center;">
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600;">Rate your experience</label>
+                                    <div class="star-rating-input" id="trackReviewStars">
+                                        <i class="far fa-star" data-val="1"></i>
+                                        <i class="far fa-star" data-val="2"></i>
+                                        <i class="far fa-star" data-val="3"></i>
+                                        <i class="far fa-star" data-val="4"></i>
+                                        <i class="far fa-star" data-val="5"></i>
+                                    </div>
+                                    <input type="hidden" id="trackReviewRating" value="0">
+                                </div>
+                                <div style="margin-bottom: 8px;">
+                                    <label style="display: block; margin-bottom: 6px; font-weight: 600;">Your Review</label>
+                                    <textarea id="trackReviewComment" rows="4" placeholder="Tell us about your storage experience... (e.g., 'Very secure, easy pickup, would recommend!')" required></textarea>
+                                </div>
+                            </div>
+                            <div class="review-card-footer">
+                                <button id="submitTrackReviewBtn" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Submit Review</button>
+                            </div>
+                        </div>
+                    `;
+                    resultDiv.insertAdjacentHTML('beforeend', reviewFormHtml);
+                    initTrackReviewStars();
+                    document.getElementById('submitTrackReviewBtn').onclick = () => submitTrackReview(b.bookingId, b.name);
+                } else {
+                    const alreadyReviewedHtml = `<div style="margin-top: 20px; padding: 14px; background: rgba(251,191,36,0.15); border-radius: var(--radius-sm); text-align: center; border-left: 4px solid var(--gold);">
+                        <i class="fas fa-star" style="color: var(--gold);"></i> Thank you for your review! Your feedback helps other students.
+                    </div>`;
+                    resultDiv.insertAdjacentHTML('beforeend', alreadyReviewedHtml);
+                }
+            }
+        }
+
+        function initTrackReviewStars() {
+            const stars = document.querySelectorAll('#trackReviewStars i');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const val = parseInt(this.getAttribute('data-val'));
+                    document.getElementById('trackReviewRating').value = val;
+                    stars.forEach((s, idx) => {
+                        if (idx < val) s.className = "fas fa-star active";
+                        else s.className = "far fa-star";
+                    });
+                });
+            });
+        }
+
+        async function submitTrackReview(bookingId, customerName) {
+            const rating = parseInt(document.getElementById('trackReviewRating').value);
+            const comment = document.getElementById('trackReviewComment').value.trim();
+            if (rating === 0) { showToast('Please select a rating', '⚠️'); return; }
+            if (!comment) { showToast('Please write your experience', '⚠️'); return; }
+            try {
+                await reviewsRef.push({
+                    bookingId: bookingId,
+                    customerName: customerName,
+                    rating: rating,
+                    comment: comment,
+                    createdAt: new Date().toISOString()
+                });
+                showToast('Thank you for your review!', '⭐');
+                const formDiv = document.getElementById('trackingReviewForm');
+                if (formDiv) formDiv.remove();
+                const resultDiv = document.getElementById('trackingResult');
+                resultDiv.insertAdjacentHTML('beforeend', `<div style="margin-top: 12px; padding: 12px; background: rgba(52,211,153,0.15); border-radius: var(--radius-sm); text-align: center;">
+                    <i class="fas fa-check-circle" style="color: var(--emerald);"></i> Review submitted successfully! It will appear in the testimonials section.
+                </div>`);
+                loadReviews();
+            } catch (err) { showToast('Error submitting review', '❌'); }
+        }
+
+        async function confirmCollection(bookingKey) {
+            if (!confirm('⚠️ Confirm you have received all your items. This action cannot be undone and will close your booking.')) return;
+            try {
+                await bookingsRef.child(bookingKey).update({
+                    status: 'collected',
+                    collectedAt: new Date().toISOString()
+                });
+                showToast('Collection confirmed! Digital proof recorded.', '✅');
+                const refreshed = await bookingsRef.child(bookingKey).once('value');
+                displaySingleBooking({ ...refreshed.val(), _key: bookingKey });
+                loadReviews();
             } catch (err) { showToast('Error: ' + err.message, '❌'); }
         }
 
+        // ========== REVIEWS & TESTIMONIALS GLOBAL LIST ==========
+        async function loadReviews() {
+            const snap = await reviewsRef.once('value');
+            const reviews = snap.val() ? Object.values(snap.val()) : [];
+            const container = document.getElementById('reviewsListContainer');
+            if (reviews.length === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:20px;">✨ No reviews yet. Be the first to share your experience!</div>';
+                return;
+            }
+            const sorted = reviews.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+            container.innerHTML = sorted.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <span class="review-name">${escapeHtml(r.customerName)}</span>
+                        <span class="review-stars">${'⭐'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                    </div>
+                    <div class="review-comment">${escapeHtml(r.comment)}</div>
+                    <div class="review-date">📅 ${new Date(r.createdAt).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+        loadReviews();
+
+        // Marketplace products (unchanged)
         function renderProducts(filter = 'all') {
             productsRef.once('value').then(snap => {
                 const allProducts = snap.val() ? Object.values(snap.val()) : [];
@@ -709,6 +1091,7 @@
         function inquireProduct(name, price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
         renderProducts();
 
+        // Contact, Delivery, Sell, HouseHunt handlers (unchanged)
         function handleContactForm(e) {
             e.preventDefault();
             const name = document.getElementById('contactName').value.trim();
@@ -724,7 +1107,6 @@
                     document.getElementById('contactMessage').value = '';
                 }).catch(err => showToast('Error: ' + err.message, '❌'));
         }
-
         function handleDeliveryRequest(e) {
             e.preventDefault();
             const name = document.getElementById('delName').value.trim();
@@ -736,7 +1118,6 @@
                 .then(() => { showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); e.target.reset(); })
                 .catch(err => showToast('Error: ' + err.message, '❌'));
         }
-
         function handleSellSubmission(e) {
             e.preventDefault();
             const sellData = {
@@ -752,7 +1133,6 @@
                 .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); e.target.reset(); })
                 .catch(err => showToast('Error', '❌'));
         }
-
         function handleHouseHunt(e) {
             e.preventDefault();
             const name = document.getElementById('houseName').value.trim();
@@ -768,7 +1148,7 @@
                 .catch(err => showToast('Error: ' + err.message, '❌'));
         }
 
-        // ========== AI INTERACTIVE ENGINE ==========
+        // AI Chat (unchanged, but kept for completeness)
         const aiState = { active: false, type: null, step: 0, data: {} };
         const flows = {
             storage: {
@@ -801,7 +1181,8 @@
                         itemCount: parseInt(data.itemCount), category: data.category,
                         deliveryMethod: data.deliveryMethod.toLowerCase(),
                         scheduledDateTime: data.scheduledDateTime,
-                        status: 'active', timestamp: new Date().toISOString()
+                        status: 'active', verificationImages: [], collectedAt: null,
+                        timestamp: new Date().toISOString()
                     };
                     await bookingsRef.child(bookingId).set(booking);
                     const deliveryWord = booking.deliveryMethod === 'self' ? 'Drop‑off' : 'Pickup';
@@ -868,7 +1249,6 @@
                 }
             }
         };
-
         function startFlow(type) {
             aiState.active = true;
             aiState.type = type;
@@ -877,7 +1257,6 @@
             const flow = flows[type];
             appendChat('bot', `Let's set that up! ${flow.questions[flow.steps[0]]}`);
         }
-
         function processFlow(input) {
             const flow = flows[aiState.type];
             const currentStepKey = flow.steps[aiState.step];
@@ -902,19 +1281,13 @@
                 });
             }
         }
-
         function sendAiMessage() {
             const input = document.getElementById('aiUserInput');
             const message = input.value.trim();
             if (!message) return;
             appendChat('user', message);
             input.value = '';
-
-            if (aiState.active) {
-                processFlow(message);
-                return;
-            }
-
+            if (aiState.active) { processFlow(message); return; }
             const msg = message.toLowerCase();
             if (/book|storage/i.test(msg)) startFlow('storage');
             else if (/track/i.test(msg)) {
@@ -927,7 +1300,6 @@
             else if (/house|accommodation/i.test(msg)) startFlow('house');
             else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing. Tap a quick reply or describe what you need.");
         }
-
         function trackById(id) {
             bookingsRef.orderByChild('bookingId').equalTo(id).once('value').then(snap => {
                 if (snap.exists()) return Object.values(snap.val())[0];
@@ -939,12 +1311,10 @@
                 } else appendChat('bot', '❌ No record found with that ID.');
             });
         }
-
         function quickSend(text) {
             appendChat('user', text);
             if (aiState.active) processFlow(text);
             else {
-                // Re‑evaluate intent
                 if (/book|storage/i.test(text)) startFlow('storage');
                 else if (/track/i.test(text)) {
                     const id = text.match(/\b(CV|TRK)[-]?\w+/i)?.[0] || text.replace(/[^A-Z0-9-]/g, '').substring(0, 12);
@@ -957,7 +1327,6 @@
                 else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing.");
             }
         }
-
         function appendChat(sender, text) {
             const chatDiv = document.getElementById('aiChatMessages');
             const div = document.createElement('div');
