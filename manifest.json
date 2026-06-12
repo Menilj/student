@@ -1,6 +1,6 @@
 {
   "name": "CampusVault_student",
-  "short_name": "campvault_Student",
+  "short_name": "Vault_Student",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
