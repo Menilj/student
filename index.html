@@ -12,7 +12,10 @@
     <link rel="icon" type="image/png" sizes="192x192" href="apple-touch-icon.png">
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+    <!-- PDF.js for bulk language import -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
+        /* ========== CSS (ultra‑mobile‑friendly) ========== */
         :root {
             --bg: #0f172a; --surface: #1e293b; --surface-alt: #334155;
             --text: #f1f5f9; --text-secondary: #cbd5e1; --primary: #38bdf8;
@@ -38,7 +41,6 @@
         .bg-blob:nth-child(3){ width:300px; height:300px; background:var(--gold); top:50%; left:50%; animation-duration:30s; }
         @keyframes float { 0%{transform:translate(0,0);} 100%{transform:translate(30px,-20px);} }
         .main-content { position:relative; z-index:1; }
-
         .nav {
             position:sticky; top:0; z-index:1000; background: var(--surface);
             backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
@@ -59,7 +61,6 @@
         .nav-links a:hover { background:var(--surface-alt); color:var(--primary); }
         .nav-cta { background:var(--primary)!important; color:#fff!important; font-weight:600!important; border-radius:30px!important; padding:8px 16px!important; }
         .hamburger { display:none; background:none; border:none; font-size:1.6rem; color:var(--text); cursor:pointer; z-index:1001; }
-
         @media (max-width:768px) {
             .nav-links {
                 position:fixed; top:0; right:-100%; width:280px; height:100vh;
@@ -69,7 +70,6 @@
             .nav-links.open { right:0; }
             .hamburger { display:block; }
         }
-
         .hero {
             padding:40px 16px; max-width:var(--max-width); margin:0 auto;
             display:flex; flex-direction:column; align-items:center; text-align:center; gap:24px;
@@ -89,12 +89,10 @@
         .btn-outline { background:transparent; border:2px solid var(--border); color:var(--text); }
         .btn-outline:active { border-color:var(--primary); }
         .hero-visual { display:none; }
-
         .section { padding:40px 16px; max-width:var(--max-width); margin:0 auto; }
         .section-title { font-size:1.6rem; font-weight:800; text-align:center; margin-bottom:8px; }
         .section-subtitle { color:var(--text-secondary); text-align:center; max-width:650px; margin:0 auto 24px; font-size:0.9rem; }
         .gradient-text { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-
         .services-grid, .marketplace-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; }
         .service-card, .product-card {
             background:var(--surface); border-radius:var(--radius); padding:20px;
@@ -105,7 +103,6 @@
         .service-card h3 { font-size:1.1rem; margin-bottom:6px; }
         .service-card p { color:var(--text-secondary); margin-bottom:16px; }
         .service-card .btn, .product-card .btn { margin-top:auto; width:100%; }
-
         .booking-card { background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border:1px solid var(--border); }
         .form-grid { display:flex; flex-direction:column; gap:16px; }
         .form-grid input, .form-grid select, .form-grid textarea {
@@ -122,14 +119,12 @@
             cursor:pointer; transition:0.2s; font-size:0.95rem;
         }
         .radio-card input { accent-color:var(--primary); }
-
-        /* Modal Overlay – full screen on mobile by default */
         .modal-overlay {
             position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
             display:flex; align-items:center; justify-content:center; z-index:2000;
             padding: 0;
         }
-        .modal, .ai-chat-modal, .assurance-modal {
+        .modal, .ai-chat-modal, .assurance-modal, .lang-contribution-modal {
             background:var(--surface); width:100%; height:100%;
             max-width: none; max-height: none;
             border-radius:0; padding:16px; position:relative;
@@ -142,8 +137,6 @@
             cursor:pointer; font-size:1.4rem; color:var(--text-secondary); z-index:10;
         }
         .modal-close:active { background:var(--border); }
-
-        /* Toast – centred at bottom */
         .toast {
             position:fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
             background:var(--text); color:var(--bg);
@@ -153,13 +146,11 @@
         }
         @keyframes slideUp { from{opacity:0; transform:translate(-50%, 20px);} to{opacity:1; transform:translate(-50%,0);} }
         @keyframes fadeOut { to{opacity:0; transform:translate(-50%, 10px);} }
-
         .loading-spinner {
             display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3);
             border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px;
         }
         @keyframes spin { to{transform:rotate(360deg);} }
-
         .product-img-container {
             width:100%; height:160px; overflow:hidden; background:var(--surface-alt);
             border-radius: var(--radius-sm) var(--radius-sm) 0 0; display:flex; align-items:center; justify-content:center;
@@ -171,7 +162,6 @@
         .badge { padding:4px 10px; border-radius:12px; font-size:0.7rem; font-weight:600; }
         .badge-active { background:#d1fae5; color:#065f46; }
         .badge-collected { background:#e2e8f0; color:#475569; }
-
         .contact-grid { display:flex; flex-direction:column; gap:24px; max-width:700px; margin:0 auto; }
         .contact-info-card {
             background:linear-gradient(135deg, var(--primary) 0%, #0f2b45 100%);
@@ -199,7 +189,6 @@
             background:var(--surface);
         }
         .contact-form-card textarea { resize:vertical; min-height:100px; }
-
         .reviews-container { max-width: 700px; margin:0 auto; }
         .review-card {
             background: var(--surface-alt); border-radius: var(--radius); padding: 16px;
@@ -210,7 +199,6 @@
         .review-stars { color: var(--gold); letter-spacing: 2px; }
         .review-comment { color: var(--text-secondary); line-height: 1.5; font-size:0.9rem; }
         .review-date { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
-
         .verification-gallery { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
         .gallery-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; }
         .star-rating-input { display: flex; gap: 8px; font-size: 1.8rem; cursor: pointer; margin: 8px 0; justify-content: center; }
@@ -232,8 +220,6 @@
             background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius-sm);
             padding: 10px; width: 100%; color: var(--text); font-family: var(--font); resize: vertical; margin-top: 6px;
         }
-
-        /* Floating buttons – small, minimal */
         .floating-group {
             position: fixed; right: 12px; bottom: 12px; z-index: 1500;
             display: flex; flex-direction: column-reverse; gap: 8px; align-items: flex-end;
@@ -251,6 +237,13 @@
             box-shadow: 0 4px 12px rgba(139,92,246,0.4); cursor: pointer; transition: 0.3s;
         }
         .ai-float:active { transform: scale(0.9); }
+        .lang-float {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669); color: #fff;
+            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.4); cursor: pointer; transition: 0.3s;
+        }
+        .lang-float:active { transform: scale(0.9); }
         .scroll-top {
             width: 36px; height: 36px; border-radius: 50%; background: var(--surface);
             border: 1px solid var(--border); color: var(--text); font-size: 1rem;
@@ -258,11 +251,15 @@
             opacity: 0; pointer-events: none; transition: 0.3s; box-shadow: var(--shadow);
         }
         .scroll-top.visible { opacity: 1; pointer-events: auto; }
-
         .chat-messages { flex:1; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:10px; }
         .chat-msg { max-width:80%; padding:10px 14px; border-radius:18px; font-size:0.9rem; line-height:1.4; }
         .chat-msg.bot { background:var(--surface-alt); align-self:flex-start; border-bottom-left-radius:4px; }
         .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+        .typing-indicator { display:flex; gap:4px; padding:4px 0; align-self:flex-start; }
+        .typing-indicator span { width:6px; height:6px; background: var(--text-secondary); border-radius:50%; animation: typingBounce 1.2s infinite; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce { 0%,60%,100% { transform:translateY(0); } 30% { transform:translateY(-4px); } }
         .chat-input-area { display:flex; gap:8px; margin-top:8px; }
         .chat-input-area input {
             flex:1; padding:10px 14px; border-radius:24px; border:1px solid var(--border);
@@ -279,12 +276,22 @@
             border-radius:20px; font-size:0.8rem; cursor:pointer; transition:0.2s; color:var(--text);
         }
         .quick-reply:active { background:var(--primary); color:#fff; border-color:var(--primary); }
-
         footer {
             background:var(--surface); color:var(--text-secondary); text-align:center;
             padding:16px; font-size:0.85rem; border-top:1px solid var(--border);
         }
         footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+        /* PDF import related */
+        .file-upload-area {
+            border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px;
+            text-align: center; cursor: pointer; transition: 0.2s; margin-top: 10px;
+        }
+        .file-upload-area:hover { border-color: var(--primary); background: var(--surface-alt); }
+        .pdf-preview-container {
+            max-height: 250px; overflow-y: auto; background: var(--surface-alt);
+            border-radius: var(--radius-sm); padding: 12px; margin-top: 10px;
+            font-size: 0.85rem; white-space: pre-wrap; word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -308,6 +315,7 @@
     </nav>
 
     <div class="main-content">
+        <!-- Hero -->
         <section class="hero" id="home">
             <div class="hero-content">
                 <h1>Storage, Housing & <span class="gradient-text">Deliveries</span></h1>
@@ -321,6 +329,7 @@
             </div>
         </section>
 
+        <!-- Services -->
         <section class="section" id="services">
             <h2 class="section-title">All‑In‑One <span class="gradient-text">Student Platform</span></h2>
             <p class="section-subtitle">Storage, housing, marketplace, deliveries and student support – one platform.</p>
@@ -353,6 +362,7 @@
             </div>
         </section>
 
+        <!-- Storage Booking -->
         <section class="section" id="storage">
             <h2 class="section-title">📦 <span class="gradient-text">Book Storage</span></h2>
             <p class="section-subtitle">Fill in the details, choose delivery method, get your IDs instantly.</p>
@@ -362,10 +372,27 @@
                         <input type="text" id="custName" placeholder="Full Name *" required>
                         <input type="tel" id="custPhone" placeholder="Phone Number *" required>
                         <input type="email" id="custEmail" placeholder="Email (optional)">
-                        <div><label style="display:block; margin-bottom:4px; font-size:0.9rem;">Start Date *</label><input type="date" id="checkInDate" required></div>
-                        <div><label style="display:block; margin-bottom:4px; font-size:0.9rem;">Collection Date *</label><input type="date" id="collectDate" required></div>
-                        <div><label style="display:block; margin-bottom:4px; font-size:0.9rem;">No. of Items *</label><input type="number" id="itemCount" min="1" required></div>
-                        <div><label style="display:block; margin-bottom:4px; font-size:0.9rem;">Category *</label><select id="itemCategory" required><option value="">-- Select --</option><option>Luggage/Bags</option><option>Boxes</option><option>Electronics</option><option>Bedding</option><option>Furniture</option><option>Kitchen Items</option><option>Books</option><option>Other</option></select></div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-size:0.9rem;">Start Date *</label>
+                            <input type="date" id="checkInDate" required>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-size:0.9rem;">Collection Date *</label>
+                            <input type="date" id="collectDate" required disabled>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-size:0.9rem;">No. of Items *</label>
+                            <input type="number" id="itemCount" min="1" required>
+                        </div>
+                        <div>
+                            <label style="display:block; margin-bottom:4px; font-size:0.9rem;">Category *</label>
+                            <select id="itemCategory" required>
+                                <option value="">-- Select --</option>
+                                <option>Luggage/Bags</option><option>Boxes</option><option>Electronics</option>
+                                <option>Bedding</option><option>Furniture</option><option>Kitchen Items</option>
+                                <option>Books</option><option>Other</option>
+                            </select>
+                        </div>
                     </div>
                     <div style="margin-top:16px;">
                         <label style="font-weight:600; display:block; margin-bottom:8px;">🚚 Delivery Method *</label>
@@ -392,6 +419,7 @@
             </div>
         </section>
 
+        <!-- Tracking -->
         <section class="section" id="track">
             <h2 class="section-title">🔍 Track <span class="gradient-text">Your Items</span></h2>
             <p class="section-subtitle">Enter Booking ID, Tracking ID, <strong>or your phone number</strong>.</p>
@@ -402,6 +430,7 @@
             <div id="trackingResult" style="display:none; margin-top:16px; background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);"></div>
         </section>
 
+        <!-- Marketplace -->
         <section class="section" id="marketplace">
             <h2 class="section-title">🛍️ Student <span class="gradient-text">Marketplace</span></h2>
             <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
@@ -418,6 +447,7 @@
             </div>
         </section>
 
+        <!-- Accommodation -->
         <section class="section" id="accommodation">
             <h2 class="section-title">🏡 <span class="gradient-text">Accommodation</span> Assistance</h2>
             <div style="display:flex; flex-direction:column; gap:16px; max-width:500px; margin:0 auto;">
@@ -436,6 +466,7 @@
             </div>
         </section>
 
+        <!-- Reviews & Testimonials -->
         <section class="section" id="reviewsSection">
             <h2 class="section-title">⭐ <span class="gradient-text">Reviews & Testimonials</span></h2>
             <div class="reviews-container" id="reviewsListContainer">
@@ -443,6 +474,7 @@
             </div>
         </section>
 
+        <!-- Contact -->
         <section class="section" id="contact">
             <h2 class="section-title">📞 Contact <span class="gradient-text">Amos</span></h2>
             <div class="contact-grid">
@@ -477,6 +509,9 @@
         <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
             <i class="fab fa-whatsapp"></i>
         </a>
+        <div class="lang-float" onclick="openModal('langContributionModal')" title="Teach AI your language">
+            <i class="fas fa-language"></i>
+        </div>
         <div class="ai-float" onclick="openModal('aiChatModal')" title="AI Assistant">
             <i class="fas fa-robot"></i>
         </div>
@@ -485,7 +520,7 @@
         </button>
     </div>
 
-    <!-- Modals -->
+    <!-- Modals (Delivery, Sell, Housing, AI Chat, Assurance, Language Contribution) -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('deliveryModal')">&times;</button>
@@ -549,9 +584,11 @@
                 <span class="quick-reply" onclick="quickSend('Request delivery')">🚚 Delivery</span>
                 <span class="quick-reply" onclick="quickSend('Sell an item')">💰 Sell</span>
                 <span class="quick-reply" onclick="quickSend('Find housing')">🏠 Housing</span>
+                <span class="quick-reply" onclick="quickSend('Show marketplace')">🛒 Marketplace</span>
+                <span class="quick-reply" onclick="quickSend('Recent reviews')">⭐ Reviews</span>
             </div>
             <div class="chat-messages" id="aiChatMessages">
-                <div class="chat-msg bot">Hi! 👋 I'm the CampusVault assistant. I can directly book services for you. Just tap a quick reply or tell me what you need.</div>
+                <div class="chat-msg bot">Hi! 👋 I speak many Kenyan languages. Ask me anything!</div>
             </div>
             <div class="chat-input-area">
                 <input type="text" id="aiUserInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendAiMessage()">
@@ -570,10 +607,62 @@
         </div>
     </div>
 
+    <!-- Language Contribution Modal (with PDF import) -->
+    <div class="modal-overlay" id="langContributionModal" style="display:none;" onclick="closeModalBg(event,'langContributionModal')">
+        <div class="lang-contribution-modal">
+            <button class="modal-close" onclick="closeModal('langContributionModal')">&times;</button>
+            <h3 style="margin-bottom:16px;">🌍 Teach AI Your Language</h3>
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:20px;">Add words/phrases in your native language or upload a PDF for bulk import.</p>
+            <div class="form-grid">
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600;">Language *</label>
+                    <select id="contribLanguage" required>
+                        <option value="">-- Choose --</option>
+                        <option>Swahili</option><option>Kikuyu</option><option>Maasai</option>
+                        <option>Luhya</option><option>Luo</option><option>Kisii</option>
+                        <option>Kamba</option><option>Kalenjin</option><option>Somali</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600;">English Phrase *</label>
+                    <input type="text" id="contribEnglish" placeholder="e.g. Hello" required>
+                </div>
+                <div>
+                    <label style="display:block; margin-bottom:4px; font-weight:600;">Translation *</label>
+                    <input type="text" id="contribTranslation" placeholder="e.g. Habari" required>
+                </div>
+                <button class="btn btn-primary" onclick="submitLanguageContribution()" style="width:100%; margin-top:8px;">💾 Save Translation</button>
+            </div>
+
+            <!-- Bulk PDF Import Section -->
+            <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
+                <h4 style="margin-bottom: 8px;">📄 Bulk Import from PDF</h4>
+                <p style="font-size:0.8rem; color:var(--text-secondary);">Upload a PDF where each line contains: <strong>language,english,translation</strong> (comma separated).</p>
+                <div class="file-upload-area" id="pdfUploadArea" onclick="document.getElementById('pdfFileInput').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem; color:var(--primary);"></i>
+                    <p>Click to select PDF file</p>
+                    <input type="file" id="pdfFileInput" accept=".pdf" style="display:none;" onchange="handlePDFUpload(event)">
+                </div>
+                <div id="pdfPreview" class="pdf-preview-container" style="display:none;"></div>
+                <div id="pdfImportActions" style="display:none; margin-top:12px; display:flex; gap:8px;">
+                    <button class="btn btn-accent" id="importPdfBtn" onclick="confirmPDFImport()">📥 Import All</button>
+                    <button class="btn btn-outline" onclick="clearPDFImport()">Cancel</button>
+                </div>
+                <p id="pdfStatus" style="margin-top:8px; font-size:0.8rem; color:var(--text-secondary);"></p>
+            </div>
+
+            <div style="margin-top:24px;">
+                <h4 style="margin-bottom:8px;">📚 Your Contributions</h4>
+                <div id="userContributionsList" style="max-height:200px; overflow-y:auto;"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="toastContainer"></div>
 
     <script>
-        // Firebase config (same as admin)
+        // ==================== FIREBASE CONFIG ====================
         const firebaseConfig = {
             apiKey: "AIzaSyCuCd89dawEHOGrKmcCimw3pBErKYJU_VI",
             authDomain: "campusvault-connect.firebaseapp.com",
@@ -592,20 +681,269 @@
         const deliveriesRef = db.ref('deliveryRequests');
         const productsRef = db.ref('products');
         const reviewsRef = db.ref('reviews');
+        const securityRef = db.ref('security_alerts');
 
-        // Helpers
-        function showToast(msg, icon='✅') {
-            const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = icon + ' ' + msg;
+        // ==================== LANGUAGE DATA ====================
+        const multilingualDict = {
+            hello: { swahili: 'Habari', kikuyu: 'Niatia', maasai: 'Supa', luhya: 'Oliotya', luo: 'Misawa',
+                kisii: 'Bwakire', kamba: 'Uvoo', kalenjin: 'Chamge', somali: 'Salaam' },
+            'how are you': { swahili: 'Habari gani', kikuyu: 'Ũhoro waku', maasai: 'Kasserian Ingera',
+                luhya: 'Oliotya?', luo: 'Idhi nade?', kisii: 'Naki?', kamba: 'Wi museo?', kalenjin: 'Amache?',
+                somali: 'Sidee tahay?' },
+            goodbye: { swahili: 'Kwaheri', kikuyu: 'Tigwo na wega', maasai: 'Sere', luhya: 'Kukhuva', luo: 'Oriti',
+                kisii: 'Kwaheri', kamba: 'Tiwa na wega', kalenjin: 'Sere', somali: 'Nabadey' },
+            'thank you': { swahili: 'Asante', kikuyu: 'Thengiũ', maasai: 'Ashe', luhya: 'Webale', luo: 'Erokamano',
+                kisii: 'Asante', kamba: 'Ni ngatho', kalenjin: 'Ashe', somali: 'Mahadsanid' },
+            'book storage': { swahili: 'Weka mizigo', kikuyu: 'Gũtahĩra kũhithia', maasai: 'Enkibook enaata',
+                luhya: 'Tera esanduku', luo: 'Keto gik moko', kisii: 'Beka emeigo', kamba: 'Kuthingĩra',
+                kalenjin: 'Ibik kaa', somali: 'Kaydinta alaabta' },
+            'track item': { swahili: 'Fuatilia bidhaa', kikuyu: 'Gũcaria kĩndũ', maasai: 'Enkidimata enaata',
+                luhya: 'Rondia eshindu', luo: 'Manyo gik moko', kisii: 'Rigia ekeene', kamba: 'Kũmantha',
+                kalenjin: 'Rip kiy', somali: 'Raadinta alaabta' },
+            delivery: { swahili: 'Usafirishaji', kikuyu: 'Gũtwarithia', maasai: 'Enkibook enkitok', luhya: 'Khurusia',
+                luo: 'Tero', kisii: 'Ogokwania', kamba: 'Kũtumya', kalenjin: 'Keseng', somali: 'Geyn' },
+            sell: { swahili: 'Uza', kikuyu: 'Kwendia', maasai: 'Aanyunot', luhya: 'Kusia', luo: 'Uso', kisii: 'Kogoria',
+                kamba: 'Kũtũnga', kalenjin: 'Al', somali: 'Iib' },
+            housing: { swahili: 'Makazi', kikuyu: 'Nyũmba', maasai: 'Enkaji', luhya: 'Inzu', luo: 'Ot',
+            kisii: 'Enyomba', kamba: 'Mũciĩ', kalenjin: 'Kaa', somali: 'Guri' }
+        };
+
+        const LANG_STORE_KEY = 'campusvault_lang_contributions';
+        let userLanguages = JSON.parse(localStorage.getItem(LANG_STORE_KEY) || '{}');
+
+        function saveLanguages() { localStorage.setItem(LANG_STORE_KEY, JSON.stringify(userLanguages)); }
+
+        function detectLanguage(text) {
+            const lower = text.toLowerCase();
+            for (const [english, translations] of Object.entries(multilingualDict)) {
+                for (const [lang, phrase] of Object.entries(translations)) {
+                    if (lower.includes(phrase.toLowerCase())) return lang;
+                }
+            }
+            for (const [lang, entries] of Object.entries(userLanguages)) {
+                for (const [english, translation] of Object.entries(entries)) {
+                    if (lower.includes(translation.toLowerCase())) return lang;
+                }
+            }
+            return 'english';
+        }
+
+        function translateToLanguage(text, targetLang) {
+            if (targetLang === 'english') return text;
+            for (const [english, translations] of Object.entries(multilingualDict)) {
+                if (text.toLowerCase().includes(english.toLowerCase())) {
+                    return translations[targetLang] || text;
+                }
+            }
+            if (userLanguages[targetLang]) {
+                for (const [english, translation] of Object.entries(userLanguages[targetLang])) {
+                    if (text.toLowerCase().includes(english.toLowerCase())) {
+                        return translation;
+                    }
+                }
+            }
+            return text;
+        }
+
+        // Quick learning multiadapt: demonstrate new translation in AI chat immediately
+        function demonstrateLearning(language, english, translation) {
+            const chatDiv = document.getElementById('aiChatMessages');
+            const message = `✅ Quick learning: I've learned that "${translation}" means "${english}" in ${language}. For example, if you say "${translation}", I'll understand it as "${english}".`;
+            appendChat('bot', message);
+            if (document.getElementById('aiChatModal').style.display !== 'flex') {
+                openModal('aiChatModal');
+            }
+        }
+
+        function submitLanguageContribution() {
+            const language = document.getElementById('contribLanguage').value.trim();
+            const english = document.getElementById('contribEnglish').value.trim();
+            const translation = document.getElementById('contribTranslation').value.trim();
+            if (!language || !english || !translation) {
+                showToast('Please fill all fields', '⚠️');
+                return;
+            }
+            const langKey = language.toLowerCase();
+            if (!userLanguages[langKey]) userLanguages[langKey] = {};
+            userLanguages[langKey][english.toLowerCase()] = translation;
+            saveLanguages();
+            showToast(`✅ "${translation}" saved for ${language}!`);
+            document.getElementById('contribEnglish').value = '';
+            document.getElementById('contribTranslation').value = '';
+            renderUserContributions();
+            demonstrateLearning(language, english, translation);
+        }
+
+        function renderUserContributions() {
+            const container = document.getElementById('userContributionsList');
+            let html = '';
+            for (const [lang, entries] of Object.entries(userLanguages)) {
+                html += `<div style="margin-bottom:8px;"><strong style="text-transform:capitalize;">${lang}:</strong><br>`;
+                for (const [eng, trans] of Object.entries(entries)) {
+                    html += `<span style="background:var(--surface-alt); border-radius:12px; padding:4px 10px; margin:2px; display:inline-block; font-size:0.8rem;">${eng} → ${trans}</span> `;
+                }
+                html += '</div>';
+            }
+            container.innerHTML = html || '<p style="color:var(--text-secondary);">No contributions yet.</p>';
+        }
+
+        // ===== PDF Bulk Import =====
+        let pdfParsedTranslations = [];
+
+        async function handlePDFUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.type !== 'application/pdf') {
+                showToast('Please select a PDF file', '⚠️');
+                return;
+            }
+            document.getElementById('pdfStatus').textContent = 'Parsing PDF...';
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let fullText = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    const pageText = content.items.map(item => item.str).join(' ');
+                    fullText += pageText + '\n';
+                }
+                const lines = fullText.split(/\r?\n/).filter(line => line.trim());
+                pdfParsedTranslations = [];
+                for (const line of lines) {
+                    const parts = line.split(',').map(s => s.trim());
+                    if (parts.length === 3) {
+                        const [lang, eng, trans] = parts;
+                        if (lang && eng && trans) {
+                            pdfParsedTranslations.push({ language: lang, english: eng.toLowerCase(), translation: trans });
+                        }
+                    }
+                }
+                if (pdfParsedTranslations.length === 0) {
+                    showToast('No valid translations found in PDF. Use format: language,english,translation', '⚠️');
+                    document.getElementById('pdfStatus').textContent = '';
+                    return;
+                }
+                const preview = pdfParsedTranslations.slice(0, 10).map(t => `${t.language}: ${t.english} → ${t.translation}`).join('\n');
+                const previewDiv = document.getElementById('pdfPreview');
+                previewDiv.textContent = preview + (pdfParsedTranslations.length > 10 ? `\n... and ${pdfParsedTranslations.length - 10} more` : '');
+                previewDiv.style.display = 'block';
+                document.getElementById('pdfImportActions').style.display = 'flex';
+                document.getElementById('pdfStatus').textContent = `Found ${pdfParsedTranslations.length} translations.`;
+            } catch (err) {
+                showToast('Error reading PDF: ' + err.message, '❌');
+                document.getElementById('pdfStatus').textContent = '';
+            }
+        }
+
+        function clearPDFImport() {
+            pdfParsedTranslations = [];
+            document.getElementById('pdfPreview').style.display = 'none';
+            document.getElementById('pdfImportActions').style.display = 'none';
+            document.getElementById('pdfStatus').textContent = '';
+            document.getElementById('pdfFileInput').value = '';
+        }
+
+        function confirmPDFImport() {
+            if (pdfParsedTranslations.length === 0) return;
+            let importCount = 0;
+            for (const item of pdfParsedTranslations) {
+                const langKey = item.language.toLowerCase();
+                if (!userLanguages[langKey]) userLanguages[langKey] = {};
+                userLanguages[langKey][item.english] = item.translation;
+                importCount++;
+            }
+            saveLanguages();
+            showToast(`✅ Imported ${importCount} translations!`, '🎉');
+            renderUserContributions();
+            if (importCount > 0) {
+                const sample = pdfParsedTranslations[0];
+                demonstrateLearning(sample.language, sample.english, sample.translation);
+            }
+            clearPDFImport();
+        }
+
+        // ==================== SECURITY SYSTEM ====================
+        const threatLog = [];
+        const MAX_TRACK_PER_WINDOW = 5;
+        const WINDOW_MS = 10000;
+        const SUSPICIOUS_INPUT_PATTERNS = [
+            /<script/i, /<\/script/i, /javascript:/i, /on\w+=/i,
+            /select\s+.*from/i, /drop\s+table/i, /union\s+select/i
+        ];
+
+        function detectDevTools() {
+            const threshold = 160;
+            setInterval(() => {
+                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                if (widthThreshold || heightThreshold) {
+                    reportSecurityIncident('devtools', 'Developer tools opened or window resized suspiciously');
+                }
+            }, 2000);
+        }
+
+        function recordAction(actionType) {
+            const now = Date.now();
+            threatLog.push({ type: actionType, time: now });
+            while (threatLog.length > 0 && threatLog[0].time < now - WINDOW_MS) {
+                threatLog.shift();
+            }
+            if (threatLog.length >= MAX_TRACK_PER_WINDOW) {
+                reportSecurityIncident('rapid_requests', `More than ${MAX_TRACK_PER_WINDOW} requests in ${WINDOW_MS/1000}s (last action: ${actionType})`);
+            }
+        }
+
+        function isInputSuspicious(value) {
+            if (!value) return false;
+            return SUSPICIOUS_INPUT_PATTERNS.some(regex => regex.test(value));
+        }
+
+        function scanFormInputs(formElement) {
+            const inputs = formElement.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (isInputSuspicious(input.value)) {
+                    reportSecurityIncident('suspicious_input', `Possible injection attempt in field: ${input.id || input.name}`);
+                }
+            });
+        }
+
+        function reportSecurityIncident(type, details) {
+            const alert = {
+                type: type,
+                details: details,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                page: window.location.href
+            };
+            securityRef.push(alert).catch(e => console.warn('Security alert push failed', e));
+            console.warn(`[SECURITY] ${type}: ${details}`);
+        }
+
+        document.addEventListener('submit', function(e) {
+            scanFormInputs(e.target);
+        }, true);
+
+        // ==================== HELPERS ====================
+        function showToast(msg, icon = '✅') {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.innerHTML = icon + ' ' + msg;
             document.getElementById('toastContainer').appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }
+
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function closeModalBg(e, id) { if (e.target === e.currentTarget) closeModal(id); }
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); });
-        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
-        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        });
 
+        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
+        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]) : ''; }
+
+        // Mobile menu & scroll
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
             scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
@@ -621,6 +959,35 @@
             hamburger.innerHTML = '<i class="fas fa-bars"></i>';
         }));
 
+        // ==================== DATE HELPERS & BOOKING LOGIC ====================
+        function getTodayStr() { return new Date().toISOString().split('T')[0]; }
+        function getNowLocalStr() { const d = new Date(); const offset = d.getTimezoneOffset(); const local = new Date(d.getTime() - offset * 60000); return local.toISOString().slice(0, 16); }
+        function formatDateTime(isoString) { if (!isoString) return ''; const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }; return new Date(isoString).toLocaleDateString('en-KE', options); }
+        function formatDate(isoString) { if (!isoString) return ''; const options = { year: 'numeric', month: 'short', day: 'numeric' }; return new Date(isoString).toLocaleDateString('en-KE', options); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            detectDevTools();
+            renderUserContributions();
+            const today = getTodayStr();
+            const checkInInput = document.getElementById('checkInDate');
+            const collectInput = document.getElementById('collectDate');
+            const scheduleInput = document.getElementById('scheduledDateTime');
+            checkInInput.setAttribute('min', today);
+            checkInInput.addEventListener('change', () => {
+                if (checkInInput.value) {
+                    collectInput.disabled = false;
+                    collectInput.setAttribute('min', checkInInput.value);
+                    if (collectInput.value < checkInInput.value) {
+                        collectInput.value = '';
+                    }
+                } else {
+                    collectInput.disabled = true;
+                    collectInput.value = '';
+                }
+            });
+            scheduleInput.setAttribute('min', getNowLocalStr());
+        });
+
         function toggleSchedule() {
             const method = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
             const scheduleDiv = document.getElementById('scheduleField');
@@ -630,13 +997,16 @@
                 scheduleDiv.style.display = 'block';
                 input.required = true;
                 label.textContent = method === 'self' ? 'Preferred Drop‑off Date & Time *' : 'Preferred Pickup Date & Time *';
+                input.setAttribute('min', getNowLocalStr());
             } else {
                 scheduleDiv.style.display = 'none';
                 input.required = false;
             }
         }
+
         function handleStorageBooking(e) {
             e.preventDefault();
+            scanFormInputs(e.target);
             const btn = document.getElementById('bookingBtnText'), spinner = document.getElementById('bookingSpinner');
             btn.style.display = 'none'; spinner.style.display = 'inline-block';
             const name = document.getElementById('custName').value.trim();
@@ -651,18 +1021,29 @@
             if (!name || !phone || !checkIn || !collect || !itemCount || !category || !deliveryMethod || !scheduledDateTime) {
                 showToast('Fill all required fields', '⚠️'); resetBtn(); return;
             }
+            const now = new Date();
+            const scheduleDate = new Date(scheduledDateTime);
+            if (scheduleDate < now) {
+                showToast('Schedule date cannot be in the past', '⚠️'); resetBtn(); return;
+            }
             const bookingId = generateId('CV'), trackingId = generateId('TRK');
-            const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime, status: 'active', verificationImages: [], collectedAt: null, timestamp: new Date().toISOString() };
+            const booking = {
+                bookingId, trackingId, name, phone, email, checkIn, collect,
+                itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime,
+                status: 'active', verificationImages: [], collectedAt: null,
+                timestamp: new Date().toISOString()
+            };
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
                     const assureTitle = document.getElementById('assuranceTitle');
                     const assureMsg = document.getElementById('assuranceMessage');
+                    const niceDate = formatDateTime(scheduledDateTime);
                     if (deliveryMethod === 'self') {
                         assureTitle.textContent = '🧳 Self Drop‑off Scheduled';
-                        assureMsg.innerHTML = `Please bring your items on <strong>${new Date(scheduledDateTime).toLocaleString()}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
+                        assureMsg.innerHTML = `Please bring your items on <strong>${niceDate}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
                     } else {
                         assureTitle.textContent = '🚚 Pickup Confirmed';
-                        assureMsg.innerHTML = `Our team will pick up your items on <strong>${new Date(scheduledDateTime).toLocaleString()}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
+                        assureMsg.innerHTML = `Our team will pick up your items on <strong>${niceDate}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
                     }
                     openModal('assuranceModal');
                     document.getElementById('bookingConfirmation').style.display = 'block';
@@ -671,14 +1052,17 @@
                     document.getElementById('storageBookingForm').reset();
                     document.getElementById('scheduleField').style.display = 'none';
                     document.getElementById('scheduledDateTime').required = false;
+                    document.getElementById('collectDate').disabled = true;
                     showToast('Booking confirmed!', '🎉'); resetBtn();
                 })
                 .catch(err => { showToast('Error: '+err.message, '❌'); resetBtn(); });
             function resetBtn() { btn.style.display = ''; spinner.style.display = 'none'; }
         }
 
+        // ==================== TRACKING ====================
         let currentTrackedBooking = null;
         async function trackItem() {
+            recordAction('track');
             const input = document.getElementById('trackingInput').value.trim();
             const resultDiv = document.getElementById('trackingResult');
             if (!input) { showToast('Please enter a Booking ID, Tracking ID, or phone number', '⚠️'); return; }
@@ -703,6 +1087,7 @@
                 }
             } catch (err) { showToast('Error: ' + err.message, '❌'); }
         }
+
         function displayBookingList(bookings) {
             const resultDiv = document.getElementById('trackingResult');
             resultDiv.innerHTML = `<div><h3>📞 Multiple bookings found</h3><div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">${bookings.map(b => `<div style="background:var(--surface-alt); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;"><div><strong>${b.bookingId}</strong> – ${b.name}<br><small>Items: ${b.itemCount} | Status: ${b.status}</small></div><button class="btn btn-primary" onclick="selectBooking('${b._key}')">View</button></div>`).join('')}</div></div>`;
@@ -719,15 +1104,15 @@
             if (!isCollected) {
                 actionButton = `<div style="margin-top:12px;"><button id="confirmCollectionBtn" class="btn btn-primary" style="width:100%;"><i class="fas fa-check-circle"></i> I Have Successfully Received My Items</button></div>`;
             } else {
-                actionButton = `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.1); border-radius:var(--radius-sm); color:var(--emerald);"><i class="fas fa-check-circle"></i> Collection confirmed on ${new Date(b.collectedAt).toLocaleString()}</div>`;
+                actionButton = `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.1); border-radius:var(--radius-sm); color:var(--emerald);"><i class="fas fa-check-circle"></i> Collection confirmed on ${formatDateTime(b.collectedAt)}</div>`;
             }
-            resultDiv.innerHTML = `<div><h3>📋 Booking Details</h3><p><strong>Booking ID:</strong> ${b.bookingId}</p><p><strong>Customer:</strong> ${escapeHtml(b.name)}</p><p><strong>Phone:</strong> ${escapeHtml(b.phone)}</p><p><strong>Items:</strong> ${b.itemCount} (${b.category})</p><p><strong>Storage Period:</strong> ${b.checkIn} → ${b.collect}</p><p><strong>Delivery:</strong> ${b.deliveryMethod === 'self' ? 'Self drop-off' : 'Pickup'} on ${new Date(b.scheduledDateTime).toLocaleString()}</p><p><strong>Status:</strong> <span class="badge ${isCollected ? 'badge-collected' : 'badge-active'}">${isCollected ? 'Collected ✓' : 'Active / Pending'}</span></p><h3 style="margin:16px 0 8px;">📸 Verification Gallery</h3>${galleryHtml}${actionButton}</div>`;
+            resultDiv.innerHTML = `<div><h3>📋 Booking Details</h3><p><strong>Booking ID:</strong> ${b.bookingId}</p><p><strong>Customer:</strong> ${escapeHtml(b.name)}</p><p><strong>Phone:</strong> ${escapeHtml(b.phone)}</p><p><strong>Items:</strong> ${b.itemCount} (${b.category})</p><p><strong>Storage Period:</strong> ${formatDate(b.checkIn)} → ${formatDate(b.collect)}</p><p><strong>Delivery:</strong> ${b.deliveryMethod === 'self' ? 'Self drop-off' : 'Pickup'} on ${formatDateTime(b.scheduledDateTime)}</p><p><strong>Status:</strong> <span class="badge ${isCollected ? 'badge-collected' : 'badge-active'}">${isCollected ? 'Collected ✓' : 'Active / Pending'}</span></p><h3 style="margin:16px 0 8px;">📸 Verification Gallery</h3>${galleryHtml}${actionButton}</div>`;
             resultDiv.style.display = 'block';
             if (!isCollected) document.getElementById('confirmCollectionBtn').onclick = () => confirmCollection(b._key);
             else {
                 const reviewSnap = await reviewsRef.orderByChild('bookingId').equalTo(b.bookingId).once('value');
                 if (!reviewSnap.exists()) {
-                    const reviewFormHtml = `<div class="improved-review-card" id="trackingReviewForm"><div class="review-card-header"><i class="fas fa-star"></i> Share Your Experience</div><div class="review-card-body"><input type="hidden" id="trackReviewBookingId" value="${b.bookingId}"><div style="margin-bottom:12px;"><label>Your Name</label><input type="text" id="trackReviewName" value="${escapeHtml(b.name)}" readonly style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface-alt); color:var(--text);"></div><div style="margin-bottom:12px; text-align:center;"><label>Rate your experience</label><div class="star-rating-input" id="trackReviewStars"><i class="far fa-star" data-val="1"></i><i class="far fa-star" data-val="2"></i><i class="far fa-star" data-val="3"></i><i class="far fa-star" data-val="4"></i><i class="far fa-star" data-val="5"></i></div><input type="hidden" id="trackReviewRating" value="0"></div><div><label>Your Review</label><textarea id="trackReviewComment" rows="3" placeholder="Tell us about your experience..." required></textarea></div></div><div class="review-card-footer"><button id="submitTrackReviewBtn" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Submit Review</button></div></div>`;
+                    const reviewFormHtml = `<div class="improved-review-card" id="trackingReviewForm"><div class="review-card-header"><i class="fas fa-star"></i> Share Your Experience</div><div class="review-card-body"><input type="hidden" id="trackReviewBookingId" value="${b.bookingId}"><div style="margin-bottom:12px;"><label>Your Name</label><input type="text" id="trackReviewName" value="${escapeHtml(b.name)}" readonly style="width:100%;padding:10px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface-alt);color:var(--text);"></div><div style="margin-bottom:12px;text-align:center;"><label>Rate your experience</label><div class="star-rating-input" id="trackReviewStars"><i class="far fa-star" data-val="1"></i><i class="far fa-star" data-val="2"></i><i class="far fa-star" data-val="3"></i><i class="far fa-star" data-val="4"></i><i class="far fa-star" data-val="5"></i></div><input type="hidden" id="trackReviewRating" value="0"></div><div><label>Your Review</label><textarea id="trackReviewComment" rows="3" placeholder="Tell us about your experience..." required></textarea></div></div><div class="review-card-footer"><button id="submitTrackReviewBtn" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Submit Review</button></div></div>`;
                     resultDiv.insertAdjacentHTML('beforeend', reviewFormHtml);
                     initTrackReviewStars();
                     document.getElementById('submitTrackReviewBtn').onclick = () => submitTrackReview(b.bookingId, b.name);
@@ -771,6 +1156,7 @@
             } catch (err) { showToast('Error: ' + err.message, '❌'); }
         }
 
+        // ==================== REVIEWS & MARKETPLACE ====================
         async function loadReviews() {
             const snap = await reviewsRef.once('value');
             const reviews = snap.val() ? Object.values(snap.val()) : [];
@@ -797,8 +1183,10 @@
         function inquireProduct(name, price) { window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi, I'm interested in ${name} (KES ${price})`)}`, '_blank'); }
         renderProducts();
 
+        // ==================== CONTACT / DELIVERY / SELL / HOUSING ====================
         function handleContactForm(e) {
             e.preventDefault();
+            scanFormInputs(e.target);
             const name = document.getElementById('contactName').value.trim();
             const phone = document.getElementById('contactPhone').value.trim();
             const message = document.getElementById('contactMessage').value.trim();
@@ -812,6 +1200,7 @@
         }
         function handleDeliveryRequest(e) {
             e.preventDefault();
+            scanFormInputs(e.target);
             const name = document.getElementById('delName').value.trim();
             const phone = document.getElementById('delPhone').value.trim();
             const service = document.getElementById('delService').value;
@@ -823,6 +1212,7 @@
         }
         function handleSellSubmission(e) {
             e.preventDefault();
+            scanFormInputs(e.target);
             const sellData = { id: generateId('SELL'), itemName: document.getElementById('sellName').value, condition: document.getElementById('sellCond').value, location: document.getElementById('sellLoc').value, price: document.getElementById('sellPrice').value, description: document.getElementById('sellDesc').value, timestamp: new Date().toISOString() };
             sellsRef.child(sellData.id).set(sellData)
                 .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); e.target.reset(); })
@@ -830,6 +1220,7 @@
         }
         function handleHouseHunt(e) {
             e.preventDefault();
+            scanFormInputs(e.target);
             const name = document.getElementById('houseName').value.trim();
             const phone = document.getElementById('housePhone').value.trim();
             const type = document.getElementById('houseType').value;
@@ -843,22 +1234,134 @@
                 .catch(err => showToast('Error: ' + err.message, '❌'));
         }
 
-        // AI Chat
-        const aiState = { active: false, type: null, step: 0, data: {} };
-        const flows = {
-            storage: { steps: ['name','phone','checkIn','collect','itemCount','category','deliveryMethod','scheduledDateTime'], questions: { name:"Full name?", phone:"Phone?", checkIn:"Start date?", collect:"Collection date?", itemCount:"No. of items?", category:"Category?", deliveryMethod:"Method (self/pickup)?", scheduledDateTime:"Date & time?" }, onComplete: async (data) => { const bookingId = generateId('CV'); const trackingId = generateId('TRK'); await bookingsRef.child(bookingId).set({ bookingId, trackingId, name: data.name, phone: data.phone, email: '', checkIn: data.checkIn, collect: data.collect, itemCount: parseInt(data.itemCount), category: data.category, deliveryMethod: data.deliveryMethod.toLowerCase(), scheduledDateTime: data.scheduledDateTime, status:'active', verificationImages:[], collectedAt:null, timestamp: new Date().toISOString() }); return `✅ Booking confirmed!\nID: ${bookingId}\nTrack: ${trackingId}\n${data.deliveryMethod==='self'?'Drop-off':'Pickup'} on ${new Date(data.scheduledDateTime).toLocaleString()}`; } },
-            delivery: { steps: ['name','phone','service','details'], questions: { name:"Name?", phone:"Phone?", service:"Service?", details:"Details?" }, onComplete: async (data) => { const id = generateId('DEL'); await deliveriesRef.child(id).set({ id, name: data.name, phone: data.phone, service: data.service, details: data.details, timestamp: new Date().toISOString() }); return `🚚 Delivery request submitted! Ref: ${id}`; } },
-            sell: { steps: ['itemName','condition','location','price','description'], questions: { itemName:"Item name?", condition:"Condition?", location:"Location?", price:"Price (KES)?", description:"Description?" }, onComplete: async (data) => { const id = generateId('SELL'); await sellsRef.child(id).set({ id, itemName: data.itemName, condition: data.condition, location: data.location, price: data.price, description: data.description, timestamp: new Date().toISOString() }); return `💰 Item listed! ID: ${id}`; } },
-            house: { steps: ['name','phone','type','location','budget','preferences'], questions: { name:"Name?", phone:"Phone?", type:"Type?", location:"Location?", budget:"Budget?", preferences:"Preferences?" }, onComplete: async (data) => { const id = generateId('ACC'); await accommodationRef.child(id).set({ id, name: data.name, phone: data.phone, type: data.type, location: data.location||'Not specified', budget: data.budget||'Not specified', preferences: data.preferences||'', timestamp: new Date().toISOString() }); return `🏡 Housing request submitted! ID: ${id}`; } }
-        };
-        function startFlow(type) { aiState.active = true; aiState.type = type; aiState.step = 0; aiState.data = {}; appendChat('bot', `Let's set that up! ${flows[type].questions[flows[type].steps[0]]}`); }
-        function processFlow(input) { const flow = flows[aiState.type]; const cur = flow.steps[aiState.step]; if (flow.validate?.[cur] && !flow.validate[cur](input)) { appendChat('bot', `Hmm, that doesn't look right. ${flow.questions[cur]}`); return; } aiState.data[cur] = input; aiState.step++; if (aiState.step < flow.steps.length) appendChat('bot', flow.questions[flow.steps[aiState.step]]); else { appendChat('bot', 'Processing...'); flow.onComplete(aiState.data).then(res => { appendChat('bot', res); aiState.active = false; }); } }
-        function sendAiMessage() { const input = document.getElementById('aiUserInput'); const msg = input.value.trim(); if (!msg) return; appendChat('user', msg); input.value = ''; if (aiState.active) { processFlow(msg); return; } if (/book|storage/i.test(msg)) startFlow('storage'); else if (/track/i.test(msg)) { const id = msg.match(/\b(CV|TRK)[-]?\w+/i)?.[0] || msg.replace(/[^A-Z0-9-]/g,'').substring(0,12); if (id) trackById(id); else appendChat('bot', "Sure! Please tell me your Booking ID or Tracking ID."); } else if (/delivery/i.test(msg)) startFlow('delivery'); else if (/sell/i.test(msg)) startFlow('sell'); else if (/house|accommodation/i.test(msg)) startFlow('house'); else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing."); }
-        function trackById(id) { bookingsRef.orderByChild('bookingId').equalTo(id).once('value').then(snap => snap.exists() ? Object.values(snap.val())[0] : bookingsRef.orderByChild('trackingId').equalTo(id).once('value').then(s => s.exists() ? Object.values(s.val())[0] : null)).then(b => { if(b) appendChat('bot', `📦 Booking: ${b.bookingId}\nStatus: ${b.status}\nItems: ${b.itemCount}\nCheck‑in: ${b.checkIn}\nCollection: ${b.collect}`); else appendChat('bot', '❌ No record found.'); }); }
-        function quickSend(text) { appendChat('user', text); if (aiState.active) processFlow(text); else { if (/book|storage/i.test(text)) startFlow('storage'); else if (/track/i.test(text)) { const id = text.match(/\b(CV|TRK)[-]?\w+/i)?.[0] || text.replace(/[^A-Z0-9-]/g,'').substring(0,12); if (id) trackById(id); else appendChat('bot', "Sure! Please tell me your Booking ID or Tracking ID."); } else if (/delivery/i.test(text)) startFlow('delivery'); else if (/sell/i.test(text)) startFlow('sell'); else if (/house|accommodation/i.test(text)) startFlow('house'); else appendChat('bot', "I can help with booking storage, tracking, delivery, selling, or housing."); } }
-        function appendChat(sender, text) { const chatDiv = document.getElementById('aiChatMessages'); const div = document.createElement('div'); div.className = `chat-msg ${sender}`; div.textContent = text; chatDiv.appendChild(div); chatDiv.scrollTop = chatDiv.scrollHeight; }
+        // ==================== ENHANCED AI – SELF-LEARNING, MULTILINGUAL, SECURITY ====================
+        const aiMemoryKey = 'campusvault_user_ai_memory';
+        let aiMemory = JSON.parse(localStorage.getItem(aiMemoryKey) || '{}');
+        function saveAIMemory() { localStorage.setItem(aiMemoryKey, JSON.stringify(aiMemory)); }
 
-        // PWA
+        function appendChat(sender, text) {
+            const chatDiv = document.getElementById('aiChatMessages');
+            const div = document.createElement('div');
+            div.className = `chat-msg ${sender}`;
+            div.textContent = text;
+            chatDiv.appendChild(div);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+        function showTyping() {
+            const msgs = document.getElementById('aiChatMessages');
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.id = 'aiTyping';
+            indicator.innerHTML = '<span></span><span></span><span></span>';
+            msgs.appendChild(indicator);
+            msgs.scrollTop = msgs.scrollHeight;
+        }
+        function hideTyping() { const el = document.getElementById('aiTyping'); if (el) el.remove(); }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('aiUserInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            appendChat('user', msg);
+            input.value = '';
+            showTyping();
+            const response = await processAICommand(msg);
+            setTimeout(() => { hideTyping(); appendChat('bot', response); }, 600 + Math.random() * 400);
+        }
+        function quickSend(text) {
+            appendChat('user', text);
+            showTyping();
+            processAICommand(text).then(res => { setTimeout(() => { hideTyping(); appendChat('bot', res); }, 600); });
+        }
+
+        async function processAICommand(cmd) {
+            cmd = cmd.toLowerCase();
+            const detectedLang = detectLanguage(cmd);
+
+            // Self-learning
+            if (cmd.startsWith('remember that ')) {
+                const phrase = cmd.replace('remember that ', '');
+                const parts = phrase.split(' means ');
+                if (parts.length === 2) {
+                    aiMemory[parts[0].trim()] = parts[1].trim();
+                    saveAIMemory();
+                    return `Got it! I'll remember that "${parts[0].trim()}" means "${parts[1].trim()}".`;
+                } else {
+                    return 'Please use format: remember that [phrase] means [meaning]';
+                }
+            }
+            if (cmd.startsWith('forget ')) {
+                const key = cmd.replace('forget ', '').trim();
+                if (aiMemory[key]) { delete aiMemory[key]; saveAIMemory(); return `Okay, I forgot "${key}".`; }
+                return `I don't have a memory for "${key}".`;
+            }
+            for (const [key, val] of Object.entries(aiMemory)) {
+                if (cmd.includes(key)) return val;
+            }
+
+            // Greetings
+            if (/^(hello|hi|hey|yo|hallo|habari|supa|niatia|oliorya|misawa|bwakire|uvoo|chamge|salaam)\b/i.test(cmd)) {
+                const greet = translateToLanguage('hello', detectedLang);
+                return greet || 'Hello! 👋 How can I help?';
+            }
+            if (/how are you/i.test(cmd)) {
+                return translateToLanguage('I am doing great, thanks for asking!', detectedLang) || "I'm doing great, thanks for asking! 😊";
+            }
+
+            // Services
+            if (/book.*(storage|store|space)|weka mizigo|gũtahĩra|enkibook|tera esanduku|keto gik moko|beka emeigo|kuthingĩra|ibik kaa|kaydinta/i.test(cmd)) {
+                document.getElementById('storage').scrollIntoView({ behavior: 'smooth' });
+                return translateToLanguage("Sure! I've scrolled to the booking form.", detectedLang);
+            }
+            if (/track|fuatilia|gũcaria|enkidimata|rondia|manyo gik|rigia ekeene|kũmantha|rip kiy|raadinta/i.test(cmd)) {
+                document.getElementById('track').scrollIntoView({ behavior: 'smooth' });
+                return translateToLanguage('Enter your Booking ID or Tracking ID.', detectedLang);
+            }
+            if (/delivery|usafirishaji|gũtwarithia|enkibook enkitok|khurusia|tero|ogokwania|kũtumya|keseng|geyn/i.test(cmd)) {
+                openModal('deliveryModal');
+                return translateToLanguage('Delivery request form opened!', detectedLang);
+            }
+            if (/sell|uza|kwendia|aanyunot|kusia|uso|kogoria|kũtũnga|al|iib/i.test(cmd)) {
+                openModal('sellModal');
+                return translateToLanguage('Sell form opened!', detectedLang);
+            }
+            if (/house|housing|accommodation|makazi|nyũmba|enkaji|inzu|ot|enyomba|mũciĩ|kaa|guri/i.test(cmd)) {
+                openModal('houseHuntingModal');
+                return translateToLanguage('Accommodation request opened!', detectedLang);
+            }
+
+            // Data queries
+            if (/marketplace|products|what.*(available|for sale)/i.test(cmd)) {
+                const snap = await productsRef.once('value');
+                const products = snap.val() ? Object.values(snap.val()).filter(p => p.available) : [];
+                if (products.length === 0) return "There are currently no available products.";
+                const list = products.slice(0, 5).map(p => `• ${p.name} (KES ${p.price}) - ${p.condition}`).join('\n');
+                return `Here are some available items:\n${list}\n... and more in the Marketplace section.`;
+            }
+            if (/reviews|testimonials|what.*people.*say/i.test(cmd)) {
+                const snap = await reviewsRef.once('value');
+                const reviews = snap.val() ? Object.values(snap.val()) : [];
+                if (reviews.length === 0) return "No reviews yet.";
+                const recent = reviews.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3);
+                const list = recent.map(r => `⭐ ${r.rating}/5 - "${r.comment.substring(0, 40)}..." by ${r.customerName}`).join('\n');
+                return `Recent reviews:\n${list}`;
+            }
+            if (/how many (bookings|storage)/i.test(cmd)) {
+                const snap = await bookingsRef.once('value');
+                const count = snap.numChildren();
+                return `There are currently ${count} bookings.`;
+            }
+            if (/contact|phone|reach/i.test(cmd)) {
+                return translateToLanguage("You can reach Amos at 0116375166 or via WhatsApp.", detectedLang);
+            }
+            if (/help/i.test(cmd)) {
+                return `I can help with many services in English, Swahili, Kikuyu, Maasai, Luhya, Luo, Kisii, Kamba, Kalenjin, Somali... Just ask! You can also teach me new words via the Language button.`;
+            }
+
+            return "I'm still learning. Try asking about bookings, tracking, or marketplace.";
+        }
+
+        // ==================== PWA ====================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.error('SW failed', e)));
         }
