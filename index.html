@@ -10,287 +10,958 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="apple-touch-icon.png">
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-    <!-- PDF.js for bulk language import -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
+    </script>
     <style>
-        /* ========== CSS (ultra‑mobile‑friendly) ========== */
+        /* ========== FULL CSS ========== */
         :root {
-            --bg: #0f172a; --surface: #1e293b; --surface-alt: #334155;
-            --text: #f1f5f9; --text-secondary: #cbd5e1; --primary: #38bdf8;
-            --accent: #0ea5e9; --gold: #fbbf24; --emerald: #34d399; --rose: #fb7185;
-            --border: #475569; --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-md: 0 8px 20px -5px rgba(0,0,0,0.4);
-            --radius: 14px; --radius-sm: 10px; --transition: 0.2s ease;
-            --font: 'Inter', system-ui, sans-serif; --max-width: 1140px; --font-base: 1rem;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-alt: #334155;
+            --text: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --primary: #38bdf8;
+            --accent: #0ea5e9;
+            --gold: #fbbf24;
+            --emerald: #34d399;
+            --rose: #fb7185;
+            --border: #475569;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 8px 20px -5px rgba(0, 0, 0, 0.4);
+            --radius: 14px;
+            --radius-sm: 10px;
+            --transition: 0.2s ease;
+            --font: 'Inter', system-ui, sans-serif;
+            --max-width: 1140px;
+            --font-base: 1rem;
         }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior: smooth; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: var(--font); background: var(--bg); color: var(--text);
-            line-height: 1.65; -webkit-font-smoothing: antialiased; font-weight: 400;
-            font-size: var(--font-base); position: relative;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            font-weight: 400;
+            font-size: var(--font-base);
+            position: relative;
             padding-bottom: env(safe-area-inset-bottom);
         }
-        .bg-blobs { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-        .bg-blob { position:absolute; border-radius:50%; filter:blur(80px); opacity:0.08; animation:float 20s infinite alternate; }
-        .bg-blob:nth-child(1){ width:500px; height:500px; background:var(--accent); top:-10%; left:-10%; }
-        .bg-blob:nth-child(2){ width:400px; height:400px; background:var(--emerald); bottom:-10%; right:-5%; animation-duration:25s; }
-        .bg-blob:nth-child(3){ width:300px; height:300px; background:var(--gold); top:50%; left:50%; animation-duration:30s; }
-        @keyframes float { 0%{transform:translate(0,0);} 100%{transform:translate(30px,-20px);} }
-        .main-content { position:relative; z-index:1; }
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.08;
+            animation: float 20s infinite alternate;
+        }
+        .bg-blob:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: var(--accent);
+            top: -10%;
+            left: -10%;
+        }
+        .bg-blob:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: var(--emerald);
+            bottom: -10%;
+            right: -5%;
+            animation-duration: 25s;
+        }
+        .bg-blob:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: var(--gold);
+            top: 50%;
+            left: 50%;
+            animation-duration: 30s;
+        }
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(30px, -20px);
+            }
+        }
+        .main-content {
+            position: relative;
+            z-index: 1;
+        }
         .nav {
-            position:sticky; top:0; z-index:1000; background: var(--surface);
-            backdrop-filter:blur(12px); border-bottom:1px solid var(--border);
-            padding:0 16px; height:56px; display:flex; align-items:center; transition:var(--transition);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 16px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
             box-shadow: var(--shadow-sm);
         }
-        .nav.scrolled { box-shadow:var(--shadow); }
-        .nav-inner { max-width:var(--max-width); margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
+        .nav.scrolled {
+            box-shadow: var(--shadow);
+        }
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
         .nav-logo {
-            font-weight:800; font-size:1.3rem; color:var(--primary); text-decoration:none; display:flex; align-items:center; gap:6px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .nav-logo i { font-size:1.4rem; background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .nav-links { display:flex; gap:6px; list-style:none; align-items:center; }
+        .nav-logo i {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-links {
+            display: flex;
+            gap: 6px;
+            list-style: none;
+            align-items: center;
+        }
         .nav-links a {
-            text-decoration:none; color:var(--text-secondary); font-weight:500;
-            padding:6px 12px; border-radius:30px; font-size:0.95rem; transition:var(--transition);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            transition: var(--transition);
         }
-        .nav-links a:hover { background:var(--surface-alt); color:var(--primary); }
-        .nav-cta { background:var(--primary)!important; color:#fff!important; font-weight:600!important; border-radius:30px!important; padding:8px 16px!important; }
-        .hamburger { display:none; background:none; border:none; font-size:1.6rem; color:var(--text); cursor:pointer; z-index:1001; }
+        .nav-links a:hover {
+            background: var(--surface-alt);
+            color: var(--primary);
+        }
+        .nav-cta {
+            background: var(--primary) !important;
+            color: #fff !important;
+            font-weight: 600 !important;
+            border-radius: 30px !important;
+            padding: 8px 16px !important;
+        }
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--text);
+            cursor: pointer;
+            z-index: 1001;
+        }
         @media (max-width:768px) {
             .nav-links {
-                position:fixed; top:0; right:-100%; width:280px; height:100vh;
-                background:var(--surface); flex-direction:column; padding:80px 24px;
-                gap:16px; box-shadow:var(--shadow-md); transition:0.3s; z-index:999;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: var(--surface);
+                flex-direction: column;
+                padding: 80px 24px;
+                gap: 16px;
+                box-shadow: var(--shadow-md);
+                transition: 0.3s;
+                z-index: 999;
             }
-            .nav-links.open { right:0; }
-            .hamburger { display:block; }
+            .nav-links.open {
+                right: 0;
+            }
+            .hamburger {
+                display: block;
+            }
         }
         .hero {
-            padding:40px 16px; max-width:var(--max-width); margin:0 auto;
-            display:flex; flex-direction:column; align-items:center; text-align:center; gap:24px;
+            padding: 40px 16px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 24px;
         }
-        .hero-content h1 { font-size:1.8rem; font-weight:900; letter-spacing:-0.5px; line-height:1.2; margin-bottom:12px; }
-        .hero-content .subhead { font-size:0.95rem; color:var(--text-secondary); margin-bottom:20px; }
+        .hero-content h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+        .hero-content .subhead {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
         .btn {
-            display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:30px;
-            font-weight:600; font-size:0.95rem; cursor:pointer; border:none; transition:var(--transition); text-decoration:none; white-space: nowrap;
-        }
-        .btn-primary { background:var(--primary); color:#fff; }
-        .btn-primary:active { filter: brightness(0.9); transform: scale(0.98); }
-        .btn-accent { background:var(--accent); color:#fff; }
-        .btn-accent:active { filter: brightness(0.9); transform: scale(0.98); }
-        .btn-gold { background:var(--gold); color:#1a1a1a; }
-        .btn-gold:active { filter: brightness(0.9); transform: scale(0.98); }
-        .btn-outline { background:transparent; border:2px solid var(--border); color:var(--text); }
-        .btn-outline:active { border-color:var(--primary); }
-        .hero-visual { display:none; }
-        .section { padding:40px 16px; max-width:var(--max-width); margin:0 auto; }
-        .section-title { font-size:1.6rem; font-weight:800; text-align:center; margin-bottom:8px; }
-        .section-subtitle { color:var(--text-secondary); text-align:center; max-width:650px; margin:0 auto 24px; font-size:0.9rem; }
-        .gradient-text { background:linear-gradient(135deg,var(--primary),var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .services-grid, .marketplace-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; }
-        .service-card, .product-card {
-            background:var(--surface); border-radius:var(--radius); padding:20px;
-            border:1px solid var(--border); transition:var(--transition); box-shadow:var(--shadow-sm);
-        }
-        .service-card:active, .product-card:active { transform:scale(0.98); }
-        .service-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; margin-bottom:12px; }
-        .service-card h3 { font-size:1.1rem; margin-bottom:6px; }
-        .service-card p { color:var(--text-secondary); margin-bottom:16px; }
-        .service-card .btn, .product-card .btn { margin-top:auto; width:100%; }
-        .booking-card { background:var(--surface); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border:1px solid var(--border); }
-        .form-grid { display:flex; flex-direction:column; gap:16px; }
-        .form-grid input, .form-grid select, .form-grid textarea {
-            width:100%; padding:12px 14px; border-radius:var(--radius-sm);
-            border:1px solid var(--border); font-family:var(--font); font-size:1rem;
-            background:var(--surface); color:var(--text); transition:0.2s;
-        }
-        .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus {
-            outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.15);
-        }
-        .radio-card {
-            display:flex; align-items:center; gap:8px; background:var(--surface-alt);
-            padding:12px 16px; border-radius:var(--radius-sm); border:1px solid var(--border);
-            cursor:pointer; transition:0.2s; font-size:0.95rem;
-        }
-        .radio-card input { accent-color:var(--primary); }
-        .modal-overlay {
-            position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
-            display:flex; align-items:center; justify-content:center; z-index:2000;
-            padding: 0;
-        }
-        .modal, .ai-chat-modal, .assurance-modal, .lang-contribution-modal {
-            background:var(--surface); width:100%; height:100%;
-            max-width: none; max-height: none;
-            border-radius:0; padding:16px; position:relative;
-            display:flex; flex-direction:column;
-            color:var(--text); overflow-y:auto;
-        }
-        .modal-close {
-            position:absolute; top:12px; right:12px; background:var(--surface-alt); border:none;
-            width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-            cursor:pointer; font-size:1.4rem; color:var(--text-secondary); z-index:10;
-        }
-        .modal-close:active { background:var(--border); }
-        .toast {
-            position:fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background:var(--text); color:var(--bg);
-            padding:12px 24px; border-radius:30px; font-weight:600; font-size:0.9rem; z-index:3000;
-            animation: slideUp 0.3s, fadeOut 0.3s 2.5s forwards; box-shadow:var(--shadow-md);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            text-decoration: none;
             white-space: nowrap;
         }
-        @keyframes slideUp { from{opacity:0; transform:translate(-50%, 20px);} to{opacity:1; transform:translate(-50%,0);} }
-        @keyframes fadeOut { to{opacity:0; transform:translate(-50%, 10px);} }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+        .btn-primary:active {
+            filter: brightness(0.9);
+            transform: scale(0.98);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-accent:active {
+            filter: brightness(0.9);
+            transform: scale(0.98);
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: #1a1a1a;
+        }
+        .btn-gold:active {
+            filter: brightness(0.9);
+            transform: scale(0.98);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text);
+        }
+        .btn-outline:active {
+            border-color: var(--primary);
+        }
+        .section {
+            padding: 40px 16px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .section-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 24px;
+            font-size: 0.9rem;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .services-grid,
+        .marketplace-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .service-card,
+        .product-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .service-card:active,
+        .product-card:active {
+            transform: scale(0.98);
+        }
+        .service-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+        .service-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .service-card .btn,
+        .product-card .btn {
+            margin-top: auto;
+            width: 100%;
+        }
+        .booking-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-grid input,
+        .form-grid select,
+        .form-grid textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            font-family: var(--font);
+            font-size: 1rem;
+            background: var(--surface);
+            color: var(--text);
+            transition: 0.2s;
+        }
+        .form-grid input:focus,
+        .form-grid select:focus,
+        .form-grid textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+        .radio-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface-alt);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .radio-card input {
+            accent-color: var(--primary);
+        }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 0;
+        }
+        .modal,
+        .ai-chat-modal,
+        .assurance-modal,
+        .lang-contribution-modal {
+            background: var(--surface);
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            border-radius: 0;
+            padding: 16px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            color: var(--text);
+            overflow-y: auto;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--surface-alt);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            z-index: 10;
+        }
+        .modal-close:active {
+            background: var(--border);
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: var(--bg);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 3000;
+            animation: slideUp 0.3s, fadeOut 0.3s 2.5s forwards;
+            box-shadow: var(--shadow-md);
+            white-space: nowrap;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translate(-50%, 10px);
+            }
+        }
         .loading-spinner {
-            display:inline-block; width:18px; height:18px; border:2px solid rgba(255,255,255,0.3);
-            border-top-color:#fff; border-radius:50%; animation:spin 0.6s linear infinite; margin-left:10px;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 10px;
         }
-        @keyframes spin { to{transform:rotate(360deg);} }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
         .product-img-container {
-            width:100%; height:160px; overflow:hidden; background:var(--surface-alt);
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0; display:flex; align-items:center; justify-content:center;
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background: var(--surface-alt);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .product-img-container img { width:100%; height:100%; object-fit:cover; }
-        .product-img-placeholder { font-size:2.5rem; color:var(--text-secondary); display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
-        .product-card { overflow:hidden; padding:0; display:flex; flex-direction:column; }
-        .product-info { padding:16px; flex:1; display:flex; flex-direction:column; }
-        .badge { padding:4px 10px; border-radius:12px; font-size:0.7rem; font-weight:600; }
-        .badge-active { background:#d1fae5; color:#065f46; }
-        .badge-collected { background:#e2e8f0; color:#475569; }
-        .contact-grid { display:flex; flex-direction:column; gap:24px; max-width:700px; margin:0 auto; }
+        .product-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-img-placeholder {
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        .product-card {
+            overflow: hidden;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-info {
+            padding: 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .badge-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .badge-collected {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .contact-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
         .contact-info-card {
-            background:linear-gradient(135deg, var(--primary) 0%, #0f2b45 100%);
-            color:#fff; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-md);
+            background: linear-gradient(135deg, var(--primary) 0%, #0f2b45 100%);
+            color: #fff;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
         }
-        .contact-info-card h3 { font-size:1.4rem; margin-bottom:16px; }
-        .contact-info-card .info-item { display:flex; align-items:center; gap:12px; margin-bottom:16px; font-size:1rem; }
+        .contact-info-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+        }
+        .contact-info-card .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
         .contact-info-card .info-item i {
-            width:36px; height:36px; background:rgba(255,255,255,0.15); border-radius:50%;
-            display:flex; align-items:center; justify-content:center; font-size:1rem;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
         }
         .contact-form-card {
-            background:var(--surface); border-radius:var(--radius); padding:24px;
-            box-shadow:var(--shadow-md); border:1px solid var(--border);
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
         }
-        .contact-form-card h3 { font-size:1.4rem; margin-bottom:20px; }
-        .contact-form-card .form-group { margin-bottom:16px; }
-        .contact-form-card input, .contact-form-card textarea {
-            width:100%; padding:12px 16px; border-radius:var(--radius-sm);
-            border:1px solid var(--border); background:var(--surface-alt);
-            font-family:var(--font); font-size:1rem; transition:0.2s;
+        .contact-form-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
         }
-        .contact-form-card input:focus, .contact-form-card textarea:focus {
-            outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(14,165,233,0.15);
-            background:var(--surface);
+        .contact-form-card .form-group {
+            margin-bottom: 16px;
         }
-        .contact-form-card textarea { resize:vertical; min-height:100px; }
-        .reviews-container { max-width: 700px; margin:0 auto; }
+        .contact-form-card input,
+        .contact-form-card textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--surface-alt);
+            font-family: var(--font);
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .contact-form-card input:focus,
+        .contact-form-card textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+            background: var(--surface);
+        }
+        .contact-form-card textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .reviews-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
         .review-card {
-            background: var(--surface-alt); border-radius: var(--radius); padding: 16px;
-            margin-bottom: 16px; border-left: 4px solid var(--gold);
+            background: var(--surface-alt);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 4px solid var(--gold);
         }
-        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
-        .review-name { font-weight: 700; font-size: 1rem; }
-        .review-stars { color: var(--gold); letter-spacing: 2px; }
-        .review-comment { color: var(--text-secondary); line-height: 1.5; font-size:0.9rem; }
-        .review-date { font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; }
-        .verification-gallery { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-        .gallery-thumb { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; }
-        .star-rating-input { display: flex; gap: 8px; font-size: 1.8rem; cursor: pointer; margin: 8px 0; justify-content: center; }
-        .star-rating-input i { color: #cbd5e1; }
-        .star-rating-input i.active { color: var(--gold); text-shadow: 0 0 2px rgba(251,191,36,0.5); }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .review-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .review-stars {
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+        .review-comment {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+        .review-date {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+        .verification-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .gallery-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+        .star-rating-input {
+            display: flex;
+            gap: 8px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin: 8px 0;
+            justify-content: center;
+        }
+        .star-rating-input i {
+            color: #cbd5e1;
+        }
+        .star-rating-input i.active {
+            color: var(--gold);
+            text-shadow: 0 0 2px rgba(251, 191, 36, 0.5);
+        }
         .improved-review-card {
-            background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border);
-            overflow: hidden; margin-top: 16px; box-shadow: var(--shadow-md);
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 16px;
+            box-shadow: var(--shadow-md);
         }
         .improved-review-card .review-card-header {
             background: linear-gradient(135deg, var(--gold), #d97706);
-            padding: 12px 16px; color: #1e293b; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;
+            padding: 12px 16px;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .improved-review-card .review-card-body { padding: 16px; }
+        .improved-review-card .review-card-body {
+            padding: 16px;
+        }
         .improved-review-card .review-card-footer {
-            padding: 12px 16px; background: var(--surface-alt); border-top: 1px solid var(--border); display: flex; justify-content: flex-end;
+            padding: 12px 16px;
+            background: var(--surface-alt);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
         }
         .improved-review-card textarea {
-            background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius-sm);
-            padding: 10px; width: 100%; color: var(--text); font-family: var(--font); resize: vertical; margin-top: 6px;
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+            width: 100%;
+            color: var(--text);
+            font-family: var(--font);
+            resize: vertical;
+            margin-top: 6px;
         }
         .floating-group {
-            position: fixed; right: 12px; bottom: 12px; z-index: 1500;
-            display: flex; flex-direction: column-reverse; gap: 8px; align-items: flex-end;
+            position: fixed;
+            right: 12px;
+            bottom: 12px;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 8px;
+            align-items: flex-end;
         }
         .whatsapp-float {
-            width: 48px; height: 48px; border-radius: 50%; background: #25d366; color: #fff;
-            font-size: 1.4rem; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(37,211,102,0.4); transition: transform 0.3s; text-decoration: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #25d366;
+            color: #fff;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+            transition: transform 0.3s;
+            text-decoration: none;
         }
-        .whatsapp-float:active { transform: scale(0.9); }
+        .whatsapp-float:active {
+            transform: scale(0.9);
+        }
         .ai-float {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff;
-            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(139,92,246,0.4); cursor: pointer; transition: 0.3s;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: #fff;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .ai-float:active { transform: scale(0.9); }
+        .ai-float:active {
+            transform: scale(0.9);
+        }
         .lang-float {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: linear-gradient(135deg, #10b981, #059669); color: #fff;
-            font-size: 1.3rem; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 12px rgba(16,185,129,0.4); cursor: pointer; transition: 0.3s;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #fff;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .lang-float:active { transform: scale(0.9); }
+        .lang-float:active {
+            transform: scale(0.9);
+        }
         .scroll-top {
-            width: 36px; height: 36px; border-radius: 50%; background: var(--surface);
-            border: 1px solid var(--border); color: var(--text); font-size: 1rem;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            opacity: 0; pointer-events: none; transition: 0.3s; box-shadow: var(--shadow);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            box-shadow: var(--shadow);
         }
-        .scroll-top.visible { opacity: 1; pointer-events: auto; }
-        .chat-messages { flex:1; overflow-y:auto; margin-bottom:16px; display:flex; flex-direction:column; gap:10px; }
-        .chat-msg { max-width:80%; padding:10px 14px; border-radius:18px; font-size:0.9rem; line-height:1.4; }
-        .chat-msg.bot { background:var(--surface-alt); align-self:flex-start; border-bottom-left-radius:4px; }
-        .chat-msg.user { background:var(--primary); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
-        .typing-indicator { display:flex; gap:4px; padding:4px 0; align-self:flex-start; }
-        .typing-indicator span { width:6px; height:6px; background: var(--text-secondary); border-radius:50%; animation: typingBounce 1.2s infinite; }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typingBounce { 0%,60%,100% { transform:translateY(0); } 30% { transform:translateY(-4px); } }
-        .chat-input-area { display:flex; gap:8px; margin-top:8px; }
+        .scroll-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .chat-msg.bot {
+            background: var(--surface-alt);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-msg.user {
+            background: var(--primary);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 4px 0;
+            align-self: flex-start;
+        }
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typingBounce 1.2s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typingBounce {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-4px);
+            }
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
         .chat-input-area input {
-            flex:1; padding:10px 14px; border-radius:24px; border:1px solid var(--border);
-            background:var(--surface-alt); color:var(--text); font-size:0.95rem;
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            background: var(--surface-alt);
+            color: var(--text);
+            font-size: 0.95rem;
         }
-        .chat-input-area input:focus { outline:none; border-color:var(--accent); }
+        .chat-input-area input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
         .chat-input-area button {
-            width:44px; height:44px; border-radius:50%; background:var(--primary);
-            color:#fff; border:none; cursor:pointer; font-size:1.2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
-        .quick-replies { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+        .voice-btn {
+            background: var(--surface-alt);
+            border: none;
+            color: var(--text);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-right: 8px;
+        }
+        .voice-btn.listening {
+            background: var(--rose);
+            color: #fff;
+        }
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
         .quick-reply {
-            background:var(--surface-alt); border:1px solid var(--border); padding:6px 12px;
-            border-radius:20px; font-size:0.8rem; cursor:pointer; transition:0.2s; color:var(--text);
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text);
         }
-        .quick-reply:active { background:var(--primary); color:#fff; border-color:var(--primary); }
+        .quick-reply:active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
         footer {
-            background:var(--surface); color:var(--text-secondary); text-align:center;
-            padding:16px; font-size:0.85rem; border-top:1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 16px;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
         }
-        footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
-        /* PDF import related */
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
         .file-upload-area {
-            border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px;
-            text-align: center; cursor: pointer; transition: 0.2s; margin-top: 10px;
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
         }
-        .file-upload-area:hover { border-color: var(--primary); background: var(--surface-alt); }
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: var(--surface-alt);
+        }
         .pdf-preview-container {
-            max-height: 250px; overflow-y: auto; background: var(--surface-alt);
-            border-radius: var(--radius-sm); padding: 12px; margin-top: 10px;
-            font-size: 0.85rem; white-space: pre-wrap; word-break: break-all;
+            max-height: 250px;
+            overflow-y: auto;
+            background: var(--surface-alt);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .image-upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .image-upload-area:hover {
+            border-color: var(--primary);
+            background: var(--surface-alt);
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: var(--radius-sm);
+            margin-top: 8px;
         }
     </style>
 </head>
@@ -315,7 +986,6 @@
     </nav>
 
     <div class="main-content">
-        <!-- Hero -->
         <section class="hero" id="home">
             <div class="hero-content">
                 <h1>Storage, Housing & <span class="gradient-text">Deliveries</span></h1>
@@ -329,7 +999,6 @@
             </div>
         </section>
 
-        <!-- Services -->
         <section class="section" id="services">
             <h2 class="section-title">All‑In‑One <span class="gradient-text">Student Platform</span></h2>
             <p class="section-subtitle">Storage, housing, marketplace, deliveries and student support – one platform.</p>
@@ -362,7 +1031,6 @@
             </div>
         </section>
 
-        <!-- Storage Booking -->
         <section class="section" id="storage">
             <h2 class="section-title">📦 <span class="gradient-text">Book Storage</span></h2>
             <p class="section-subtitle">Fill in the details, choose delivery method, get your IDs instantly.</p>
@@ -419,7 +1087,6 @@
             </div>
         </section>
 
-        <!-- Tracking -->
         <section class="section" id="track">
             <h2 class="section-title">🔍 Track <span class="gradient-text">Your Items</span></h2>
             <p class="section-subtitle">Enter Booking ID, Tracking ID, <strong>or your phone number</strong>.</p>
@@ -430,7 +1097,6 @@
             <div id="trackingResult" style="display:none; margin-top:16px; background:var(--surface); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);"></div>
         </section>
 
-        <!-- Marketplace -->
         <section class="section" id="marketplace">
             <h2 class="section-title">🛍️ Student <span class="gradient-text">Marketplace</span></h2>
             <div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
@@ -447,7 +1113,6 @@
             </div>
         </section>
 
-        <!-- Accommodation -->
         <section class="section" id="accommodation">
             <h2 class="section-title">🏡 <span class="gradient-text">Accommodation</span> Assistance</h2>
             <div style="display:flex; flex-direction:column; gap:16px; max-width:500px; margin:0 auto;">
@@ -466,7 +1131,6 @@
             </div>
         </section>
 
-        <!-- Reviews & Testimonials -->
         <section class="section" id="reviewsSection">
             <h2 class="section-title">⭐ <span class="gradient-text">Reviews & Testimonials</span></h2>
             <div class="reviews-container" id="reviewsListContainer">
@@ -474,7 +1138,6 @@
             </div>
         </section>
 
-        <!-- Contact -->
         <section class="section" id="contact">
             <h2 class="section-title">📞 Contact <span class="gradient-text">Amos</span></h2>
             <div class="contact-grid">
@@ -504,23 +1167,14 @@
         <a href="https://menilj.github.io/E-web/" target="">Powered by Zafyier</a>
     </footer>
 
-    <!-- Floating Buttons -->
     <div class="floating-group">
-        <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float" title="Chat on WhatsApp">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <div class="lang-float" onclick="openModal('langContributionModal')" title="Teach AI your language">
-            <i class="fas fa-language"></i>
-        </div>
-        <div class="ai-float" onclick="openModal('aiChatModal')" title="AI Assistant">
-            <i class="fas fa-robot"></i>
-        </div>
-        <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <i class="fas fa-chevron-up"></i>
-        </button>
+        <a href="https://wa.me/254116375166" target="_blank" class="whatsapp-float" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <div class="lang-float" onclick="openModal('langContributionModal')" title="Teach AI your language"><i class="fas fa-language"></i></div>
+        <div class="ai-float" onclick="openModal('aiChatModal')" title="AI Assistant"><i class="fas fa-robot"></i></div>
+        <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fas fa-chevron-up"></i></button>
     </div>
 
-    <!-- Modals (Delivery, Sell, Housing, AI Chat, Assurance, Language Contribution) -->
+    <!-- Modals -->
     <div class="modal-overlay" id="deliveryModal" style="display:none;" onclick="closeModalBg(event,'deliveryModal')">
         <div class="modal">
             <button class="modal-close" onclick="closeModal('deliveryModal')">&times;</button>
@@ -544,10 +1198,18 @@
             <form onsubmit="handleSellSubmission(event)" style="margin-top:16px;">
                 <div class="form-grid">
                     <input type="text" placeholder="Item Name *" id="sellName" required>
-                    <input type="text" placeholder="Condition" id="sellCond" required>
+                    <input type="text" placeholder="Condition (New/Used)" id="sellCond" required>
                     <input type="text" placeholder="Location" id="sellLoc" required>
                     <input type="number" placeholder="Price (KES)" id="sellPrice" required>
                     <textarea placeholder="Description" id="sellDesc" required></textarea>
+                    <div>
+                        <label style="font-weight:600;">Item Image (optional)</label>
+                        <div class="image-upload-area" onclick="document.getElementById('sellImageInput').click()">
+                            <i class="fas fa-camera"></i> Click to upload image
+                        </div>
+                        <input type="file" id="sellImageInput" accept="image/*" style="display:none;" onchange="previewSellImage(event)">
+                        <img id="sellImagePreview" class="image-preview" style="display:none;">
+                    </div>
                 </div>
                 <button class="btn btn-gold" style="width:100%; margin-top:12px;">Submit Item</button>
             </form>
@@ -575,7 +1237,7 @@
     <div class="modal-overlay" id="aiChatModal" style="display:none;" onclick="closeModalBg(event,'aiChatModal')">
         <div class="ai-chat-modal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h3 style="font-size:1.1rem;"><i class="fas fa-robot" style="color:#8b5cf6;"></i> CampusVault AI</h3>
+                <h3 style="font-size:1.1rem;"><i class="fas fa-robot" style="color:#8b5cf6;"></i> CampusVault AI <span style="font-size:0.7rem; color:var(--text-secondary);">(Speaks 15+ languages)</span></h3>
                 <button class="modal-close" onclick="closeModal('aiChatModal')" style="position:static;">&times;</button>
             </div>
             <div class="quick-replies" id="quickReplies">
@@ -588,10 +1250,11 @@
                 <span class="quick-reply" onclick="quickSend('Recent reviews')">⭐ Reviews</span>
             </div>
             <div class="chat-messages" id="aiChatMessages">
-                <div class="chat-msg bot">Hi! 👋 I speak many Kenyan languages. Ask me anything!</div>
+                <div class="chat-msg bot">👋 Hello! I'm your CampusVault assistant. I speak many Kenyan languages. Ask me anything or tell me your name first.</div>
             </div>
             <div class="chat-input-area">
-                <input type="text" id="aiUserInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter')sendAiMessage()">
+                <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Speak"><i class="fas fa-microphone"></i></button>
+                <input type="text" id="aiUserInput" placeholder="Type or speak..." onkeypress="if(event.key==='Enter')sendAiMessage()">
                 <button onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
@@ -607,7 +1270,6 @@
         </div>
     </div>
 
-    <!-- Language Contribution Modal (with PDF import) -->
     <div class="modal-overlay" id="langContributionModal" style="display:none;" onclick="closeModalBg(event,'langContributionModal')">
         <div class="lang-contribution-modal">
             <button class="modal-close" onclick="closeModal('langContributionModal')">&times;</button>
@@ -635,7 +1297,6 @@
                 <button class="btn btn-primary" onclick="submitLanguageContribution()" style="width:100%; margin-top:8px;">💾 Save Translation</button>
             </div>
 
-            <!-- Bulk PDF Import Section -->
             <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px;">
                 <h4 style="margin-bottom: 8px;">📄 Bulk Import from PDF</h4>
                 <p style="font-size:0.8rem; color:var(--text-secondary);">Upload a PDF where each line contains: <strong>language,english,translation</strong> (comma separated).</p>
@@ -674,6 +1335,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const storage = firebase.storage();
         const bookingsRef = db.ref('bookings');
         const sellsRef = db.ref('sells');
         const accommodationRef = db.ref('accommodationRequests');
@@ -683,34 +1345,21 @@
         const reviewsRef = db.ref('reviews');
         const securityRef = db.ref('security_alerts');
 
-        // ==================== LANGUAGE DATA ====================
+        // ==================== LANGUAGE DATA (15+ languages) ====================
         const multilingualDict = {
-            hello: { swahili: 'Habari', kikuyu: 'Niatia', maasai: 'Supa', luhya: 'Oliotya', luo: 'Misawa',
-                kisii: 'Bwakire', kamba: 'Uvoo', kalenjin: 'Chamge', somali: 'Salaam' },
-            'how are you': { swahili: 'Habari gani', kikuyu: 'Ũhoro waku', maasai: 'Kasserian Ingera',
-                luhya: 'Oliotya?', luo: 'Idhi nade?', kisii: 'Naki?', kamba: 'Wi museo?', kalenjin: 'Amache?',
-                somali: 'Sidee tahay?' },
-            goodbye: { swahili: 'Kwaheri', kikuyu: 'Tigwo na wega', maasai: 'Sere', luhya: 'Kukhuva', luo: 'Oriti',
-                kisii: 'Kwaheri', kamba: 'Tiwa na wega', kalenjin: 'Sere', somali: 'Nabadey' },
-            'thank you': { swahili: 'Asante', kikuyu: 'Thengiũ', maasai: 'Ashe', luhya: 'Webale', luo: 'Erokamano',
-                kisii: 'Asante', kamba: 'Ni ngatho', kalenjin: 'Ashe', somali: 'Mahadsanid' },
-            'book storage': { swahili: 'Weka mizigo', kikuyu: 'Gũtahĩra kũhithia', maasai: 'Enkibook enaata',
-                luhya: 'Tera esanduku', luo: 'Keto gik moko', kisii: 'Beka emeigo', kamba: 'Kuthingĩra',
-                kalenjin: 'Ibik kaa', somali: 'Kaydinta alaabta' },
-            'track item': { swahili: 'Fuatilia bidhaa', kikuyu: 'Gũcaria kĩndũ', maasai: 'Enkidimata enaata',
-                luhya: 'Rondia eshindu', luo: 'Manyo gik moko', kisii: 'Rigia ekeene', kamba: 'Kũmantha',
-                kalenjin: 'Rip kiy', somali: 'Raadinta alaabta' },
-            delivery: { swahili: 'Usafirishaji', kikuyu: 'Gũtwarithia', maasai: 'Enkibook enkitok', luhya: 'Khurusia',
-                luo: 'Tero', kisii: 'Ogokwania', kamba: 'Kũtumya', kalenjin: 'Keseng', somali: 'Geyn' },
-            sell: { swahili: 'Uza', kikuyu: 'Kwendia', maasai: 'Aanyunot', luhya: 'Kusia', luo: 'Uso', kisii: 'Kogoria',
-                kamba: 'Kũtũnga', kalenjin: 'Al', somali: 'Iib' },
-            housing: { swahili: 'Makazi', kikuyu: 'Nyũmba', maasai: 'Enkaji', luhya: 'Inzu', luo: 'Ot',
-            kisii: 'Enyomba', kamba: 'Mũciĩ', kalenjin: 'Kaa', somali: 'Guri' }
+            hello: { swahili:'Habari', kikuyu:'Niatia', maasai:'Supa', luhya:'Oliotya', luo:'Misawa', kisii:'Bwakire', kamba:'Uvoo', kalenjin:'Chamge', somali:'Salaam', meru:'Mwaramubani', embu:'Wi mwega', turkana:'Ejoka', pokot:'Chamgei', sabaot:'Chamge', taita:'Babu' },
+            'how are you': { swahili:'Habari gani', kikuyu:'Ũhoro waku', maasai:'Kasserian Ingera', luhya:'Oliotya?', luo:'Idhi nade?', kisii:'Naki?', kamba:'Wi museo?', kalenjin:'Amache?', somali:'Sidee tahay?', meru:'Wi mwaramubani?', embu:'Wi mwega?', turkana:'Ijoya?', pokot:'Nyoman?', sabaot:'Chamge ak mwe?', taita:'Wawuka?' },
+            goodbye: { swahili:'Kwaheri', kikuyu:'Tigwo na wega', maasai:'Sere', luhya:'Kukhuva', luo:'Oriti', kisii:'Kwaheri', kamba:'Tiwa na wega', kalenjin:'Sere', somali:'Nabadey', meru:'Tigania na wega', embu:'Tiga na wega', turkana:'Akuuta', pokot:'Sere', sabaot:'Sere', taita:'Badae' },
+            'thank you': { swahili:'Asante', kikuyu:'Thengiũ', maasai:'Ashe', luhya:'Webale', luo:'Erokamano', kisii:'Asante', kamba:'Ni ngatho', kalenjin:'Ashe', somali:'Mahadsanid', meru:'Ni thengi', embu:'Ngatho', turkana:'Eyakal', pokot:'Kongoi', sabaot:'Ashe', taita:'Nashukuru' },
+            'book storage': { swahili:'Weka mizigo', kikuyu:'Gũtahĩra kũhithia', maasai:'Enkibook enaata', luhya:'Tera esanduku', luo:'Keto gik moko', kisii:'Beka emeigo', kamba:'Kuthingĩra', kalenjin:'Ibik kaa', somali:'Kaydinta alaabta' },
+            'track item': { swahili:'Fuatilia bidhaa', kikuyu:'Gũcaria kĩndũ', maasai:'Enkidimata enaata', luhya:'Rondia eshindu', luo:'Manyo gik moko', kisii:'Rigia ekeene', kamba:'Kũmantha', kalenjin:'Rip kiy', somali:'Raadinta alaabta' },
+            delivery: { swahili:'Usafirishaji', kikuyu:'Gũtwarithia', maasai:'Enkibook enkitok', luhya:'Khurusia', luo:'Tero', kisii:'Ogokwania', kamba:'Kũtumya', kalenjin:'Keseng', somali:'Geyn' },
+            sell: { swahili:'Uza', kikuyu:'Kwendia', maasai:'Aanyunot', luhya:'Kusia', luo:'Uso', kisii:'Kogoria', kamba:'Kũtũnga', kalenjin:'Al', somali:'Iib' },
+            housing: { swahili:'Makazi', kikuyu:'Nyũmba', maasai:'Enkaji', luhya:'Inzu', luo:'Ot', kisii:'Enyomba', kamba:'Mũciĩ', kalenjin:'Kaa', somali:'Guri' }
         };
 
         const LANG_STORE_KEY = 'campusvault_lang_contributions';
         let userLanguages = JSON.parse(localStorage.getItem(LANG_STORE_KEY) || '{}');
-
         function saveLanguages() { localStorage.setItem(LANG_STORE_KEY, JSON.stringify(userLanguages)); }
 
         function detectLanguage(text) {
@@ -737,32 +1386,98 @@
             }
             if (userLanguages[targetLang]) {
                 for (const [english, translation] of Object.entries(userLanguages[targetLang])) {
-                    if (text.toLowerCase().includes(english.toLowerCase())) {
-                        return translation;
-                    }
+                    if (text.toLowerCase().includes(english.toLowerCase())) return translation;
                 }
             }
             return text;
         }
 
-        // Quick learning multiadapt: demonstrate new translation in AI chat immediately
-        function demonstrateLearning(language, english, translation) {
-            const chatDiv = document.getElementById('aiChatMessages');
-            const message = `✅ Quick learning: I've learned that "${translation}" means "${english}" in ${language}. For example, if you say "${translation}", I'll understand it as "${english}".`;
-            appendChat('bot', message);
-            if (document.getElementById('aiChatModal').style.display !== 'flex') {
-                openModal('aiChatModal');
-            }
+        // ==================== AI MEMORY & CONTEXT ====================
+        const AI_CONTEXT_KEY = 'campusvault_ai_context';
+        let aiContext = JSON.parse(localStorage.getItem(AI_CONTEXT_KEY) || '{"userName":"","preferredLang":"english","lastIntent":"","lastResponse":"","conversationState":"idle","mood":"neutral","lastBookingId":""}');
+        function saveContext() { localStorage.setItem(AI_CONTEXT_KEY, JSON.stringify(aiContext)); }
+        function setConversationState(state) { aiContext.conversationState = state; saveContext(); }
+        function updateLastIntent(intent, response) { aiContext.lastIntent = intent; aiContext.lastResponse = response; saveContext(); }
+        function detectMood(text) {
+            const lower = text.toLowerCase();
+            if (/thank|thanks|asante|thengi|ashe|webale|erokamano|nashukuru|mahadsanid/i.test(lower)) return 'grateful';
+            if (/bad|terrible|slow|not working|fail|error|broken|sucks/i.test(lower)) return 'frustrated';
+            if (/happy|great|awesome|good|nice/i.test(lower)) return 'happy';
+            return 'neutral';
         }
 
+        function demonstrateLearning(language, english, translation) {
+            appendChat('bot', `✅ I learned: "${translation}" means "${english}" in ${language}. Now you can use it!`);
+            if (document.getElementById('aiChatModal').style.display !== 'flex') openModal('aiChatModal');
+        }
+
+        // ==================== PDF BULK IMPORT ====================
+        let pdfParsedTranslations = [];
+        async function handlePDFUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.type !== 'application/pdf') { showToast('Please select a PDF file', '⚠️'); return; }
+            document.getElementById('pdfStatus').textContent = 'Parsing PDF...';
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let fullText = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    fullText += content.items.map(item => item.str).join(' ') + '\n';
+                }
+                const lines = fullText.split(/\r?\n/).filter(line => line.trim());
+                pdfParsedTranslations = [];
+                for (const line of lines) {
+                    const parts = line.split(',').map(s => s.trim());
+                    if (parts.length === 3) {
+                        const [lang, eng, trans] = parts;
+                        if (lang && eng && trans) pdfParsedTranslations.push({ language: lang, english: eng.toLowerCase(), translation: trans });
+                    }
+                }
+                if (pdfParsedTranslations.length === 0) {
+                    showToast('No valid translations found. Use format: language,english,translation', '⚠️');
+                    document.getElementById('pdfStatus').textContent = '';
+                    return;
+                }
+                const preview = pdfParsedTranslations.slice(0, 10).map(t => `${t.language}: ${t.english} → ${t.translation}`).join('\n');
+                document.getElementById('pdfPreview').textContent = preview + (pdfParsedTranslations.length > 10 ? `\n... and ${pdfParsedTranslations.length - 10} more` : '');
+                document.getElementById('pdfPreview').style.display = 'block';
+                document.getElementById('pdfImportActions').style.display = 'flex';
+                document.getElementById('pdfStatus').textContent = `Found ${pdfParsedTranslations.length} translations.`;
+            } catch (err) {
+                showToast('Error reading PDF: ' + err.message, '❌');
+                document.getElementById('pdfStatus').textContent = '';
+            }
+        }
+        function clearPDFImport() {
+            pdfParsedTranslations = [];
+            document.getElementById('pdfPreview').style.display = 'none';
+            document.getElementById('pdfImportActions').style.display = 'none';
+            document.getElementById('pdfStatus').textContent = '';
+            document.getElementById('pdfFileInput').value = '';
+        }
+        function confirmPDFImport() {
+            if (pdfParsedTranslations.length === 0) return;
+            let importCount = 0;
+            for (const item of pdfParsedTranslations) {
+                const langKey = item.language.toLowerCase();
+                if (!userLanguages[langKey]) userLanguages[langKey] = {};
+                userLanguages[langKey][item.english] = item.translation;
+                importCount++;
+            }
+            saveLanguages();
+            showToast(`✅ Imported ${importCount} translations!`, '🎉');
+            renderUserContributions();
+            if (importCount > 0) demonstrateLearning(pdfParsedTranslations[0].language, pdfParsedTranslations[0].english, pdfParsedTranslations[0].translation);
+            clearPDFImport();
+        }
         function submitLanguageContribution() {
             const language = document.getElementById('contribLanguage').value.trim();
             const english = document.getElementById('contribEnglish').value.trim();
             const translation = document.getElementById('contribTranslation').value.trim();
-            if (!language || !english || !translation) {
-                showToast('Please fill all fields', '⚠️');
-                return;
-            }
+            if (!language || !english || !translation) { showToast('Please fill all fields', '⚠️'); return; }
             const langKey = language.toLowerCase();
             if (!userLanguages[langKey]) userLanguages[langKey] = {};
             userLanguages[langKey][english.toLowerCase()] = translation;
@@ -773,7 +1488,6 @@
             renderUserContributions();
             demonstrateLearning(language, english, translation);
         }
-
         function renderUserContributions() {
             const container = document.getElementById('userContributionsList');
             let html = '';
@@ -787,82 +1501,6 @@
             container.innerHTML = html || '<p style="color:var(--text-secondary);">No contributions yet.</p>';
         }
 
-        // ===== PDF Bulk Import =====
-        let pdfParsedTranslations = [];
-
-        async function handlePDFUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (file.type !== 'application/pdf') {
-                showToast('Please select a PDF file', '⚠️');
-                return;
-            }
-            document.getElementById('pdfStatus').textContent = 'Parsing PDF...';
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                let fullText = '';
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const content = await page.getTextContent();
-                    const pageText = content.items.map(item => item.str).join(' ');
-                    fullText += pageText + '\n';
-                }
-                const lines = fullText.split(/\r?\n/).filter(line => line.trim());
-                pdfParsedTranslations = [];
-                for (const line of lines) {
-                    const parts = line.split(',').map(s => s.trim());
-                    if (parts.length === 3) {
-                        const [lang, eng, trans] = parts;
-                        if (lang && eng && trans) {
-                            pdfParsedTranslations.push({ language: lang, english: eng.toLowerCase(), translation: trans });
-                        }
-                    }
-                }
-                if (pdfParsedTranslations.length === 0) {
-                    showToast('No valid translations found in PDF. Use format: language,english,translation', '⚠️');
-                    document.getElementById('pdfStatus').textContent = '';
-                    return;
-                }
-                const preview = pdfParsedTranslations.slice(0, 10).map(t => `${t.language}: ${t.english} → ${t.translation}`).join('\n');
-                const previewDiv = document.getElementById('pdfPreview');
-                previewDiv.textContent = preview + (pdfParsedTranslations.length > 10 ? `\n... and ${pdfParsedTranslations.length - 10} more` : '');
-                previewDiv.style.display = 'block';
-                document.getElementById('pdfImportActions').style.display = 'flex';
-                document.getElementById('pdfStatus').textContent = `Found ${pdfParsedTranslations.length} translations.`;
-            } catch (err) {
-                showToast('Error reading PDF: ' + err.message, '❌');
-                document.getElementById('pdfStatus').textContent = '';
-            }
-        }
-
-        function clearPDFImport() {
-            pdfParsedTranslations = [];
-            document.getElementById('pdfPreview').style.display = 'none';
-            document.getElementById('pdfImportActions').style.display = 'none';
-            document.getElementById('pdfStatus').textContent = '';
-            document.getElementById('pdfFileInput').value = '';
-        }
-
-        function confirmPDFImport() {
-            if (pdfParsedTranslations.length === 0) return;
-            let importCount = 0;
-            for (const item of pdfParsedTranslations) {
-                const langKey = item.language.toLowerCase();
-                if (!userLanguages[langKey]) userLanguages[langKey] = {};
-                userLanguages[langKey][item.english] = item.translation;
-                importCount++;
-            }
-            saveLanguages();
-            showToast(`✅ Imported ${importCount} translations!`, '🎉');
-            renderUserContributions();
-            if (importCount > 0) {
-                const sample = pdfParsedTranslations[0];
-                demonstrateLearning(sample.language, sample.english, sample.translation);
-            }
-            clearPDFImport();
-        }
-
         // ==================== SECURITY SYSTEM ====================
         const threatLog = [];
         const MAX_TRACK_PER_WINDOW = 5;
@@ -871,142 +1509,87 @@
             /<script/i, /<\/script/i, /javascript:/i, /on\w+=/i,
             /select\s+.*from/i, /drop\s+table/i, /union\s+select/i
         ];
-
         function detectDevTools() {
-            const threshold = 160;
             setInterval(() => {
-                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                if (widthThreshold || heightThreshold) {
-                    reportSecurityIncident('devtools', 'Developer tools opened or window resized suspiciously');
-                }
+                const widthThreshold = window.outerWidth - window.innerWidth > 160;
+                const heightThreshold = window.outerHeight - window.innerHeight > 160;
+                if (widthThreshold || heightThreshold) reportSecurityIncident('devtools', 'Developer tools opened or window resized suspiciously');
             }, 2000);
         }
-
         function recordAction(actionType) {
             const now = Date.now();
             threatLog.push({ type: actionType, time: now });
-            while (threatLog.length > 0 && threatLog[0].time < now - WINDOW_MS) {
-                threatLog.shift();
-            }
-            if (threatLog.length >= MAX_TRACK_PER_WINDOW) {
-                reportSecurityIncident('rapid_requests', `More than ${MAX_TRACK_PER_WINDOW} requests in ${WINDOW_MS/1000}s (last action: ${actionType})`);
-            }
+            while (threatLog.length > 0 && threatLog[0].time < now - WINDOW_MS) threatLog.shift();
+            if (threatLog.length >= MAX_TRACK_PER_WINDOW) reportSecurityIncident('rapid_requests', `More than ${MAX_TRACK_PER_WINDOW} requests in ${WINDOW_MS/1000}s`);
         }
-
-        function isInputSuspicious(value) {
-            if (!value) return false;
-            return SUSPICIOUS_INPUT_PATTERNS.some(regex => regex.test(value));
-        }
-
+        function isInputSuspicious(value) { return value && SUSPICIOUS_INPUT_PATTERNS.some(regex => regex.test(value)); }
         function scanFormInputs(formElement) {
-            const inputs = formElement.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {
-                if (isInputSuspicious(input.value)) {
-                    reportSecurityIncident('suspicious_input', `Possible injection attempt in field: ${input.id || input.name}`);
-                }
+            formElement.querySelectorAll('input, textarea, select').forEach(input => {
+                if (isInputSuspicious(input.value)) reportSecurityIncident('suspicious_input', `Possible injection in field: ${input.id||input.name}`);
             });
         }
-
         function reportSecurityIncident(type, details) {
-            const alert = {
-                type: type,
-                details: details,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent,
-                page: window.location.href
-            };
-            securityRef.push(alert).catch(e => console.warn('Security alert push failed', e));
-            console.warn(`[SECURITY] ${type}: ${details}`);
+            securityRef.push({ type, details, timestamp: new Date().toISOString(), userAgent: navigator.userAgent, page: window.location.href }).catch(e => console.warn(e));
         }
-
-        document.addEventListener('submit', function(e) {
-            scanFormInputs(e.target);
-        }, true);
+        document.addEventListener('submit', e => scanFormInputs(e.target), true);
 
         // ==================== HELPERS ====================
-        function showToast(msg, icon = '✅') {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.innerHTML = icon + ' ' + msg;
+        function showToast(msg, icon='✅') {
+            const t = document.createElement('div'); t.className='toast'; t.innerHTML=icon+' '+msg;
             document.getElementById('toastContainer').appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }
-
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function closeModalBg(e, id) { if (e.target === e.currentTarget) closeModal(id); }
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-        });
+        document.addEventListener('keydown', e => { if (e.key==='Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.style.display='none'); });
+        function generateId(prefix) { return prefix+'-'+Math.random().toString(36).substring(2,10).toUpperCase(); }
+        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
 
-        function generateId(prefix) { return prefix + '-' + Math.random().toString(36).substring(2, 10).toUpperCase(); }
-        function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]) : ''; }
-
-        // Mobile menu & scroll
         const scrollTopBtn = document.getElementById('scrollTopBtn');
-        window.addEventListener('scroll', () => {
-            scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
-        });
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('navLinks');
+        window.addEventListener('scroll', () => { scrollTopBtn.classList.toggle('visible', window.scrollY > 400); });
+        const hamburger = document.getElementById('hamburger'), navLinks = document.getElementById('navLinks');
         hamburger.addEventListener('click', () => {
             navLinks.classList.toggle('open');
             hamburger.innerHTML = navLinks.classList.contains('open') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
         });
-        document.querySelectorAll('.nav-links a').forEach(el => el.addEventListener('click', () => {
-            navLinks.classList.remove('open');
-            hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-        }));
+        document.querySelectorAll('.nav-links a').forEach(el => el.addEventListener('click', () => { navLinks.classList.remove('open'); hamburger.innerHTML = '<i class="fas fa-bars"></i>'; }));
 
         // ==================== DATE HELPERS & BOOKING LOGIC ====================
         function getTodayStr() { return new Date().toISOString().split('T')[0]; }
-        function getNowLocalStr() { const d = new Date(); const offset = d.getTimezoneOffset(); const local = new Date(d.getTime() - offset * 60000); return local.toISOString().slice(0, 16); }
-        function formatDateTime(isoString) { if (!isoString) return ''; const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }; return new Date(isoString).toLocaleDateString('en-KE', options); }
-        function formatDate(isoString) { if (!isoString) return ''; const options = { year: 'numeric', month: 'short', day: 'numeric' }; return new Date(isoString).toLocaleDateString('en-KE', options); }
+        function getNowLocalStr() { const d = new Date(); const offset = d.getTimezoneOffset(); return new Date(d.getTime() - offset*60000).toISOString().slice(0,16); }
+        function formatDateTime(isoString) { if (!isoString) return ''; return new Date(isoString).toLocaleDateString('en-KE', { year:'numeric', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true }); }
+        function formatDate(isoString) { if (!isoString) return ''; return new Date(isoString).toLocaleDateString('en-KE', { year:'numeric', month:'short', day:'numeric' }); }
 
         document.addEventListener('DOMContentLoaded', () => {
             detectDevTools();
             renderUserContributions();
             const today = getTodayStr();
-            const checkInInput = document.getElementById('checkInDate');
-            const collectInput = document.getElementById('collectDate');
-            const scheduleInput = document.getElementById('scheduledDateTime');
+            const checkInInput = document.getElementById('checkInDate'), collectInput = document.getElementById('collectDate'), scheduleInput = document.getElementById('scheduledDateTime');
             checkInInput.setAttribute('min', today);
             checkInInput.addEventListener('change', () => {
                 if (checkInInput.value) {
                     collectInput.disabled = false;
                     collectInput.setAttribute('min', checkInInput.value);
-                    if (collectInput.value < checkInInput.value) {
-                        collectInput.value = '';
-                    }
-                } else {
-                    collectInput.disabled = true;
-                    collectInput.value = '';
-                }
+                    if (collectInput.value < checkInInput.value) collectInput.value = '';
+                } else { collectInput.disabled = true; collectInput.value = ''; }
             });
             scheduleInput.setAttribute('min', getNowLocalStr());
         });
 
         function toggleSchedule() {
             const method = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
-            const scheduleDiv = document.getElementById('scheduleField');
-            const input = document.getElementById('scheduledDateTime');
-            const label = document.getElementById('scheduleLabel');
+            const scheduleDiv = document.getElementById('scheduleField'), input = document.getElementById('scheduledDateTime'), label = document.getElementById('scheduleLabel');
             if (method) {
                 scheduleDiv.style.display = 'block';
                 input.required = true;
                 label.textContent = method === 'self' ? 'Preferred Drop‑off Date & Time *' : 'Preferred Pickup Date & Time *';
                 input.setAttribute('min', getNowLocalStr());
-            } else {
-                scheduleDiv.style.display = 'none';
-                input.required = false;
-            }
+            } else { scheduleDiv.style.display = 'none'; input.required = false; }
         }
 
         function handleStorageBooking(e) {
-            e.preventDefault();
-            scanFormInputs(e.target);
+            e.preventDefault(); scanFormInputs(e.target);
             const btn = document.getElementById('bookingBtnText'), spinner = document.getElementById('bookingSpinner');
             btn.style.display = 'none'; spinner.style.display = 'inline-block';
             const name = document.getElementById('custName').value.trim();
@@ -1018,26 +1601,14 @@
             const category = document.getElementById('itemCategory').value;
             const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked')?.value;
             const scheduledDateTime = document.getElementById('scheduledDateTime').value;
-            if (!name || !phone || !checkIn || !collect || !itemCount || !category || !deliveryMethod || !scheduledDateTime) {
-                showToast('Fill all required fields', '⚠️'); resetBtn(); return;
-            }
-            const now = new Date();
-            const scheduleDate = new Date(scheduledDateTime);
-            if (scheduleDate < now) {
-                showToast('Schedule date cannot be in the past', '⚠️'); resetBtn(); return;
-            }
+            if (!name || !phone || !checkIn || !collect || !itemCount || !category || !deliveryMethod || !scheduledDateTime) { showToast('Fill all required fields', '⚠️'); resetBtn(); return; }
+            if (new Date(scheduledDateTime) < new Date()) { showToast('Schedule date cannot be in the past', '⚠️'); resetBtn(); return; }
             const bookingId = generateId('CV'), trackingId = generateId('TRK');
-            const booking = {
-                bookingId, trackingId, name, phone, email, checkIn, collect,
-                itemCount: parseInt(itemCount), category, deliveryMethod, scheduledDateTime,
-                status: 'active', verificationImages: [], collectedAt: null,
-                timestamp: new Date().toISOString()
-            };
+            const booking = { bookingId, trackingId, name, phone, email, checkIn, collect, itemCount:parseInt(itemCount), category, deliveryMethod, scheduledDateTime, status:'active', verificationImages:[], collectedAt:null, timestamp:new Date().toISOString() };
             bookingsRef.child(bookingId).set(booking)
                 .then(() => {
-                    const assureTitle = document.getElementById('assuranceTitle');
-                    const assureMsg = document.getElementById('assuranceMessage');
-                    const niceDate = formatDateTime(scheduledDateTime);
+                    aiContext.lastBookingId = bookingId; saveContext();
+                    const assureTitle = document.getElementById('assuranceTitle'), assureMsg = document.getElementById('assuranceMessage'), niceDate = formatDateTime(scheduledDateTime);
                     if (deliveryMethod === 'self') {
                         assureTitle.textContent = '🧳 Self Drop‑off Scheduled';
                         assureMsg.innerHTML = `Please bring your items on <strong>${niceDate}</strong>.<br>Your Booking ID: <strong>${bookingId}</strong>`;
@@ -1071,42 +1642,36 @@
             try {
                 if (bookingIdMatch) {
                     const snap = await bookingsRef.child(input.toUpperCase()).once('value');
-                    if (snap.exists()) displaySingleBooking({...snap.val(), _key: snap.key});
+                    if (snap.exists()) displaySingleBooking({...snap.val(), _key:snap.key});
                     else { resultDiv.style.display = 'none'; showToast('No booking found with that ID', '❌'); }
                 } else if (trackingIdMatch) {
                     const snap = await bookingsRef.orderByChild('trackingId').equalTo(input.toUpperCase()).once('value');
-                    if (snap.exists()) { const [key, val] = Object.entries(snap.val())[0]; displaySingleBooking({...val, _key: key}); }
+                    if (snap.exists()) { const [key, val] = Object.entries(snap.val())[0]; displaySingleBooking({...val, _key:key}); }
                     else { resultDiv.style.display = 'none'; showToast('No booking found with that Tracking ID', '❌'); }
                 } else {
                     const allSnap = await bookingsRef.once('value');
                     const allBookings = [];
-                    allSnap.forEach(child => { const b = child.val(); if (b.phone && b.phone.includes(input)) allBookings.push({...b, _key: child.key}); });
+                    allSnap.forEach(child => { const b = child.val(); if (b.phone && b.phone.includes(input)) allBookings.push({...b, _key:child.key}); });
                     if (allBookings.length === 0) { resultDiv.style.display = 'none'; showToast('No bookings found for this phone number', '❌'); }
                     else if (allBookings.length === 1) displaySingleBooking(allBookings[0]);
                     else displayBookingList(allBookings);
                 }
-            } catch (err) { showToast('Error: ' + err.message, '❌'); }
+            } catch (err) { showToast('Error: '+err.message, '❌'); }
         }
-
         function displayBookingList(bookings) {
-            const resultDiv = document.getElementById('trackingResult');
-            resultDiv.innerHTML = `<div><h3>📞 Multiple bookings found</h3><div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">${bookings.map(b => `<div style="background:var(--surface-alt); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between; align-items:center;"><div><strong>${b.bookingId}</strong> – ${b.name}<br><small>Items: ${b.itemCount} | Status: ${b.status}</small></div><button class="btn btn-primary" onclick="selectBooking('${b._key}')">View</button></div>`).join('')}</div></div>`;
-            resultDiv.style.display = 'block';
+            document.getElementById('trackingResult').innerHTML = `<div><h3>📞 Multiple bookings found</h3><div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">${bookings.map(b => `<div style="background:var(--surface-alt); border-radius:var(--radius-sm); padding:12px; display:flex; justify-content:space-between;"><div><strong>${b.bookingId}</strong> – ${b.name}<br><small>Items: ${b.itemCount} | Status: ${b.status}</small></div><button class="btn btn-primary" onclick="selectBooking('${b._key}')">View</button></div>`).join('')}</div></div>`;
+            document.getElementById('trackingResult').style.display = 'block';
         }
-        window.selectBooking = async (bookingKey) => { const snap = await bookingsRef.child(bookingKey).once('value'); if (snap.exists()) displaySingleBooking({...snap.val(), _key: bookingKey}); else showToast('Booking not found', '❌'); };
+        window.selectBooking = async (key) => { const snap = await bookingsRef.child(key).once('value'); if (snap.exists()) displaySingleBooking({...snap.val(), _key:key}); else showToast('Booking not found', '❌'); };
         async function displaySingleBooking(b) {
             currentTrackedBooking = b;
-            const isCollected = b.status === 'collected';
-            const resultDiv = document.getElementById('trackingResult');
+            const isCollected = b.status === 'collected', resultDiv = document.getElementById('trackingResult');
             const images = b.verificationImages || [];
-            const galleryHtml = images.length ? `<div class="verification-gallery">${images.map(url => `<img src="${url}" class="gallery-thumb" onclick="window.open(this.src)" alt="Verification">`).join('')}</div>` : `<p><i class="fas fa-info-circle"></i> No verification photos yet.</p>`;
+            const galleryHtml = images.length ? `<div class="verification-gallery">${images.map(url => `<img src="${url}" class="gallery-thumb" onclick="window.open(this.src)">`).join('')}</div>` : `<p><i class="fas fa-info-circle"></i> No verification photos yet.</p>`;
             let actionButton = '';
-            if (!isCollected) {
-                actionButton = `<div style="margin-top:12px;"><button id="confirmCollectionBtn" class="btn btn-primary" style="width:100%;"><i class="fas fa-check-circle"></i> I Have Successfully Received My Items</button></div>`;
-            } else {
-                actionButton = `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.1); border-radius:var(--radius-sm); color:var(--emerald);"><i class="fas fa-check-circle"></i> Collection confirmed on ${formatDateTime(b.collectedAt)}</div>`;
-            }
-            resultDiv.innerHTML = `<div><h3>📋 Booking Details</h3><p><strong>Booking ID:</strong> ${b.bookingId}</p><p><strong>Customer:</strong> ${escapeHtml(b.name)}</p><p><strong>Phone:</strong> ${escapeHtml(b.phone)}</p><p><strong>Items:</strong> ${b.itemCount} (${b.category})</p><p><strong>Storage Period:</strong> ${formatDate(b.checkIn)} → ${formatDate(b.collect)}</p><p><strong>Delivery:</strong> ${b.deliveryMethod === 'self' ? 'Self drop-off' : 'Pickup'} on ${formatDateTime(b.scheduledDateTime)}</p><p><strong>Status:</strong> <span class="badge ${isCollected ? 'badge-collected' : 'badge-active'}">${isCollected ? 'Collected ✓' : 'Active / Pending'}</span></p><h3 style="margin:16px 0 8px;">📸 Verification Gallery</h3>${galleryHtml}${actionButton}</div>`;
+            if (!isCollected) actionButton = `<div style="margin-top:12px;"><button id="confirmCollectionBtn" class="btn btn-primary" style="width:100%;"><i class="fas fa-check-circle"></i> I Have Successfully Received My Items</button></div>`;
+            else actionButton = `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.1); border-radius:var(--radius-sm); color:var(--emerald);"><i class="fas fa-check-circle"></i> Collection confirmed on ${formatDateTime(b.collectedAt)}</div>`;
+            resultDiv.innerHTML = `<div><h3>📋 Booking Details</h3><p><strong>Booking ID:</strong> ${b.bookingId}</p><p><strong>Customer:</strong> ${escapeHtml(b.name)}</p><p><strong>Phone:</strong> ${escapeHtml(b.phone)}</p><p><strong>Items:</strong> ${b.itemCount} (${b.category})</p><p><strong>Storage Period:</strong> ${formatDate(b.checkIn)} → ${formatDate(b.collect)}</p><p><strong>Delivery:</strong> ${b.deliveryMethod==='self'?'Self drop-off':'Pickup'} on ${formatDateTime(b.scheduledDateTime)}</p><p><strong>Status:</strong> <span class="badge ${isCollected?'badge-collected':'badge-active'}">${isCollected?'Collected ✓':'Active / Pending'}</span></p><h3 style="margin:16px 0 8px;">📸 Verification Gallery</h3>${galleryHtml}${actionButton}</div>`;
             resultDiv.style.display = 'block';
             if (!isCollected) document.getElementById('confirmCollectionBtn').onclick = () => confirmCollection(b._key);
             else {
@@ -1116,44 +1681,35 @@
                     resultDiv.insertAdjacentHTML('beforeend', reviewFormHtml);
                     initTrackReviewStars();
                     document.getElementById('submitTrackReviewBtn').onclick = () => submitTrackReview(b.bookingId, b.name);
-                } else {
-                    resultDiv.insertAdjacentHTML('beforeend', `<div style="margin-top:12px; padding:10px; background:rgba(251,191,36,0.15); border-radius:var(--radius-sm); text-align:center;"><i class="fas fa-star" style="color:var(--gold);"></i> Thank you for your review!</div>`);
-                }
+                } else resultDiv.insertAdjacentHTML('beforeend', `<div style="margin-top:12px; padding:10px; background:rgba(251,191,36,0.15); border-radius:var(--radius-sm); text-align:center;"><i class="fas fa-star" style="color:var(--gold);"></i> Thank you for your review!</div>`);
             }
         }
         function initTrackReviewStars() {
             const stars = document.querySelectorAll('#trackReviewStars i');
-            stars.forEach(star => {
-                star.addEventListener('click', function() {
-                    const val = parseInt(this.getAttribute('data-val'));
-                    document.getElementById('trackReviewRating').value = val;
-                    stars.forEach((s, idx) => { if (idx < val) s.className = "fas fa-star active"; else s.className = "far fa-star"; });
-                });
-            });
+            stars.forEach(star => star.addEventListener('click', function() {
+                const val = parseInt(this.getAttribute('data-val'));
+                document.getElementById('trackReviewRating').value = val;
+                stars.forEach((s,idx) => s.className = idx < val ? "fas fa-star active" : "far fa-star");
+            }));
         }
         async function submitTrackReview(bookingId, customerName) {
             const rating = parseInt(document.getElementById('trackReviewRating').value);
             const comment = document.getElementById('trackReviewComment').value.trim();
-            if (rating === 0) { showToast('Please select a rating', '⚠️'); return; }
+            if (rating===0) { showToast('Please select a rating', '⚠️'); return; }
             if (!comment) { showToast('Please write your experience', '⚠️'); return; }
-            try {
-                await reviewsRef.push({ bookingId, customerName, rating, comment, createdAt: new Date().toISOString() });
-                showToast('Thank you for your review!', '⭐');
-                document.getElementById('trackingReviewForm')?.remove();
-                const resultDiv = document.getElementById('trackingResult');
-                resultDiv.insertAdjacentHTML('beforeend', `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.15); border-radius:var(--radius-sm); text-align:center;"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Review submitted!</div>`);
-                loadReviews();
-            } catch (err) { showToast('Error submitting review', '❌'); }
+            await reviewsRef.push({ bookingId, customerName, rating, comment, createdAt:new Date().toISOString() });
+            showToast('Thank you for your review!', '⭐');
+            document.getElementById('trackingReviewForm')?.remove();
+            document.getElementById('trackingResult').insertAdjacentHTML('beforeend', `<div style="margin-top:12px; padding:10px; background:rgba(52,211,153,0.15); border-radius:var(--radius-sm); text-align:center;"><i class="fas fa-check-circle" style="color:var(--emerald);"></i> Review submitted!</div>`);
+            loadReviews();
         }
         async function confirmCollection(bookingKey) {
-            if (!confirm('⚠️ Confirm you have received all your items. This action cannot be undone and will close your booking.')) return;
-            try {
-                await bookingsRef.child(bookingKey).update({ status: 'collected', collectedAt: new Date().toISOString() });
-                showToast('Collection confirmed!', '✅');
-                const refreshed = await bookingsRef.child(bookingKey).once('value');
-                displaySingleBooking({...refreshed.val(), _key: bookingKey});
-                loadReviews();
-            } catch (err) { showToast('Error: ' + err.message, '❌'); }
+            if (!confirm('⚠️ Confirm you have received all your items. This action cannot be undone.')) return;
+            await bookingsRef.child(bookingKey).update({ status:'collected', collectedAt:new Date().toISOString() });
+            showToast('Collection confirmed!', '✅');
+            const refreshed = await bookingsRef.child(bookingKey).once('value');
+            displaySingleBooking({...refreshed.val(), _key:bookingKey});
+            loadReviews();
         }
 
         // ==================== REVIEWS & MARKETPLACE ====================
@@ -1161,18 +1717,17 @@
             const snap = await reviewsRef.once('value');
             const reviews = snap.val() ? Object.values(snap.val()) : [];
             const container = document.getElementById('reviewsListContainer');
-            if (reviews.length === 0) { container.innerHTML = '<div style="text-align:center; padding:16px;">✨ No reviews yet. Be the first to share your experience!</div>'; return; }
-            const sorted = reviews.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
-            container.innerHTML = sorted.map(r => `<div class="review-card"><div class="review-header"><span class="review-name">${escapeHtml(r.customerName)}</span><span class="review-stars">${'⭐'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div><div class="review-comment">${escapeHtml(r.comment)}</div><div class="review-date">📅 ${new Date(r.createdAt).toLocaleDateString()}</div></div>`).join('');
+            if (reviews.length===0) { container.innerHTML = '<div style="text-align:center; padding:16px;">✨ No reviews yet. Be the first to share your experience!</div>'; return; }
+            container.innerHTML = reviews.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(r => `<div class="review-card"><div class="review-header"><span class="review-name">${escapeHtml(r.customerName)}</span><span class="review-stars">${'⭐'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div><div class="review-comment">${escapeHtml(r.comment)}</div><div class="review-date">📅 ${new Date(r.createdAt).toLocaleDateString()}</div></div>`).join('');
         }
         loadReviews();
 
-        function renderProducts(filter = 'all') {
+        function renderProducts(filter='all') {
             productsRef.once('value').then(snap => {
                 const allProducts = snap.val() ? Object.values(snap.val()) : [];
-                const filtered = filter === 'all' ? allProducts : allProducts.filter(p => p.category === filter);
+                const filtered = filter==='all' ? allProducts : allProducts.filter(p => p.category===filter);
                 const grid = document.getElementById('marketplaceGrid');
-                if (filtered.length === 0) { grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-secondary);">No products found.</p>'; return; }
+                if (filtered.length===0) { grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-secondary);">No products found.</p>'; return; }
                 grid.innerHTML = filtered.map(p => {
                     const imgHtml = p.image ? `<img src="${p.image}" alt="${p.name}" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'product-img-placeholder\\'>📦</div>'">` : `<div class="product-img-placeholder">📦</div>`;
                     return `<div class="product-card"><div class="product-img-container">${imgHtml}</div><div class="product-info"><h4 style="font-size:1rem;">${p.name}</h4><span class="badge ${p.condition==='New'?'badge-active':'badge-collected'}">${p.condition}</span><p style="font-weight:700; margin:4px 0;">KES ${parseInt(p.price).toLocaleString()}</p><p style="font-size:0.8rem; color:${p.available?'#10b981':'#f43f5e'};">${p.available?'✅ Available':'❌ Sold Out'}</p><button class="btn btn-primary" style="font-size:0.85rem; padding:8px 12px;" onclick="inquireProduct('${p.name}',${p.price})" ${!p.available?'disabled':''}>Inquire</button></div></div>`;
@@ -1185,60 +1740,102 @@
 
         // ==================== CONTACT / DELIVERY / SELL / HOUSING ====================
         function handleContactForm(e) {
-            e.preventDefault();
-            scanFormInputs(e.target);
-            const name = document.getElementById('contactName').value.trim();
-            const phone = document.getElementById('contactPhone').value.trim();
-            const message = document.getElementById('contactMessage').value.trim();
-            const inquiryId = generateId('INQ');
-            inquiriesRef.child(inquiryId).set({ id: inquiryId, name, phone, message, timestamp: new Date().toISOString() })
-                .then(() => {
-                    window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${message}`)}`, '_blank');
-                    showToast('Message sent!', '📱');
-                    document.getElementById('contactName').value = document.getElementById('contactPhone').value = document.getElementById('contactMessage').value = '';
-                }).catch(err => showToast('Error: ' + err.message, '❌'));
+            e.preventDefault(); scanFormInputs(e.target);
+            const name = document.getElementById('contactName').value.trim(), phone = document.getElementById('contactPhone').value.trim(), message = document.getElementById('contactMessage').value.trim();
+            inquiriesRef.push({ name, phone, message, timestamp:new Date().toISOString() }).then(() => {
+                window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`Hi Amos, ${name} (${phone}): ${message}`)}`, '_blank');
+                showToast('Message sent!', '📱');
+                document.getElementById('contactName').value = document.getElementById('contactPhone').value = document.getElementById('contactMessage').value = '';
+            }).catch(err => showToast('Error: '+err.message, '❌'));
         }
         function handleDeliveryRequest(e) {
-            e.preventDefault();
-            scanFormInputs(e.target);
-            const name = document.getElementById('delName').value.trim();
-            const phone = document.getElementById('delPhone').value.trim();
-            const service = document.getElementById('delService').value;
-            const details = document.getElementById('delDetails').value.trim();
-            const deliveryId = generateId('DEL');
-            deliveriesRef.child(deliveryId).set({ id: deliveryId, name, phone, service, details, timestamp: new Date().toISOString() })
+            e.preventDefault(); scanFormInputs(e.target);
+            deliveriesRef.push({ name:document.getElementById('delName').value, phone:document.getElementById('delPhone').value, service:document.getElementById('delService').value, details:document.getElementById('delDetails').value, timestamp:new Date().toISOString() })
                 .then(() => { showToast('Delivery request submitted!', '✅'); closeModal('deliveryModal'); e.target.reset(); })
-                .catch(err => showToast('Error: ' + err.message, '❌'));
+                .catch(err => showToast('Error: '+err.message, '❌'));
         }
-        function handleSellSubmission(e) {
-            e.preventDefault();
-            scanFormInputs(e.target);
-            const sellData = { id: generateId('SELL'), itemName: document.getElementById('sellName').value, condition: document.getElementById('sellCond').value, location: document.getElementById('sellLoc').value, price: document.getElementById('sellPrice').value, description: document.getElementById('sellDesc').value, timestamp: new Date().toISOString() };
-            sellsRef.child(sellData.id).set(sellData)
-                .then(() => { showToast('Item submitted!', '💰'); closeModal('sellModal'); e.target.reset(); })
-                .catch(err => showToast('Error', '❌'));
+        let sellImageFile = null;
+        function previewSellImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                sellImageFile = file;
+                const reader = new FileReader();
+                reader.onload = e => { document.getElementById('sellImagePreview').src = e.target.result; document.getElementById('sellImagePreview').style.display = 'block'; };
+                reader.readAsDataURL(file);
+            }
         }
+        async function handleSellSubmission(e) {
+            e.preventDefault(); scanFormInputs(e.target);
+            const itemName = document.getElementById('sellName').value, condition = document.getElementById('sellCond').value, location = document.getElementById('sellLoc').value, price = document.getElementById('sellPrice').value, description = document.getElementById('sellDesc').value;
+            let imageUrl = '';
+            if (sellImageFile) {
+                const storageRef = storage.ref(`products/${Date.now()}_${sellImageFile.name}`);
+                try {
+                    const snapshot = await storageRef.put(sellImageFile);
+                    imageUrl = await snapshot.ref.getDownloadURL();
+                } catch (err) { showToast('Image upload failed', '❌'); }
+            }
+            const sellData = { itemName, condition, location, price, description, image: imageUrl, available: true, timestamp: new Date().toISOString() };
+            sellsRef.push(sellData).then(() => {
+                productsRef.push(sellData).then(() => {
+                    showToast('Item listed!', '💰');
+                    closeModal('sellModal');
+                    e.target.reset();
+                    sellImageFile = null;
+                    document.getElementById('sellImagePreview').style.display = 'none';
+                    renderProducts();
+                });
+            }).catch(err => showToast('Error', '❌'));
+        }
+        function requestLocationForHousing() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    document.getElementById('houseLoc').value = `Near you (${pos.coords.latitude.toFixed(2)}, ${pos.coords.longitude.toFixed(2)})`;
+                }, () => showToast('Location access denied', '⚠️'));
+            }
+        }
+        const originalOpenModal = openModal;
+        openModal = function(id) {
+            originalOpenModal(id);
+            if (id === 'houseHuntingModal') requestLocationForHousing();
+        };
         function handleHouseHunt(e) {
-            e.preventDefault();
-            scanFormInputs(e.target);
-            const name = document.getElementById('houseName').value.trim();
-            const phone = document.getElementById('housePhone').value.trim();
-            const type = document.getElementById('houseType').value;
-            const location = document.getElementById('houseLoc').value.trim() || 'Not specified';
-            const budget = document.getElementById('houseBudget').value.trim() || 'Not specified';
-            const preferences = document.getElementById('housePrefs').value.trim();
+            e.preventDefault(); scanFormInputs(e.target);
+            const name = document.getElementById('houseName').value.trim(), phone = document.getElementById('housePhone').value.trim(), type = document.getElementById('houseType').value, location = document.getElementById('houseLoc').value.trim()||'Not specified', budget = document.getElementById('houseBudget').value.trim()||'Not specified', preferences = document.getElementById('housePrefs').value.trim();
             if (!name || !phone || !type) { showToast('Fill name, phone and housing type', '⚠️'); return; }
-            const requestId = generateId('ACC');
-            accommodationRef.child(requestId).set({ id: requestId, name, phone, type, location, budget, preferences, timestamp: new Date().toISOString() })
+            accommodationRef.push({ name, phone, type, location, budget, preferences, timestamp:new Date().toISOString() })
                 .then(() => { showToast('🏡 Housing request submitted!', '✅'); closeModal('houseHuntingModal'); e.target.reset(); })
-                .catch(err => showToast('Error: ' + err.message, '❌'));
+                .catch(err => showToast('Error: '+err.message, '❌'));
         }
 
-        // ==================== ENHANCED AI – SELF-LEARNING, MULTILINGUAL, SECURITY ====================
-        const aiMemoryKey = 'campusvault_user_ai_memory';
-        let aiMemory = JSON.parse(localStorage.getItem(aiMemoryKey) || '{}');
-        function saveAIMemory() { localStorage.setItem(aiMemoryKey, JSON.stringify(aiMemory)); }
+        // ==================== VOICE INPUT ====================
+        let recognition = null;
+        function initVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                document.getElementById('voiceBtn').style.display = 'none';
+                return;
+            }
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-KE';
+            recognition.onresult = event => {
+                document.getElementById('aiUserInput').value = event.results[0][0].transcript;
+                document.getElementById('voiceBtn').classList.remove('listening');
+                sendAiMessage();
+            };
+            recognition.onerror = () => document.getElementById('voiceBtn').classList.remove('listening');
+            recognition.onend = () => document.getElementById('voiceBtn').classList.remove('listening');
+        }
+        function toggleVoice() {
+            if (!recognition) initVoice();
+            const btn = document.getElementById('voiceBtn');
+            if (btn.classList.contains('listening')) { recognition.stop(); btn.classList.remove('listening'); }
+            else { recognition.start(); btn.classList.add('listening'); }
+        }
 
+        // ==================== AI CHAT ====================
         function appendChat(sender, text) {
             const chatDiv = document.getElementById('aiChatMessages');
             const div = document.createElement('div');
@@ -1250,8 +1847,7 @@
         function showTyping() {
             const msgs = document.getElementById('aiChatMessages');
             const indicator = document.createElement('div');
-            indicator.className = 'typing-indicator';
-            indicator.id = 'aiTyping';
+            indicator.className = 'typing-indicator'; indicator.id = 'aiTyping';
             indicator.innerHTML = '<span></span><span></span><span></span>';
             msgs.appendChild(indicator);
             msgs.scrollTop = msgs.scrollHeight;
@@ -1275,98 +1871,158 @@
         }
 
         async function processAICommand(cmd) {
-            cmd = cmd.toLowerCase();
+            cmd = cmd.trim();
+            const lower = cmd.toLowerCase();
             const detectedLang = detectLanguage(cmd);
+            aiContext.preferredLang = detectedLang;
+            const mood = detectMood(cmd);
+            aiContext.mood = mood;
+            saveContext();
 
-            // Self-learning
-            if (cmd.startsWith('remember that ')) {
-                const phrase = cmd.replace('remember that ', '');
-                const parts = phrase.split(' means ');
-                if (parts.length === 2) {
-                    aiMemory[parts[0].trim()] = parts[1].trim();
-                    saveAIMemory();
-                    return `Got it! I'll remember that "${parts[0].trim()}" means "${parts[1].trim()}".`;
-                } else {
-                    return 'Please use format: remember that [phrase] means [meaning]';
-                }
+            // learn mid-chat
+            const learnMatch = lower.match(/^learn:\s*([^=]+)=\s*(.+)/);
+            if (learnMatch) {
+                const english = learnMatch[1].trim(), translation = learnMatch[2].trim();
+                const lang = detectedLang !== 'english' ? detectedLang : 'swahili';
+                if (!userLanguages[lang]) userLanguages[lang] = {};
+                userLanguages[lang][english.toLowerCase()] = translation;
+                saveLanguages();
+                demonstrateLearning(lang, english, translation);
+                updateLastIntent('learn', `Learned "${translation}" for "${english}"`);
+                return `✅ Learned! "${translation}" now means "${english}" in ${lang}.`;
             }
-            if (cmd.startsWith('forget ')) {
+            if (lower === 'undo' && aiContext.lastIntent) {
+                const last = aiContext.lastIntent; aiContext.lastIntent = ''; saveContext();
+                return `🔄 I've undone the last action ("${last}"). How else can I help?`;
+            }
+
+            // name
+            const nameMatch = lower.match(/(?:my name is|i am|call me|ni|niì|nĩ|ndi|ndĩ)\s+([A-Za-z]+)/i);
+            if (nameMatch && nameMatch[1].length > 1) {
+                aiContext.userName = nameMatch[1]; saveContext();
+                const greet = translateToLanguage('hello', detectedLang);
+                updateLastIntent('name', `Stored name ${aiContext.userName}`);
+                return `${greet}, ${aiContext.userName}! How can I help?`;
+            }
+
+            // self-learning memory
+            if (lower.startsWith('remember that ')) {
+                const phrase = cmd.replace('remember that ', ''), parts = phrase.split(' means ');
+                if (parts.length === 2) {
+                    aiContext[parts[0].trim()] = parts[1].trim(); saveContext();
+                    updateLastIntent('memory', `Remembered "${parts[0].trim()}"`);
+                    return `Got it! I'll remember that "${parts[0].trim()}" means "${parts[1].trim()}".`;
+                } else return 'Format: remember that [phrase] means [meaning]';
+            }
+            if (lower.startsWith('forget ')) {
                 const key = cmd.replace('forget ', '').trim();
-                if (aiMemory[key]) { delete aiMemory[key]; saveAIMemory(); return `Okay, I forgot "${key}".`; }
+                if (aiContext[key]) { delete aiContext[key]; saveContext(); updateLastIntent('forget', key); return `Forgot "${key}".`; }
                 return `I don't have a memory for "${key}".`;
             }
-            for (const [key, val] of Object.entries(aiMemory)) {
-                if (cmd.includes(key)) return val;
+            for (const [key, val] of Object.entries(aiContext)) {
+                if (lower.includes(key) && !['userName','preferredLang','lastIntent','lastResponse','conversationState','mood','lastBookingId'].includes(key)) return val;
             }
 
-            // Greetings
-            if (/^(hello|hi|hey|yo|hallo|habari|supa|niatia|oliorya|misawa|bwakire|uvoo|chamge|salaam)\b/i.test(cmd)) {
-                const greet = translateToLanguage('hello', detectedLang);
-                return greet || 'Hello! 👋 How can I help?';
+            // greetings
+            if (/^(hello|hi|hey|yo|hallo|habari|supa|niatia|oliorya|misawa|bwakire|uvoo|chamge|salaam|mwaramubani|wi mwega|ejoka|chamgei|babu)\b/i.test(lower)) {
+                const name = aiContext.userName ? ` ${aiContext.userName}` : '';
+                let response = `${translateToLanguage('hello', detectedLang)}${name}! 👋 `;
+                if (mood === 'frustrated') response += 'I see you might be upset. Let me try to help. ';
+                else response += 'How can I help?';
+                updateLastIntent('greeting', response);
+                return response;
             }
-            if (/how are you/i.test(cmd)) {
-                return translateToLanguage('I am doing great, thanks for asking!', detectedLang) || "I'm doing great, thanks for asking! 😊";
+            if (/how are you/i.test(lower)) {
+                const name = aiContext.userName ? ` ${aiContext.userName}` : '';
+                let response = translateToLanguage(`I'm doing great${name}, thanks!`, detectedLang);
+                if (mood === 'frustrated') response += ' I hope I can help.';
+                updateLastIntent('howareyou', response);
+                return response;
             }
 
-            // Services
-            if (/book.*(storage|store|space)|weka mizigo|gũtahĩra|enkibook|tera esanduku|keto gik moko|beka emeigo|kuthingĩra|ibik kaa|kaydinta/i.test(cmd)) {
-                document.getElementById('storage').scrollIntoView({ behavior: 'smooth' });
-                return translateToLanguage("Sure! I've scrolled to the booking form.", detectedLang);
+            // services
+            if (/book.*(storage|store|space|keep|bag|luggage)|weka mizigo|gũtahĩra|enkibook|tera esanduku|keto gik moko|beka emeigo|kuthingĩra|ibik kaa|kaydinta/i.test(lower)) {
+                document.getElementById('storage').scrollIntoView({ behavior:'smooth' });
+                let response = translateToLanguage("I've scrolled to the booking form. Fill in your details to get a tracking ID.", detectedLang);
+                response += " Need housing too?";
+                updateLastIntent('storage', response);
+                return response;
             }
-            if (/track|fuatilia|gũcaria|enkidimata|rondia|manyo gik|rigia ekeene|kũmantha|rip kiy|raadinta/i.test(cmd)) {
-                document.getElementById('track').scrollIntoView({ behavior: 'smooth' });
-                return translateToLanguage('Enter your Booking ID or Tracking ID.', detectedLang);
+            if (/track|where is my|gũcaria|enkidimata|rondia|manyo gik|rigia ekeene|kũmantha|rip kiy|raadinta|check.*(status|order)|fuatalia/i.test(lower)) {
+                document.getElementById('track').scrollIntoView({ behavior:'smooth' });
+                let response = translateToLanguage('Enter your Booking ID, Tracking ID, or phone number in the tracking box.', detectedLang);
+                if (aiContext.lastIntent === 'storage') response += ' Already booked? Enter your ID above.';
+                updateLastIntent('track', response);
+                return response;
             }
-            if (/delivery|usafirishaji|gũtwarithia|enkibook enkitok|khurusia|tero|ogokwania|kũtumya|keseng|geyn/i.test(cmd)) {
+            if (/delivery|send|parcel|food|usafirishaji|gũtwarithia|enkibook enkitok|khurusia|tero|ogokwania|kũtumya|keseng|geyn/i.test(lower)) {
                 openModal('deliveryModal');
-                return translateToLanguage('Delivery request form opened!', detectedLang);
+                let response = translateToLanguage('Delivery request form opened!', detectedLang);
+                if (mood === 'frustrated') response += ' We will handle it quickly.';
+                updateLastIntent('delivery', response);
+                return response;
             }
-            if (/sell|uza|kwendia|aanyunot|kusia|uso|kogoria|kũtũnga|al|iib/i.test(cmd)) {
+            if (/sell|selling|uza|kwendia|aanyunot|kusia|uso|kogoria|kũtũnga|al|iib/i.test(lower)) {
                 openModal('sellModal');
-                return translateToLanguage('Sell form opened!', detectedLang);
+                updateLastIntent('sell', 'Sell form opened');
+                return translateToLanguage('Sell form opened! List your item details.', detectedLang);
             }
-            if (/house|housing|accommodation|makazi|nyũmba|enkaji|inzu|ot|enyomba|mũciĩ|kaa|guri/i.test(cmd)) {
+            if (/house|housing|accommodation|room|rent|makazi|nyũmba|enkaji|inzu|ot|enyomba|mũciĩ|kaa|guri/i.test(lower)) {
                 openModal('houseHuntingModal');
+                updateLastIntent('housing', 'Housing form opened');
                 return translateToLanguage('Accommodation request opened!', detectedLang);
             }
+            // send to WhatsApp
+            if ((lower.includes('send') && lower.includes('whatsapp') || lower.includes('share my id')) && aiContext.lastBookingId) {
+                window.open(`https://wa.me/254116375166?text=${encodeURIComponent(`My booking ID: ${aiContext.lastBookingId}`)}`, '_blank');
+                return `I've opened WhatsApp with your booking ID: ${aiContext.lastBookingId}.`;
+            }
 
-            // Data queries
-            if (/marketplace|products|what.*(available|for sale)/i.test(cmd)) {
-                const snap = await productsRef.once('value');
-                const products = snap.val() ? Object.values(snap.val()).filter(p => p.available) : [];
-                if (products.length === 0) return "There are currently no available products.";
-                const list = products.slice(0, 5).map(p => `• ${p.name} (KES ${p.price}) - ${p.condition}`).join('\n');
-                return `Here are some available items:\n${list}\n... and more in the Marketplace section.`;
+            // data queries
+            const dataQuery = async (ref, filterFn, noneMsg, listBuilder) => {
+                try {
+                    const snap = await ref.once('value');
+                    const items = snap.val() ? Object.values(snap.val()) : [];
+                    const filtered = filterFn ? items.filter(filterFn) : items;
+                    if (filtered.length === 0) return noneMsg;
+                    return listBuilder(filtered.slice(0,5));
+                } catch (e) { reportSecurityIncident('ai_query_error', e.message); return "I'm having trouble fetching that data. Please try again later."; }
+            };
+            if (/marketplace|products|what.*(available|for sale)|show me (phones|laptops)/i.test(lower)) {
+                return await dataQuery(productsRef, p => p.available, "No available products right now.", items => "Here are some items:\n"+items.map(p => `• ${p.name} (KES ${p.price}) - ${p.condition}`).join('\n')+"\nMore in the Marketplace section.");
             }
-            if (/reviews|testimonials|what.*people.*say/i.test(cmd)) {
-                const snap = await reviewsRef.once('value');
-                const reviews = snap.val() ? Object.values(snap.val()) : [];
-                if (reviews.length === 0) return "No reviews yet.";
-                const recent = reviews.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 3);
-                const list = recent.map(r => `⭐ ${r.rating}/5 - "${r.comment.substring(0, 40)}..." by ${r.customerName}`).join('\n');
-                return `Recent reviews:\n${list}`;
+            if (/reviews|testimonials|what.*people.*say/i.test(lower)) {
+                return await dataQuery(reviewsRef, null, "No reviews yet.", items => "Recent reviews:\n"+items.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(r => `⭐ ${r.rating}/5 - "${r.comment.substring(0,40)}..." by ${r.customerName}`).join('\n'));
             }
-            if (/how many (bookings|storage)/i.test(cmd)) {
-                const snap = await bookingsRef.once('value');
-                const count = snap.numChildren();
-                return `There are currently ${count} bookings.`;
+            if (/how many (bookings|storage)/i.test(lower)) {
+                try { const snap = await bookingsRef.once('value'); return `There are ${snap.numChildren()} active bookings.`; } catch(e) { return "Couldn't fetch count."; }
             }
-            if (/contact|phone|reach/i.test(cmd)) {
+            if (/my (bookings|items)/i.test(lower) && aiContext.userName) {
+                try {
+                    const snap = await bookingsRef.once('value');
+                    const myBookings = [];
+                    snap.forEach(child => { const b = child.val(); if (b.name && b.name.toLowerCase().includes(aiContext.userName.toLowerCase())) myBookings.push(b); });
+                    if (myBookings.length === 0) return `No bookings under ${aiContext.userName}.`;
+                    return `Your bookings, ${aiContext.userName}:\n`+myBookings.map(b => `ID: ${b.bookingId}, Items: ${b.itemCount}, Status: ${b.status}`).join('\n');
+                } catch(e) { return "Couldn't fetch your bookings."; }
+            }
+            if (/contact|phone|reach/i.test(lower)) {
                 return translateToLanguage("You can reach Amos at 0116375166 or via WhatsApp.", detectedLang);
             }
-            if (/help/i.test(cmd)) {
-                return `I can help with many services in English, Swahili, Kikuyu, Maasai, Luhya, Luo, Kisii, Kamba, Kalenjin, Somali... Just ask! You can also teach me new words via the Language button.`;
+            if (/help|what can you do/i.test(lower)) {
+                const langs = Object.keys(multilingualDict.hello).join(', ');
+                return `I can: 📦 Book Storage, 🔍 Track, 🚚 Delivery, 💰 Sell, 🏠 Housing, 🛒 Marketplace, ⭐ Reviews, 📞 Contact. I speak English, ${langs} and more. Teach me: "learn: word = translation" or upload a PDF.`;
             }
 
-            return "I'm still learning. Try asking about bookings, tracking, or marketplace.";
+            let fallback = translateToLanguage("I'm not sure I understand. Ask about bookings, tracking, or marketplace.", detectedLang);
+            if (aiContext.lastIntent) fallback += ` (You were just asking about ${aiContext.lastIntent}. Continue?)`;
+            return fallback;
         }
 
         // ==================== PWA ====================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e => console.error('SW failed', e)));
         }
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
     </script>
 </body>
 </html>
